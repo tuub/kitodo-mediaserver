@@ -15,19 +15,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
- *
+ * Starter of the importer application.
  */
 @SpringBootApplication
 public class ImporterApplication {
 
+    /**
+     * Starts the importer application.
+     *
+     * @param args external arguments
+     */
     public static void main(String[] args) {
 
         new SpringApplicationBuilder(ImporterApplication.class)
                 .properties(
-                        "spring.config.name:" +
-                                "default," +
-                                "local," +
-                                "application")
+                        "spring.config.name:"
+                                + "default,"
+                                + "local,"
+                                + "application")
                 .build().run(args);
     }
 }

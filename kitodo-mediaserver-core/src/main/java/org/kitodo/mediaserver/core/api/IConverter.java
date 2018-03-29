@@ -11,23 +11,22 @@
 
 package org.kitodo.mediaserver.core.api;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.Map;
 
 /**
- *
+ * Converter interface.
  */
 public interface IConverter {
 
     /**
      * Converts a file from a given uri. Returns an output stream with the result.
      *
-     * @param master
-     * @param parameter
-     * @return
-     * @throws Exception
+     * @param master the uri of the master file
+     * @param parameter a map of parameter
+     * @return an output stream of the converted file
+     * @throws Exception by fatal errors
      */
     OutputStream convert(URI master, Map<String, String> parameter) throws Exception;
 }

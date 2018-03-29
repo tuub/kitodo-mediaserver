@@ -11,17 +11,18 @@
 
 package org.kitodo.mediaserver.core.api;
 
+import java.util.Map;
 import org.kitodo.mediaserver.core.models.ActionControl;
 
-import java.util.Map;
 
 /**
- *
+ * Interface of all actions.
  */
 public interface IAction {
 
     /**
      * Request an action.
+     *
      * <p>
      * Requesting an action is basically just creating an ActionControl object and making it persistent.
      *
@@ -44,6 +45,7 @@ public interface IAction {
 
     /**
      * Performs the action.
+     *
      * <p>
      * Implementations of these method may or may not return an object.
      *

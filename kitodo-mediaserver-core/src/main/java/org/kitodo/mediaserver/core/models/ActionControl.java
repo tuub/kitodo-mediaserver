@@ -14,7 +14,7 @@ package org.kitodo.mediaserver.core.models;
 import java.util.Map;
 
 /**
- * Dummy for an ActionControl Entity
+ * Dummy for an ActionControl entity.
  */
 public class ActionControl {
 
@@ -30,6 +30,13 @@ public class ActionControl {
 
     private ActionControl() {}
 
+    /**
+     * Constructs an ActionControl object.
+     *
+     * @param workId the id of the work on which the action is performed
+     * @param action the action name
+     * @param parameter a map of parameter
+     */
     public ActionControl(int workId, String action, Map<String, String> parameter) {
         // create object
 

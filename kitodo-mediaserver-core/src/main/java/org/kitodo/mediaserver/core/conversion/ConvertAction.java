@@ -11,14 +11,14 @@
 
 package org.kitodo.mediaserver.core.conversion;
 
+import java.io.OutputStream;
+import java.net.URI;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.models.ActionControl;
-import java.io.OutputStream;
-import java.net.URI;
 
 /**
- *
+ * Basic implementation of a convertion action.
  */
 public class ConvertAction implements IAction {
 
@@ -26,6 +26,7 @@ public class ConvertAction implements IAction {
 
     /**
      * Performs a convert action.
+     *
      * <p>
      * Uses the injected converter to the convert the master file.
      *

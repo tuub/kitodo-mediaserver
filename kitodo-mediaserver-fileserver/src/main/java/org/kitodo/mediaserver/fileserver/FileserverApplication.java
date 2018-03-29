@@ -15,19 +15,24 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
- *
+ * Starter of the fileserver application.
  */
 @SpringBootApplication
 public class FileserverApplication {
 
+    /**
+     * Starts the fileserver appplication.
+     *
+     * @param args external arguments
+     */
     public static void main(String[] args) {
 
         new SpringApplicationBuilder(FileserverApplication.class)
                 .properties(
-                        "spring.config.name:" +
-                                "default," +
-                                "local," +
-                                "application")
+                        "spring.config.name:"
+                                + "default,"
+                                + "local,"
+                                + "application")
                 .build().run(args);
     }
 }

@@ -15,19 +15,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
- *
+ * Starter of the ui application.
  */
 @SpringBootApplication
 public class UiApplication {
 
+    /**
+     * Startsthe importer application.
+     * @param args external arguments
+     */
     public static void main(String[] args) {
 
         new SpringApplicationBuilder(UiApplication.class)
                 .properties(
-                        "spring.config.name:" +
-                                "default," +
-                                "local," +
-                                "application")
+                        "spring.config.name:"
+                                + "default,"
+                                + "local,"
+                                + "application")
                 .build().run(args);
     }
 }

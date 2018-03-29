@@ -14,24 +14,24 @@ package org.kitodo.mediaserver.core.api;
 import java.util.Map;
 
 /**
- *
+ * Interface of a path pattern processor.
  */
 public interface IPathPatternProcessor {
 
     /**
      * Resolves a file path to a parameter map.
      *
-     * @param path
-     * @return a map with the parameters
+     * @param path a file path
+     * @return a map with the parameter
      */
-   	Map<String, String> resolve(String path);
+    Map<String, String> resolve(String path);
 
     /**
      * Composes an file path from a parameter map.
      *
-     * @param parameterMap
-     * @return
+     * @param parameterMap a map of parameter
+     * @return a file path
      */
-	String compose(Map<String, String> parameterMap);
+    String compose(Map<String, String> parameterMap);
 
 }
