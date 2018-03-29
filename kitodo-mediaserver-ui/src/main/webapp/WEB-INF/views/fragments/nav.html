@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <nav th:fragment="nav(activeModule, activeSubModule)" class="nav">
+
+        <div class="toggle ui inverted large menu">
+            <div class="item">
+                <button class="toggle ui basic inverted icon button"><i class="bars icon"></i></button>
+                <div class="ui logo icon image">
+                    <img th:src="@{/static/images/favicon.png}">
+                </div>
+                <a th:src="@{/}"><b th:text="#{app.name}"></b></a>
+            </div>
+        </div>
+
+        <div class="nav ui fluid vertical inverted large menu">
+
+            <a th:class="@{${activeModule == 'status'} ? 'active' : ''} + ' item'" th:href="@{/status}">
+                <span th:text="#{status.title}"></span>
+            </a>
+
+            <div th:class="@{${activeModule == 'works'} ? 'active' : ''} + ' item'">
+                <div class="text" th:text="#{works.title}"></div>
+                <div class="menu">
+                    <div class="item">
+                        <form action="/works/search">
+                            <div class="ui fluid icon input">
+                                <input type="text" th:placeholder="#{works.search}">
+                                <i class="search link icon"></i>
+                            </div>
+                        </form>
+                    </div>
+                    <a th:class="@{${activeModule == 'works' && activeSubModule == 'all'} ? 'active' : ''} + ' item'" th:href="@{/works}" th:text="#{works.all_works}"></a>
+                </div>
+            </div>
+
+            <div th:class="@{${activeModule == 'jobs'} ? 'active' : ''} + ' item'">
+                <div class="text" th:text="#{jobs.title}">Jobs</div>
+                <div class="menu">
+                    <a th:class="@{${activeModule == 'jobs' && activeSubModule == 'all'} ? 'active' : ''} + ' item'" th:href="@{/jobs}" th:text="#{jobs.all_jobs}"></a>
+                    <a class="item" href="/jobs/new" th:text="#{jobs.new_job}"></a>
+                </div>
+            </div>
+
+            <a class="item" href="@{/history}">History</a>
+
+            <a class="item" href="@{/settings}" th:text="#{settings.title}"></a>
+
+            <a class="item" href="@{/users}" th:text="#{users.title}"></a>
+
+            <a class="item" href="@{/help}">Help</a>
+
+            <div class="ui dropdown item">
+                <div class="text" th:text="#{language.title}"></div>
+                <i class="dropdown icon"></i>
+                <div class="left menu">
+                    <a class="item" th:href="@{''(lang='en')}">
+                        <i class="gb flag"></i>
+                        English
+                    </a>
+                    <a class="item" th:href="@{''(lang='de_DE')}">
+                        <i class="de flag"></i>
+                        Deutsch
+                    </a>
+                </div>
+            </div>
+
+            <a th:href="@{/logout}" class="item">
+                <i class="sign out icon"></i>
+                <span th:text="#{login.logout}"></span>
+            </a>
+
+        </div>
+
+    </nav>
+</body>
+</html>

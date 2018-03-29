@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:replace="fragments/head::head(#{status.title})"></head>
+<body>
+
+<div class="wrapper">
+
+    <nav th:replace="fragments/nav::nav('status', '')"></nav>
+
+    <div class="content-wrapper">
+        <div class="article">
+
+            <div th:replace="fragments/pagetitle::pagetitle(#{status.title}, '')"></div>
+
+            <div class="main ui intro container">
+
+                <div class="ui dividing"></div>
+
+                <h2 class="ui dividing header">
+                    Another Header
+                    <a class="anchor" id="abc1"></a>
+                </h2>
+
+                <h4 class="ui header">
+                    Sub header 2
+                    <a class="anchor" id="abc2"></a>
+                </h4>
+
+                <p>Show some system statuses</p>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
