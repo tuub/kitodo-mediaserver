@@ -7,3 +7,13 @@
 # You can override configurations in thie fils in local.yml
 #
 #################################################################
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
+    username: kitodo
+    password: kitodo
+
+
+fileserver:
+  filePathPattern: /files/{workId}/**
