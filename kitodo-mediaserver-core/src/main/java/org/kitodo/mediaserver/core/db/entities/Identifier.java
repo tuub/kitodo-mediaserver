@@ -28,9 +28,28 @@ public class Identifier {
 
     protected Identifier() {}
 
+    /**
+     * Constructor only with identifier and type, useful for search.
+     *
+     * @param identifier the identifier string
+     * @param type the type, my be null
+     */
     public Identifier(String identifier, String type) {
         this.identifier = identifier;
         this.type = type;
+    }
+
+    /**
+     * Constructor with work object, useful for import.
+     *
+     * @param identifier the identifier string
+     * @param type the type, my be null
+     * @param work the referenced work
+     */
+    public Identifier(String identifier, String type, Work work) {
+        this.identifier = identifier;
+        this.type = type;
+        this.work = work;
     }
 
     @Id
