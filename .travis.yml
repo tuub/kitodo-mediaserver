@@ -1,0 +1,17 @@
+# sudo:false and dist:trusty uses faster build environment
+sudo: false
+language: java
+jdk: openjdk8
+os: linux
+group: stable
+dist: trusty
+
+
+cache:
+  directories:
+    # cache Maven dependencies
+    - $HOME/.m2
+
+# email notifications
+notifications:
+  email: false
