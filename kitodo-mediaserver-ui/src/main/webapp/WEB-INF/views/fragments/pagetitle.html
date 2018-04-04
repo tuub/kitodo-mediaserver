@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="ui masthead vertical segment" th:fragment="pagetitle(title, subtitle)">
+    <div class="ui container">
+        <h1 class="ui header">
+            <span th:text="${title}"></span>
+            <div class="sub header" th:text="${subtitle}"></div>
+        </h1>
+    </div>
+</div>
+</body>
+</html>

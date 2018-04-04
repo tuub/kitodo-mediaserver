@@ -1,0 +1,17 @@
+{
+  "name": "kitodo-media-ui",
+  "version": "1.0.0",
+  "description": "Kitodo Media UI is a administration frontend for Kitodo Media",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gulp": "gulp"
+  },
+  "author": "Michael Richter",
+  "license": "ISC",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "jquery": "^3.3.1",
+    "semantic-ui": "^2.3.1"
+  }
+}

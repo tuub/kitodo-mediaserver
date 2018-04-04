@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:replace="fragments/head::head(#{login.title})"></head>
+<body>
+    <main class="login ui page container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui header">
+                    <div class="content" th:text="#{login.header} + ' ' + #{app.name}"></div>
+                </h2>
+                <form class="ui form" method="post" th:action="@{/login}">
+                    <div class="ui raised segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="username" th:placeholder="#{login.username}" autofocus>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" name="password" th:placeholder="#{login.password}">
+                            </div>
+                        </div>
+                        <button class="ui fluid large primary submit button" th:text="#{login.submit}"></button>
+                    </div>
+                </form>
+                <div class="ui error message" th:if="${param.error}">
+                    <p th:text="#{login.error_msg}"></p>
+                </div>
+                <div class="ui positive message" th:if="${param.logout}">
+                    <p th:text="#{login.logout_msg}"></p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

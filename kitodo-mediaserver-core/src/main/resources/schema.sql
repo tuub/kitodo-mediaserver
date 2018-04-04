@@ -24,3 +24,10 @@ CREATE TABLE identifier (
   PRIMARY KEY (identifier),
   FOREIGN KEY (work_id) REFERENCES work(id)
 );
+
+CREATE TABLE `user` (
+  `username` varchar(255) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `enabled` tinyint(1) NOT NULL DEFAULT 1,
+  PRIMARY KEY(`username`)
+);

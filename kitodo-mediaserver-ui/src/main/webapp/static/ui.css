@@ -1,0 +1,98 @@
+/*
+ * (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+ *
+ * This file is part of the Kitodo project.
+ *
+ * It is licensed under GNU General Public License version 3 or later.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE file that was distributed with this source code.
+ */
+
+.masthead > .container,
+.main.container,
+.fixed.menu > .container {
+    margin-left: 3em !important;
+    margin-right: 3em !important;
+    width: auto !important;
+}
+.wrapper {
+    min-height: 100%;
+    position: static;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+.content-wrapper {
+    /* content part should take all space available */
+    flex-grow: 1;
+}
+
+/* main menu container */
+nav.nav {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+/* main menu */
+nav.nav .ui.menu {
+    border-radius: 0;
+    margin: 0;
+}
+nav.nav .ui.menu.nav {
+    flex-grow: 1;
+}
+
+/* spacer behind logo */
+.menu .logo.image {
+    margin-right: 1em;
+}
+
+/* login */
+main.login,
+.login .grid {
+    height: 100%;
+}
+
+
+/* mobile */
+@media only screen and (max-width: 768px) {
+    nav.nav {
+        display: block;
+    }
+    nav.nav div.nav {
+        display: none!important;
+    }
+    nav.nav div.toggle {
+        display: block;
+    }
+    nav button.toggle {
+        display: inline-block;
+        margin-right: 1em!important;
+    }
+    nav.nav.show div.nav {
+        display: block!important;
+    }
+    .wrapper {
+        flex-direction: column;
+    }
+}
+
+/* desktop */
+@media only screen and (min-width: 769px) {
+    nav.nav {
+        width: 18em;
+    }
+    nav.nav button.toggle {
+        display: none;
+    }
+    .wrapper {
+        flex-direction: row;
+    }
+    .login .column {
+        max-width: 450px;
+    }
+}

@@ -15,14 +15,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
 /**
- * Starter of the ui application.
+ * UI application starter.
  */
 @SpringBootApplication
 public class UiApplication {
 
     /**
-     * Startsthe importer application.
-     * @param args external arguments
+     * Everything starts here.
+     * @param args program arguments
      */
     public static void main(String[] args) {
 
