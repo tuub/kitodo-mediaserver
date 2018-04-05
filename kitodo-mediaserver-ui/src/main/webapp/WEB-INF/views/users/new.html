@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:replace="fragments/head::head(#{users.title})"></head>
+<body>
+
+<div class="wrapper">
+
+    <nav th:replace="fragments/nav::nav('users', '')"></nav>
+
+    <div class="content-wrapper">
+        <div class="article">
+
+            <div class="main ui container">
+
+                <h1 class="header" th:text="#{users.new_title}"></h1>
+
+                <p th:text="#{users.description}"></p>
+
+                <form class="ui form new-user" method="post" th:object="${userDto}" th:action="@{/users/-new}">
+
+                    <div class="ui negative message" th:if="${#fields.hasGlobalErrors()}">
+                        <p th:each="error : ${#fields.globalErrors()}" th:text="${error}"></p>
+                    </div>
+
+                    <div class="field" th:classappend="${#fields.hasErrors('username')} ? error">
+                        <label th:text="#{login.username}"></label>
+                        <input type="text" th:field="*{username}" autocomplete="off" autofocus>
+                        <small class="message" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></small>
+                    </div>
+
+                    <div class="field" th:classappend="${#fields.hasErrors('password')} ? error">
+                        <label th:text="#{login.password}"></label>
+                        <div class="ui action input">
+                            <input type="password" th:field="*{password}" autocomplete="off">
+                            <button class="ui icon button" th:attr="data-tooltip=#{users.show_password}">
+                                <i class="eye icon"></i>
+                            </button>
+                        </div>
+                        <small class="message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+                    </div>
+
+                    <div class="field" th:classappend="${#fields.hasErrors('name')} ? error">
+                        <label th:text="#{login.name}"></label>
+                        <input type="text" th:field="*{name}">
+                        <small class="message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                    </div>
+
+                    <div class="field">
+                        <div class="ui segment">
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" tabindex="0" class="hidden" th:field="*{enabled}">
+                                    <label th:text="#{users.enabled}"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="two fields">
+                            <div class="field">
+                                <button class="ui fluid primary button" type="submit" th:text="#{form.save}"></button>
+                            </div>
+                            <div class="field">
+                                <a class="ui fluid button" th:href="@{/users}" th:text="#{form.cancel}"></a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

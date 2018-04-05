@@ -23,11 +23,11 @@
     <div class="content-wrapper">
         <div class="article">
 
-            <div th:replace="fragments/pagetitle::pagetitle(#{status.title}, '')"></div>
+            <div class="main ui container">
 
-            <div class="main ui intro container">
+                <h1 class="header" th:text="#{status.title}"></h1>
 
-                <div class="ui dividing"></div>
+                <p th:text="#{status.description}"></p>
 
                 <h2 class="ui dividing header">
                     Another Header

@@ -28,6 +28,8 @@ CREATE TABLE identifier (
 CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(60) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY(`username`)
 );
+

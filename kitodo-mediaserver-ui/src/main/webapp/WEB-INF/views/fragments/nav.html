@@ -26,9 +26,7 @@
 
         <div class="nav ui fluid vertical inverted large menu">
 
-            <a th:class="@{${activeModule == 'status'} ? 'active' : ''} + ' item'" th:href="@{/status}">
-                <span th:text="#{status.title}"></span>
-            </a>
+            <a th:class="@{${activeModule == 'status'} ? 'active' : ''} + ' item'" th:href="@{/status}" th:text="#{status.title}"></a>
 
             <div th:class="@{${activeModule == 'works'} ? 'active' : ''} + ' item'">
                 <div class="text" th:text="#{works.title}"></div>
@@ -57,7 +55,7 @@
 
             <a class="item" href="@{/settings}" th:text="#{settings.title}"></a>
 
-            <a class="item" href="@{/users}" th:text="#{users.title}"></a>
+            <a th:class="@{${activeModule == 'users'} ? 'active' : ''} + ' item'" th:href="@{/users}" th:text="#{users.title}"></a>
 
             <a class="item" href="@{/help}">Help</a>
 

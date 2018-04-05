@@ -11,6 +11,7 @@
 
 package org.kitodo.mediaserver.core.db.repositories;
 
+import java.util.List;
 import org.kitodo.mediaserver.core.db.entities.User;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,4 +26,10 @@ public interface UserRepository extends CrudRepository<User, Integer> {
      * @return a User
      */
     User getByUsername(String username);
+
+    /**
+     * Finds all users sorted by username.
+     * @return a list of all users
+     */
+    List<User> findAllByOrderByUsernameAsc();
 }
