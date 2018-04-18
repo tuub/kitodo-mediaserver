@@ -2,10 +2,6 @@
 /node_modules/
 /src/main/webapp/static/jquery/
 /src/main/webapp/static/semantic/
-!/semantic/**/*.overrides
-!/semantic/**/*.variables
-!/semantic/**/*.config
-/semantic/
 /target/
 /out/
 /src/main/resources/config/local.yml
