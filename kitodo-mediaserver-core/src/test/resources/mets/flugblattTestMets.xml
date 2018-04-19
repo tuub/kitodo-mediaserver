@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets
+        xsi:schemaLocation="info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/mods.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.loc.gov/mix/v10 http://www.loc.gov/standards/mix/mix10/mix10.xsd"
+        xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mets:metsHdr CREATEDATE="2017-11-10T14:26:10">
+        <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
+            <mets:name>Kitodo - kitodo-ugh-2.1.0-kitodo-ugh-2.1.0 - 22−May−2017</mets:name>
+            <mets:note>Kitodo</mets:note>
+        </mets:agent>
+    </mets:metsHdr>
+    <mets:dmdSec ID="DMDLOG_0000">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+                    <mods:note type="type">Flugblatt</mods:note>
+                    <mods:originInfo>
+                        <mods:publisher>Sekretariat des ersten Publishers
+                        </mods:publisher>
+                        <mods:publisher>Zweiten Publisher</mods:publisher>
+                        <mods:place>
+                            <mods:placeTerm type="text">Berlin</mods:placeTerm>
+                        </mods:place>
+                        <mods:dateIssued encoding="w3cdtf" keyDate="yes">1965-06</mods:dateIssued>
+                        <mods:dateOther>1965</mods:dateOther>
+                    </mods:originInfo>
+                    <mods:titleInfo>
+                        <mods:title>Aufruf. In Besorgnis um den wachsenden Bildungsnotstand</mods:title>
+                    </mods:titleInfo>
+                    <mods:recordInfo>
+                        <mods:recordIdentifier source="kobv">UATUB_717-0006</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    <mods:classification authority="ivdcc">Universitätsarchiv#Flugblattsammlung</mods:classification>
+                    <mods:language>
+                        <mods:languageTerm authority="iso639-2b" type="code">ger</mods:languageTerm>
+                    </mods:language>
+                    <mods:name type="corporate">
+                        <mods:namePart>Corporate contributor</mods:namePart>
+                    </mods:name>
+                    <mods:location>
+                        <mods:shelfLocator>717-0006</mods:shelfLocator>
+                        <mods:physicalLocation>Universitätsarchiv der Technischen Universität Berlin
+                        </mods:physicalLocation>
+                    </mods:location>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Berlin</mods:placeTerm>
+                        </mods:place>
+                        <mods:dateCaptured encoding="w3cdtf">2017</mods:dateCaptured>
+                        <mods:publisher>Universitätsbibliothek der Technischen Universität Berlin</mods:publisher>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                    </mods:originInfo>
+                    <mods:physicalDescription>
+                        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+                    </mods:physicalDescription>
+                    <mods:abstract>Enthält: Ein Aufruf zu irgenwas tolles am 1. Juli 1965. 1 Blatt. S/w.
+                    </mods:abstract>
+                    <mods:subject>
+                        <mods:topic>Verband Deutscher Studentenschaften (VDS)</mods:topic>
+                    </mods:subject>
+                    <mods:subject>
+                        <mods:topic>Studentenverband Deutscher Ingenieurschulen e. V. (SVI)</mods:topic>
+                    </mods:subject>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    <mets:amdSec ID="AMD">
+        <mets:rightsMD ID="RIGHTS">
+            <mets:mdWrap MDTYPE="OTHER" MIMETYPE="text/xml" OTHERMDTYPE="DVRIGHTS">
+                <mets:xmlData>
+                    <dv:rights xmlns:dv="http://dfg-viewer.de/">
+                        <dv:owner>Universitätsbibliothek der Technischen Universität Berlin</dv:owner>
+                        <dv:ownerLogo>
+                            http://www.example.com/viewer/resources/themes/logo.jpg
+                        </dv:ownerLogo>
+                        <dv:ownerSiteURL>http://www.example.com</dv:ownerSiteURL>
+                        <dv:ownerContact>digitalisierung@example.com</dv:ownerContact>
+                    </dv:rights>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:digiprovMD ID="DIGIPROV">
+            <mets:mdWrap MDTYPE="OTHER" MIMETYPE="text/xml" OTHERMDTYPE="DVLINKS">
+                <mets:xmlData>
+                    <dv:links xmlns:dv="http://dfg-viewer.de/">
+                        <dv:reference>http://example.com/primo_library/libweb/action/search.do?&amp;fn=search&amp;vid=TUB&amp;mode=Basic&amp;fromLogin=true&amp;vl(freeText0)=UATUB_717-0006</dv:reference>
+                        <dv:presentation>http://example.com/ppnresolver?id=UATUB_717-0006
+                        </dv:presentation>
+                    </dv:links>
+                </mets:xmlData>
+            </mets:mdWrap>
+        </mets:digiprovMD>
+    </mets:amdSec>
+    <mets:fileSec>
+        <mets:fileGrp USE="PRESENTATION">
+            <mets:file ID="FILE_0001_PRESENTATION" MIMETYPE="image/tiff">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_0001.tif"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_PRESENTATION" MIMETYPE="image/tiff">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_0002.tif"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_PRESENTATION" MIMETYPE="image/tiff">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_0003.tif"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="MAX">
+            <mets:file ID="FILE_0001_MAX" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_2000_0001.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_MAX" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_2000_0002.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_MAX" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_2000_0003.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="DEFAULT">
+            <mets:file ID="FILE_0001_DEFAULT" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_1000_0001.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_DEFAULT" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_1000_0002.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_DEFAULT" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_1000_0003.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="MIN">
+            <mets:file ID="FILE_0001_MIN" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_600_0001.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_MIN" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_600_0002.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_MIN" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_600_0003.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="THUMBS">
+            <mets:file ID="FILE_0001_THUMBS" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_150_0001.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_THUMBS" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_150_0002.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_THUMBS" MIMETYPE="image/jpeg">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_tif/Flugblatt_1_717_0006_150_0003.jpg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="FULLTEXT">
+            <mets:file ID="FILE_0001_FULLTEXT" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0001_alto.xml"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_FULLTEXT" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0002_alto.xml"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_FULLTEXT" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0003_alto.xml"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="FULLTEXT_TXT">
+            <mets:file ID="FILE_0001_FULLTEXT_TXT" MIMETYPE="text/plain">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0001.txt"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_FULLTEXT_TXT" MIMETYPE="text/plain">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0002.txt"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_FULLTEXT_TXT" MIMETYPE="text/plain">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0003.txt"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="FULLTEXT_HOCR">
+            <mets:file ID="FILE_0001_FULLTEXT_HOCR" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0001.hocr"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_FULLTEXT_HOCR" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0002.hocr"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_FULLTEXT_HOCR" MIMETYPE="application/xml">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0003.hocr"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+        <mets:fileGrp USE="DOWNLOAD">
+            <mets:file ID="FILE_0001_DOWNLOAD" MIMETYPE="application/pdf">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0001.pdf"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0002_DOWNLOAD" MIMETYPE="application/pdf">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0002.pdf"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+            <mets:file ID="FILE_0003_DOWNLOAD" MIMETYPE="application/pdf">
+                <mets:FLocat LOCTYPE="URL"
+                             xlink:href="http://example.com/files/Flugblatt_1_717_0006_txt/Flugblatt_1_717_0006_0003.pdf"
+                             xmlns:xlink="http://www.w3.org/1999/xlink"/>
+            </mets:file>
+        </mets:fileGrp>
+    </mets:fileSec>
+    <mets:structMap TYPE="LOGICAL">
+        <mets:div ADMID="AMD" DMDID="DMDLOG_0000" ID="LOG_0000"
+                  LABEL="Aufruf. In Besorgnis um den wachsenden Bildungsnotstand" TYPE="Leaflet"/>
+    </mets:structMap>
+    <mets:structMap TYPE="PHYSICAL">
+        <mets:div ID="PHYS_0000" TYPE="physSequence">
+            <mets:fptr FILEID="FILE_0000_DOWNLOAD"/>
+            <mets:div ID="PHYS_0001" ORDER="1" ORDERLABEL="1" TYPE="page">
+                <mets:fptr FILEID="FILE_0001_PRESENTATION"/>
+                <mets:fptr FILEID="FILE_0001_MAX"/>
+                <mets:fptr FILEID="FILE_0001_DEFAULT"/>
+                <mets:fptr FILEID="FILE_0001_MIN"/>
+                <mets:fptr FILEID="FILE_0001_THUMBS"/>
+                <mets:fptr FILEID="FILE_0001_FULLTEXT"/>
+                <mets:fptr FILEID="FILE_0001_FULLTEXT_TXT"/>
+                <mets:fptr FILEID="FILE_0001_FULLTEXT_HOCR"/>
+                <mets:fptr FILEID="FILE_0001_DOWNLOAD"/>
+            </mets:div>
+            <mets:div ID="PHYS_0002" ORDER="2" ORDERLABEL="2" TYPE="page">
+                <mets:fptr FILEID="FILE_0002_PRESENTATION"/>
+                <mets:fptr FILEID="FILE_0002_MAX"/>
+                <mets:fptr FILEID="FILE_0002_DEFAULT"/>
+                <mets:fptr FILEID="FILE_0002_MIN"/>
+                <mets:fptr FILEID="FILE_0002_THUMBS"/>
+                <mets:fptr FILEID="FILE_0002_FULLTEXT"/>
+                <mets:fptr FILEID="FILE_0002_FULLTEXT_TXT"/>
+                <mets:fptr FILEID="FILE_0002_FULLTEXT_HOCR"/>
+                <mets:fptr FILEID="FILE_0002_DOWNLOAD"/>
+            </mets:div>
+            <mets:div ID="PHYS_0003" ORDER="3" ORDERLABEL="3" TYPE="page">
+                <mets:fptr FILEID="FILE_0003_PRESENTATION"/>
+                <mets:fptr FILEID="FILE_0003_MAX"/>
+                <mets:fptr FILEID="FILE_0003_DEFAULT"/>
+                <mets:fptr FILEID="FILE_0003_MIN"/>
+                <mets:fptr FILEID="FILE_0003_THUMBS"/>
+                <mets:fptr FILEID="FILE_0003_FULLTEXT"/>
+                <mets:fptr FILEID="FILE_0003_FULLTEXT_TXT"/>
+                <mets:fptr FILEID="FILE_0003_FULLTEXT_HOCR"/>
+                <mets:fptr FILEID="FILE_0003_DOWNLOAD"/>
+            </mets:div>
+        </mets:div>
+    </mets:structMap>
+    <mets:structLink>
+        <mets:smLink xlink:to="PHYS_0001" xlink:from="LOG_0000" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+        <mets:smLink xlink:to="PHYS_0002" xlink:from="LOG_0000" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+        <mets:smLink xlink:to="PHYS_0003" xlink:from="LOG_0000" xmlns:xlink="http://www.w3.org/1999/xlink"/>
+    </mets:structLink>
+</mets:mets>
