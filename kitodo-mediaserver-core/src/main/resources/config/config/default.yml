@@ -1,0 +1,34 @@
+################################################################
+#
+# This is the default configuration file of Kitodo Mediaserver
+#
+# DO NOT MAKE ANY LOCAL CHANGES TO THIS FILE!
+#
+# You can override configurations in thie fils in local.yml
+#
+#################################################################
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
+    username: kitodo
+    password: kitodo
+
+
+fileserver:
+  filePathPattern: /files/{workId}/**
+  caching: false
+  cachePath: /tmp
+
+conversion:
+  jpeg:
+    defaultSize: 1000
+  useGraphicsMagick: true
+  pathExtractionPatterns:
+    - .*/jpeg/(max|min|thumb|default)/.*
+    - .*/jpeg/(150|600|1000|2000)/.*
+
+mets:
+  originalFileGrpSuffix: ORIGINAL
+
+
