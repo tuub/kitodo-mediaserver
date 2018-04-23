@@ -26,27 +26,20 @@
 
         <div class="nav ui fluid vertical inverted large menu">
 
-            <a th:class="@{${activeModule == 'status'} ? 'active' : ''} + ' item'" th:href="@{/status}" th:text="#{status.title}"></a>
+            <a th:class="@{${activeModule == 'status'} ? 'active' : ''} + ' item'"
+               th:href="@{/status}"
+               th:text="#{status.title}"></a>
 
-            <div th:class="@{${activeModule == 'works'} ? 'active' : ''} + ' item'">
-                <div class="text" th:text="#{works.title}"></div>
-                <div class="menu">
-                    <div class="item">
-                        <form action="/works/search">
-                            <div class="ui fluid icon input">
-                                <input type="text" th:placeholder="#{works.search}">
-                                <i class="search link icon"></i>
-                            </div>
-                        </form>
-                    </div>
-                    <a th:class="@{${activeModule == 'works' && activeSubModule == 'all'} ? 'active' : ''} + ' item'" th:href="@{/works}" th:text="#{works.all_works}"></a>
-                </div>
-            </div>
+            <a th:class="@{${activeModule == 'works'} ? 'active' : ''} + ' item'"
+               th:href="@{/works}"
+               th:text="#{works.title}"></a>
 
             <div th:class="@{${activeModule == 'jobs'} ? 'active' : ''} + ' item'">
                 <div class="text" th:text="#{jobs.title}">Jobs</div>
                 <div class="menu">
-                    <a th:class="@{${activeModule == 'jobs' && activeSubModule == 'all'} ? 'active' : ''} + ' item'" th:href="@{/jobs}" th:text="#{jobs.all_jobs}"></a>
+                    <a th:class="@{${activeModule == 'jobs' && activeSubModule == 'all'} ? 'active' : ''} + ' item'"
+                       th:href="@{/jobs}"
+                       th:text="#{jobs.all_jobs}"></a>
                     <a class="item" href="/jobs/new" th:text="#{jobs.new_job}"></a>
                 </div>
             </div>
@@ -55,7 +48,9 @@
 
             <a class="item" href="@{/settings}" th:text="#{settings.title}"></a>
 
-            <a th:class="@{${activeModule == 'users'} ? 'active' : ''} + ' item'" th:href="@{/users}" th:text="#{users.title}"></a>
+            <a th:class="@{${activeModule == 'users'} ? 'active' : ''} + ' item'"
+               th:href="@{/users}"
+               th:text="#{users.title}"></a>
 
             <a class="item" href="@{/help}">Help</a>
 

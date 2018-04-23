@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--/*
+url         string: URL for all links
+page        int:    current page number
+totalPages  int:    count of all available pages
+size        int:    elements per page
+sizes       int[]:  list of all sizes available in dropdown field
+around      int:    optional, how many page links are shown before and after current page
+search      string: optional, a search pattern
+*/-->
+<div class="pagination"
+     th:fragment="pagination(url, page, totalPages, size, sizes, sort)"
+     th:with="around=${around} ?: 3, search=${search}">
+
+    <span class="pagination">
+        <!--/* first page */-->
+        <a class="ui basic mini icon button"
+           th:href="@{${url}(page=0, size=${size}, sort=${sort}, search=${search})}"
+           th:classappend="${page eq 0} ? disabled"><i class="fast backward icon"></i></a>
+        <!--/* previous page */-->
+        <a class="ui basic mini icon button"
+           th:href="@{${url}(page=${page - 1}, size=${size}, sort=${sort}, search=${search})}"
+           th:classappend="${page eq 0} ? disabled"><i class="step backward icon"></i></a>
+        <!--/* "..." indicator for more pages not shown */-->
+        <span class="" th:if="${page > around}">...</span>
+        <!--/* pages before current page */-->
+        <a class="ui basic circular label"
+           th:if="${page gt 0}"
+           th:each="pageNum : ${#numbers.sequence((page < around ? 0 : page - around), page - 1)}"
+           th:href="@{${url}(page=${pageNum}, size=${size}, sort=${sort}, search=${search})}"
+           th:text="${pageNum + 1}"></a>
+        <!--/* current page */-->
+        <a class="ui blue circular label"
+           th:href="@{${url}(page=${page}, size=${size}, sort=${sort}, search=${search})}"
+           th:text="${page + 1}"></a>
+        <!--/* pages after current page */-->
+        <a class="ui basic circular label"
+           th:if="${page lt totalPages - 1}"
+           th:each="pageNum : ${#numbers.sequence(page + 1, (page > totalPages - around - 1 ? totalPages - 1 : page + around))}"
+           th:href="@{${url}(page=${pageNum}, size=${size}, sort=${sort}, search=${search})}"
+           th:text="${pageNum + 1}"
+           th:classappend="${page eq pageNum} ? active"></a>
+        <!--/* "..." indicator for more pages not shown */-->
+        <span class="" th:if="${page < totalPages - 4}">...</span>
+        <!--/* next page */-->
+        <a class="ui basic mini icon button"
+           th:href="@{${url}(page=${page + 1}, size=${size}, sort=${sort}, search=${search})}"
+           th:classappend="${totalPages eq page + 1} ? disabled"><i class="step forward icon"></i></a>
+        <!--/* last page */-->
+        <a class="ui basic mini icon button"
+           th:href="@{${url}(page=${totalPages - 1}, size=${size}, sort=${sort}, search=${search})}"
+           th:classappend="${totalPages eq page + 1} ? disabled"><i class="fast forward icon"></i></a>
+    </span>
+
+    <!--/*
+    Page chooser (input field)
+    */-->
+    <span class="page-input">
+        <form method="get" th:action="@{${url}}">
+            <input type="hidden" name="size" th:value="${size}">
+            <input type="hidden" name="sort" th:value="${sort}">
+            <input type="hidden" name="search" th:value="${search}" th:if="${search}">
+            <div class="ui mini action input">
+                <input type="text" name="page" th:placeholder="#{pagination.page}">
+                <button type="submit" th:value="#{form.go}" class="ui basic icon button">
+                    <i class="angle right icon"></i>
+                </button>
+            </div>
+        </form>
+    </span>
+
+    <!--/*
+    Items per page switch (drop down field)
+    */-->
+    <span class="page-size">
+        <form method="get" th:action="@{${url}}">
+            <input type="hidden" name="page" th:value="${page}">
+            <input type="hidden" name="sort" th:value="${sort}">
+            <input type="hidden" name="search" th:value="${search}" th:if="${search}">
+            <select name="size" class="ui mini dropdown button">
+                <option th:each="sizeEl : ${sizes}" th:attr="selected=${size eq sizeEl}" th:text="${sizeEl}"></option>
+            </select>
+        </form>
+    </span>
+
+</div>
+
+</body>
+</html>

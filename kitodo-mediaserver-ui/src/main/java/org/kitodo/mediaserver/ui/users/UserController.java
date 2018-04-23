@@ -13,16 +13,13 @@ package org.kitodo.mediaserver.ui.users;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Locale;
-
 import org.kitodo.mediaserver.core.db.entities.User;
 import org.kitodo.mediaserver.ui.exceptions.UserExistsException;
 import org.kitodo.mediaserver.ui.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,8 +38,6 @@ public class UserController {
 
     private UserService userService;
 
-    private MessageSource messageSource;
-
     public UserService getUserService() {
         return userService;
     }
@@ -52,32 +47,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    public MessageSource getMessageSource() {
-        return messageSource;
-    }
-
-    @Autowired
-    public void setMessageSource(MessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
-
     /**
      * Gets all users.
      * @param model the model for view
      * @return view name
      */
     @RequestMapping
-    public String list(Model model, @ModelAttribute("errorDelete") String errorDelete, Locale locale) {
+    public String list(Model model, @ModelAttribute("errorDelete") String errorDelete) {
+
+        if (StringUtils.hasText(errorDelete)) {
+            model.addAttribute("error", errorDelete);
+        }
+
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
-        if (errorDelete != null && !errorDelete.isEmpty()) {
-            try {
-                String msg = messageSource.getMessage(errorDelete, new Object[]{}, locale);
-                model.addAttribute("error", msg);
-            } catch (NoSuchMessageException e) {
-                model.addAttribute("error", errorDelete);
-            }
-        }
+
         return "users/users";
     }
 
