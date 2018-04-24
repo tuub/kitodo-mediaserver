@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:replace="fragments/head::head(#{users.title})"></head>
+<body>
+
+<div class="wrapper">
+
+    <nav th:replace="fragments/nav::nav('users', '')"></nav>
+
+    <div class="content-wrapper">
+        <div class="article">
+
+            <div class="main ui container">
+
+                <h1 class="header" th:text="#{users.title}"></h1>
+
+                <p th:text="#{users.description}"></p>
+
+                <div class="ui basic secondary menu">
+                    <a th:href="@{/users/-new}" class="ui primary button item">
+                        <i class="plus icon"></i>
+                        <span th:text="#{users.new}"></span>
+                    </a>
+                </div>
+
+                <div class="ui negative message" th:if="${error != null}">
+                    <p th:text="${error}"></p>
+                </div>
+
+                <div class="ui stackable three column grid">
+                    <div class="column" th:each="user : ${users}">
+                        <div class="ui fluid card" th:attrappend="title=${not user.enabled} ? #{users.user_is_disabled}">
+                            <div class="ui right corner label" th:if="${not user.enabled}">
+                                <i class="lock icon"></i>
+                            </div>
+                            <div class="content">
+                                <div class="header" th:text="${user.username}"></div>
+                                <div class="description" th:text="${user.name}"></div>
+                            </div>
+                            <div class="extra content">
+                                <a class="left floated" th:href="@{'/users/' + ${user.username}}">
+                                    <i class="edit icon"></i>
+                                    <span th:text="#{form.edit}"></span>
+                                </a>
+                                <div class="right floated">
+                                    <form th:action="@{'/users/' + ${user.username} + '/delete'}" method="post">
+                                        <a th:href="@{'/users/' + ${user.username} + '/delete'}">
+                                            <i class="trash icon"></i>
+                                            <span th:text="#{form.delete}"></span>
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="fragments/confirm::confirm(id='user-delete-modal', title=#{users.delete_user}, content=#{users.delete_user_question}, affirmative=#{form.delete}, dismissive=#{form.cancel})"></div>
+
+</body>
+</html>

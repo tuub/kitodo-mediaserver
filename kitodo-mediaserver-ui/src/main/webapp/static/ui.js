@@ -21,4 +21,36 @@ $(document).ready(function(){
         on: 'hover'
     });
 
+    // initialize all checkboxes
+    $('.ui.checkbox').checkbox();
+
+    // confirm user delete button
+    $('a[href*="/users"][href*="/delete"]').click(function(e){
+        e.preventDefault();
+        $('#user-delete-modal')
+            .modal({
+                closable: false,
+                onApprove: function(){
+                    $(e.target).closest('form').submit();
+                }
+            })
+            .modal('show');
+    });
+
+    // toggle action for password fields
+    $('.action.input button.icon').click(function(e){
+        e.preventDefault();
+        button = $(e.target).closest('button');
+        icon = button.find('i');
+        input = button.siblings('input');
+
+        if (icon.hasClass('slash')) {
+            input.attr('type', 'password');
+            icon.removeClass('slash')
+        } else {
+            input.attr('type', 'text');
+            icon.addClass('slash')
+        }
+    });
+
 });

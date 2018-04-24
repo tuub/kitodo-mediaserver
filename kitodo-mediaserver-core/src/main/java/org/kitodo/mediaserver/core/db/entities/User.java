@@ -13,8 +13,10 @@ package org.kitodo.mediaserver.core.db.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -24,20 +26,19 @@ import javax.validation.constraints.Size;
 public class User {
 
     @Id
-    @NotBlank(message = "username is required")
-    @Size(min = 2, max = 255)
     private String username;
 
-    @NotBlank(message = "password is required")
     @Column(length = 60)
     private String password;
 
-    private Integer enabled;
+    private String name;
 
-    protected User() {}
+    private Boolean enabled = true;
+
+    public User() {}
 
     public User(String username, String password) {
-        this.username = username.trim();
+        this.username = username;
         this.password = password;
     }
 
@@ -46,7 +47,7 @@ public class User {
     }
 
     public User setUsername(String username) {
-        this.username = username.trim();
+        this.username = username;
         return this;
     }
 
@@ -59,12 +60,20 @@ public class User {
         return this;
     }
 
-    public boolean isEnabled() {
-        return enabled == 1;
+    public String getName() {
+        return name;
     }
 
-    public User setEnabled(boolean enabled) {
-        this.enabled = enabled ? 1 : 0;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public User setEnabled(Boolean enabled) {
+        this.enabled = enabled;
         return this;
     }
 
