@@ -12,6 +12,7 @@
 package org.kitodo.mediaserver.core.api;
 
 import java.util.Map;
+import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.models.ActionControl;
 
 
@@ -21,37 +22,16 @@ import org.kitodo.mediaserver.core.models.ActionControl;
 public interface IAction {
 
     /**
-     * Request an action.
-     *
-     * <p>
-     * Requesting an action is basically just creating an ActionControl object and making it persistent.
-     *
-     * @param workId    the id of the work
-     * @param action    the action name
-     * @param parameter a map with parameter
-     */
-    default void request(int workId, String action, Map<String, String> parameter) throws Exception {
-
-        // Check that the action can be mapped to an implementation
-
-        // Check that the action is not already requested
-
-        // create an entity
-        ActionControl actionControl = new ActionControl(workId, action, parameter);
-
-        // make it persistent
-
-    }
-
-    /**
      * Performs the action.
      *
      * <p>
      * Implementations of these method may or may not return an object.
      *
-     * @param actionControl the actionControl object with the definition of the specific action.
-     * @return  an object with the result of the action, if any.
+     * @param work a work entity
+     * @param parameter a map of parameter
+     * @return an object with the result of the action, if any.
+     * @throws Exception by fatal errors
      */
-    Object perform(ActionControl actionControl) throws Exception;
+    Object perform(Work work, Map<String, String> parameter) throws Exception;
 
 }

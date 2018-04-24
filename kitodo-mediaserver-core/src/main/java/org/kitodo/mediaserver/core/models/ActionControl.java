@@ -12,13 +12,16 @@
 package org.kitodo.mediaserver.core.models;
 
 import java.util.Map;
+import org.kitodo.mediaserver.core.db.entities.Work;
 
 /**
  * Dummy for an ActionControl entity.
  */
 public class ActionControl {
 
-    Map<String, String> parameter;
+    private Map<String, String> parameter;
+
+    private Work work;
 
     public Map<String, String> getParameter() {
         return parameter;
@@ -28,18 +31,25 @@ public class ActionControl {
         this.parameter = parameter;
     }
 
+    public Work getWork() {
+        return work;
+    }
+
+    public void setWork(Work work) {
+        this.work = work;
+    }
+
     private ActionControl() {}
 
     /**
      * Constructs an ActionControl object.
      *
-     * @param workId the id of the work on which the action is performed
+     * @param work the work on which the action is performed
      * @param action the action name
      * @param parameter a map of parameter
      */
-    public ActionControl(int workId, String action, Map<String, String> parameter) {
-        // create object
-
+    public ActionControl(Work work, String action, Map<String, String> parameter) {
         this.parameter = parameter;
+        this.work = work;
     }
 }
