@@ -1,0 +1,15 @@
+################################################################
+#
+# This is a file for local configurations of Kitodo Mediaserver
+#
+# Entries in this file override settings in default.yml
+#
+#################################################################
+
+fileserver:
+  rootUrl: http://localhost:8980/files/
+  caching: true
+  cachePath: /srv/kitodo/mediaserver/cache/
+
+mets:
+  originalFileGrpSuffix: PRESENTATION
