@@ -15,12 +15,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.HttpForbiddenException;
@@ -31,7 +36,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.servlet.HandlerMapping;
 
 /**
  * A controller responsible for delivering files, if necessary converting from a master file.
@@ -47,8 +51,13 @@ public class FileController {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
+    private FileserverProperties fileserverProperties;
+
+    @Autowired
     private WorkRepository workRepository;
 
+    @Autowired
+    private SingleFileConvertAction singleFileConvertAction;
 
     /**
      * Controller method mapped to a path with a workId.
@@ -86,36 +95,60 @@ public class FileController {
                 throw new HttpForbiddenException(message);
             }
         }
-        String completePath = (String) request.getAttribute(
-                HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE);
+        String completePath = request.getRequestURL().toString();
 
         String derivativePath = StringUtils.substringAfter(completePath, workId);
 
         File derivative = new File(work.getPath(), derivativePath);
-        if (derivative.exists() && derivative.isFile()) {
-            try {
-                InputStream inputStream = new FileInputStream(derivative);
-                //response.setContentType(); TODO
-                IOUtils.copy(inputStream, response.getOutputStream());
-                inputStream.close();
-                response.getOutputStream().close();
 
-                String message = "Delivered already present file " + completePath + " from location "
+        if (!derivative.exists()) {
+            derivative = new File(fileserverProperties.getCachePath(), workId + "/" + derivativePath);
+        }
+
+        InputStream inputStream = null;
+        try {
+            if (derivative.exists() && derivative.isFile()) {
+
+                // Perform a touch on the file to set last accessed time
+                FileUtils.touch(derivative);
+
+                inputStream = new FileInputStream(derivative);
+                //response.setContentType(); TODO
+
+                String message = "Delivering already present file " + completePath + " from location "
                         + derivative.getAbsolutePath();
                 LOGGER.info(message);
 
-            } catch (IOException e) {
-                LOGGER.error(e.toString(), e);
-                throw new HttpNotFoundException(e.toString());
+            } else {
+
+                String message = "The requested file " + completePath + " allegedly located at "
+                        + derivative.getAbsolutePath() + " does not exist. Trying to convert the file.";
+                LOGGER.info(message);
+
+                //call conversion handler to produce the file
+                try {
+                    Map<String, String> parameterMap = new HashMap<>();
+                    parameterMap.put("derivativePath", workId + derivativePath);
+                    parameterMap.put("requestUrl", completePath);
+
+                    inputStream = singleFileConvertAction.perform(work, parameterMap);
+
+                } catch (Exception e) {
+                    LOGGER.error(e.toString());
+                }
+
             }
-        } else {
 
-            // TODO call conversion handler to produce the file
+            if (inputStream == null) {
+                throw new HttpNotFoundException("File not found and could not be converted.");
+            }
 
-            String message = "The requested file " + completePath + " allegedly located at "
-                    + derivative.getAbsolutePath() + " does not exist.";
-            LOGGER.info(message);
-            throw new HttpNotFoundException("");
+            IOUtils.copy(inputStream, response.getOutputStream());
+            inputStream.close();
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            LOGGER.error(e.toString(), e);
+            throw new HttpNotFoundException(e.toString());
         }
     }
 }

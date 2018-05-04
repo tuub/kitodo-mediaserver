@@ -17,3 +17,18 @@ spring:
 
 fileserver:
   filePathPattern: /files/{workId}/**
+  caching: false
+  cachePath: /tmp
+
+conversion:
+  jpeg:
+    defaultSize: 1000
+  useGraphicsMagick: true
+  pathExtractionPatterns:
+    - .*/jpeg/(max|min|thumb|default)/.*
+    - .*/jpeg/(150|600|1000|2000)/.*
+
+mets:
+  originalFileGrpSuffix: ORIGINAL
+
+
