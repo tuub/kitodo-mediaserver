@@ -13,11 +13,14 @@ package org.kitodo.mediaserver.importer;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * Starter of the importer application.
  */
 @SpringBootApplication
+@EnableScheduling
 public class ImporterApplication {
 
     /**
