@@ -11,13 +11,17 @@
 
 package org.kitodo.mediaserver.ui.works;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.ui.config.UiProperties;
 import org.kitodo.mediaserver.ui.exceptions.WorkNotFoundException;
 import org.kitodo.mediaserver.ui.util.KeyValueParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -43,6 +47,8 @@ public class WorkController {
 
     private UiProperties uiProperties;
 
+    private CacheDeleteAction cacheDeleteAction;
+
     public WorkService getWorkService() {
         return workService;
     }
@@ -59,6 +65,15 @@ public class WorkController {
     @Autowired
     public void setUiProperties(UiProperties uiProperties) {
         this.uiProperties = uiProperties;
+    }
+
+    public CacheDeleteAction getCacheDeleteAction() {
+        return cacheDeleteAction;
+    }
+
+    @Autowired
+    public void setCacheDeleteAction(CacheDeleteAction cacheDeleteAction) {
+        this.cacheDeleteAction = cacheDeleteAction;
     }
 
     /**
@@ -127,6 +142,29 @@ public class WorkController {
             workService.updateWork(work);
         } catch (WorkNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorUpdate", "works.error.work_not_found");
+        }
+        return "redirect:/works";
+    }
+
+    /**
+     * Delete the work cache.
+     * @param id Id of the work
+     * @param redirectAttributes cookies for error handling
+     * @return view name
+     */
+    @PostMapping("/{id}/cache/delete")
+    public String cacheDelete(@PathVariable String id, RedirectAttributes redirectAttributes) {
+        Work work;
+        try {
+            work = workService.getWork(id);
+            Map<String, String> parameterMap = new HashMap<>();
+            try {
+                cacheDeleteAction.perform(work, parameterMap);
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.cache_delete_failed");
+            }
+        } catch (WorkNotFoundException e) {
+            redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.work_not_found");
         }
         return "redirect:/works";
     }

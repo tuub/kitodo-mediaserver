@@ -79,18 +79,21 @@
                                     </button>
                                 </form>
                             </div>
-                            <!--/*
-                            For future use here could be buttons to recreate and delete cached derivatives
 
-                            <div class="ui right floated icon menu">
+                            <div class="ui right floated secondary menu">
+                                <!--/*
+                                For future use here could be buttons to recreate cached derivatives
                                 <a class="item" data-tooltip="recreate cache">
                                     <i class="image outline icon"></i>
                                 </a>
-                                <a class="item" data-tooltip="clear cache">
-                                    <i class="bolt icon"></i>
-                                </a>
+                                */-->
+                                <form th:action="@{/works/{id}/cache/delete(id=${work.id})}" method="post" class="fitted item work-cache-delete">
+                                    <button class="ui basic icon button" th:attr="data-tooltip=#{works.delete_cache}">
+                                        <i class="bolt icon"></i>
+                                    </button>
+                                </form>
                             </div>
-                            */-->
+
                         </div>
                     </div>
                 </div>
