@@ -4,7 +4,7 @@
 #
 # DO NOT MAKE ANY LOCAL CHANGES TO THIS FILE!
 #
-# You can override configurations in thie fils in local.yml
+# You can override configurations in this fils in local.yml
 #
 #################################################################
 
@@ -31,4 +31,8 @@ conversion:
 mets:
   originalFileGrpSuffix: ORIGINAL
 
+importer:
+  hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/
+  importingFolderPath: /usr/local/kitodo/mediaserver/importing/
+  errorFolderPath: /usr/local/kitodo/mediaserver/import_error/
 
