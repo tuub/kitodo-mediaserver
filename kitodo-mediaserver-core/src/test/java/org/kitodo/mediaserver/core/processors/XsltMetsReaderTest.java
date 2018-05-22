@@ -3,6 +3,9 @@ package org.kitodo.mediaserver.core.processors;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.naming.ConfigurationException;
@@ -11,6 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.List;
 
@@ -27,13 +31,14 @@ public class XsltMetsReaderTest {
     private String param1 = "request_url";
     private String param2 = "original_id";
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
     @Before
     public void init() throws Exception {
         ClassLoader classLoader = getClass().getClassLoader();
-        File xsltFile = new File(classLoader.getResource("xslt/masterFileFromMets.xsl").getFile());
-        TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer = factory.newTransformer(new StreamSource(xsltFile));
-        xsltMetsReader.setTransformer(transformer);
+        Resource xsltFile = resourceLoader.getResource("xslt/masterFileFromMets.xsl");
+        xsltMetsReader.setXslt(xsltFile.getInputStream());
 
         testMetsFile = new File(classLoader.getResource("mets/flugblattTestMets.xml").getFile());
     }
@@ -96,7 +101,7 @@ public class XsltMetsReaderTest {
 
     @Test(expected = ConfigurationException.class)
     public void throwExceptionWhenXsltTransformerNull() throws Exception {
-        xsltMetsReader.setTransformer(null);
+        xsltMetsReader.setXslt(null);
         xsltMetsReader.read(null);
     }
 

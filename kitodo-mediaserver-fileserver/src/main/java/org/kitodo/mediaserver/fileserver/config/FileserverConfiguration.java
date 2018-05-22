@@ -17,6 +17,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
+import org.apache.commons.io.FileUtils;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
@@ -64,21 +65,11 @@ public class FileserverConfiguration {
      * @return the mets reader
      */
     @Bean
-    public IMetsReader masterFileMetsReader() {
+    public IMetsReader masterFileMetsReader() throws IOException {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
 
         Resource resource = resourceLoader.getResource("classpath:xslt/masterFileFromMets.xsl");
-        InputStream xsltFile;
-        Transformer transformer = null;
-        try {
-            xsltFile = resource.getInputStream();
-            TransformerFactory factory = TransformerFactory.newInstance();
-            transformer = factory.newTransformer(new StreamSource(xsltFile));
-        } catch (IOException | TransformerConfigurationException e) {
-            //TODO
-            e.printStackTrace();
-        }
-        xsltMetsReader.setTransformer(transformer);
+        xsltMetsReader.setXslt(resource.getInputStream());
         return xsltMetsReader;
     }
 
@@ -136,7 +127,7 @@ public class FileserverConfiguration {
      * @return a ConversionAction
      */
     @Bean
-    public SingleFileConvertAction conversionAction() {
+    public SingleFileConvertAction conversionAction() throws Exception {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
         singleFileConvertAction.setMetsReader(masterFileMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());

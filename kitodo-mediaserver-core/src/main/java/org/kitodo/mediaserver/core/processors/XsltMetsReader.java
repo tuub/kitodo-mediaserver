@@ -14,6 +14,7 @@ package org.kitodo.mediaserver.core.processors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 import javax.naming.ConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -33,10 +35,10 @@ import org.kitodo.mediaserver.core.api.IMetsReader;
  */
 public class XsltMetsReader implements IMetsReader {
 
-    private Transformer transformer;
+    private InputStream xslt;
 
-    public void setTransformer(Transformer transformer) {
-        this.transformer = transformer;
+    public void setXslt(InputStream xslt) {
+        this.xslt = xslt;
     }
 
     /**
@@ -50,8 +52,8 @@ public class XsltMetsReader implements IMetsReader {
     public List<String> read(File mets, Map.Entry<String, String> ... parameter)
             throws ConfigurationException, TransformerException, FileNotFoundException {
 
-        if (transformer == null) {
-            throw new ConfigurationException("The required XSLT transformer is not set, "
+        if (xslt == null) {
+            throw new ConfigurationException("The required XSLT input stream is not set, "
                     + "please check your spring configuration.");
         }
         if (mets == null) {
@@ -60,6 +62,9 @@ public class XsltMetsReader implements IMetsReader {
         if (!mets.isFile()) {
             throw new IllegalArgumentException("The mets file " + mets.getAbsolutePath() + " is not a file");
         }
+
+        TransformerFactory factory = TransformerFactory.newInstance();
+        Transformer transformer = factory.newTransformer(new StreamSource(xslt));
 
         Arrays.stream(parameter)
                 .forEach(param -> transformer.setParameter(param.getKey(), param.getValue()));
