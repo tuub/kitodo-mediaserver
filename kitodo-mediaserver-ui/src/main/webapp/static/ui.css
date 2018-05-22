@@ -74,6 +74,38 @@ label {
     cursor: pointer!important;
 }
 
+/* pagination: page numbers */
+span.pagination {
+    margin-right: 1em;
+    margin-bottom: 1em;
+    display: inline-block;
+}
+
+/* pagination: page chooser input field */
+.page-input {
+    margin-right: 1em;
+}
+.page-input form {
+    display: inline;
+}
+.page-input input {
+    width: 60px!important;
+}
+.page-input .input {
+    width: auto!important;
+}
+
+/* pagination: elements per page chooser input */
+.page-size {
+    margin-right: 1em;
+}
+.page-size form {
+    display: inline;
+}
+.page-size .dropdown {
+    min-width: 0!important;
+}
+
 /* mobile */
 @media only screen and (max-width: 768px) {
     nav.nav {
@@ -94,6 +126,9 @@ label {
     }
     .wrapper {
         flex-direction: column;
+    }
+    .pagination {
+        text-align: center;
     }
 }
 

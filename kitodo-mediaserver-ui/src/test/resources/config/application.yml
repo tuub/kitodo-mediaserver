@@ -1,0 +1,25 @@
+
+ui:
+  pagination:
+    elementsPerPage:
+
+      # Number of elements shown on a page
+      #defaultValue: 20
+
+      # Number of elements that are available in the dropdown field
+      availableValues:
+      - 5
+      - 10
+      - 20
+      - 50
+      - 100
+      - 200
+
+  works:
+
+    # Which data base fields are searchable by "field:pattern" in the UI's search field
+    searchableFields:
+      - id
+      - identifier
+      - title
+      - enabled

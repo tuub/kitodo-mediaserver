@@ -14,12 +14,13 @@ package org.kitodo.mediaserver.core.db.repositories;
 import java.util.List;
 import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * Repository for works.
  */
-public interface WorkRepository extends CrudRepository<Work, String> {
+public interface WorkRepository extends PagingAndSortingRepository<Work, String>, JpaSpecificationExecutor<Work> {
 
     /**
      * Finds a work with a particular identifier.

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--
+url             string:     URL for all links
+page            int:        current page number
+size            int:        elements per page
+search          string:     a search pattern
+availableFields string[]:   field names that may be used for search
+-->
+<form method="get" class="ui form"
+      th:action="@{${url}}"
+      th:fragment="search(url, page, size, sort, search, availableFields)">
+    <input type="hidden" name="size" th:value="${size}">
+    <input type="hidden" name="sort" th:value="${sort}">
+    <div class="field">
+        <div class="ui right action input" th:classappend="${search} ? 'left icon input'">
+            <input type="text" name="search" th:value="${search}" th:placeholder="#{works.search}">
+            <div class="ui flowing popup top left transition hidden">
+                <h3 class="ui header" th:text="#{search.syntax}"></h3>
+                <ul class="ui list">
+                    <li th:text="#{search.for_a_word}"></li>
+                    <li th:text="#{search.for_a_string}"></li>
+                    <li th:text="#{search.for_a_field}"></li>
+                </ul>
+                <h3 class="ui header" th:text="#{search.available_fields}"></h3>
+                <div>
+                    <div class="ui label"
+                         th:each="field : ${availableFields}"
+                         th:text="${field}"></div>
+                </div>
+            </div>
+            <i class="times link icon" th:if="${search}"></i>
+            <button class="ui button" type="submit" th:text="#{form.search}"></button>
+        </div>
+    </div>
+</form>
+
+<div class="ui message empty"
+     th:fragment="searchFields(searchFields)">
+    <h3 class="header" th:text="#{search.terms_used}"></h3>
+    <div class="ui stackable relaxed divided horizontal list">
+        <div class="item" th:each="field : ${searchFields}">
+            <div class="content">
+                <h4 class="header"
+                    th:text="${field.getKey()}"
+                    th:if="${field.getKey()}"></h4>
+                <h4 class="header"
+                    th:text="#{search.wildcard_field}"
+                    th:if="not ${field.getKey()}"></h4>
+                <div class="description" th:text="${field.getValue()}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
