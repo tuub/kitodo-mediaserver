@@ -13,11 +13,17 @@ package org.kitodo.mediaserver.ui.config;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+
+import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.util.FileDeleter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +45,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
  */
 @Configuration
 @ComponentScan(basePackages = "org.kitodo.mediaserver.ui")
+@Import({FileserverProperties.class})
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
@@ -138,4 +145,23 @@ public class WebMvcConfig implements WebMvcConfigurer {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Delete cached derivatives action.
+     * @return CacheDeleteAction
+     */
+    @Bean
+    public CacheDeleteAction cacheDeleteAction() {
+        CacheDeleteAction cacheDeleteAction = new CacheDeleteAction();
+        return cacheDeleteAction;
+    }
+
+    /**
+     * Deletes files (and folders).
+     * @return FileDeleter
+     */
+    @Bean
+    public FileDeleter fileDeleter() {
+        FileDeleter fileDeleter = new FileDeleter();
+        return fileDeleter;
+    }
 }
