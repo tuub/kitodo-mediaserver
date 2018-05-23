@@ -4,17 +4,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.ResourceUtils;
 
 import javax.naming.ConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.List;
 
@@ -36,11 +32,10 @@ public class XsltMetsReaderTest {
 
     @Before
     public void init() throws Exception {
-        ClassLoader classLoader = getClass().getClassLoader();
-        Resource xsltFile = resourceLoader.getResource("xslt/masterFileFromMets.xsl");
-        xsltMetsReader.setXslt(xsltFile.getInputStream());
+        File xsltFile = ResourceUtils.getFile("classpath:xslt/masterFileFromMets.xsl");
+        xsltMetsReader.setXslt(xsltFile);
 
-        testMetsFile = new File(classLoader.getResource("mets/flugblattTestMets.xml").getFile());
+        testMetsFile = ResourceUtils.getFile("classpath:mets/flugblattTestMets.xml");
     }
 
     @Test

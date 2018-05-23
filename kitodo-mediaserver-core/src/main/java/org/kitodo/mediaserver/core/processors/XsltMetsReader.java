@@ -14,7 +14,6 @@ package org.kitodo.mediaserver.core.processors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -35,9 +34,9 @@ import org.kitodo.mediaserver.core.api.IMetsReader;
  */
 public class XsltMetsReader implements IMetsReader {
 
-    private InputStream xslt;
+    private File xslt;
 
-    public void setXslt(InputStream xslt) {
+    public void setXslt(File xslt) {
         this.xslt = xslt;
     }
 
