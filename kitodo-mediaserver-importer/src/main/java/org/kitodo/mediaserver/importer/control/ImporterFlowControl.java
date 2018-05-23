@@ -21,13 +21,15 @@ import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IMetsValidation;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
 import org.kitodo.mediaserver.importer.exceptions.ImporterException;
+import org.kitodo.mediaserver.core.api.IDataReader;
+import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 
 /**
  * Flow control class for the importer.
@@ -40,6 +42,8 @@ public class ImporterFlowControl implements CommandLineRunner {
     private ImporterUtils importerUtils;
     private ImporterProperties importerProperties;
     private IImportValidation importValidation;
+
+    private IDataReader workDataReader;
 
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
@@ -54,6 +58,10 @@ public class ImporterFlowControl implements CommandLineRunner {
     @Autowired
     public void setImportValidation(IImportValidation importValidation) {
         this.importValidation = importValidation;
+    }
+
+    public void setWorkDataReader(IDataReader workDataReader) {
+        this.workDataReader = workDataReader;
     }
 
     /**
@@ -83,6 +91,8 @@ public class ImporterFlowControl implements CommandLineRunner {
 
         File workDir;
 
+        System.out.println("Starting ...");
+
         while ((workDir = importerUtils.getWorkPackage()) != null) {
 
             // Get the mets file
@@ -91,6 +101,10 @@ public class ImporterFlowControl implements CommandLineRunner {
                 throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
             }
 
+            Work workResult = workDataReader.read(workDir);
+
+            // * Validate the data and the set of files (see below).
+            //
             // * Read the work data from the mets-mods file.
             // TODO replace with work reader
             Work work = new Work("id", "title");
