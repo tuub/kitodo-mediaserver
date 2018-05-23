@@ -9,12 +9,12 @@
 fileserver:
   rootUrl: http://localhost:8980/files/
   caching: true
-  cachePath: /srv/kitodo/mediaserver/cache/
+  cachePath: /srv/kitodo-mediaserver/data/cache/
 
 mets:
   originalFileGrpSuffix: PRESENTATION
 
 importer:
-  hotfolderPath: /srv/kitodo/mediaserver/hotfolder/
-  importingFolderPath: /srv/kitodo/mediaserver/importing/
-  errorFolderPath: /srv/kitodo/mediaserver/import_error/
+  hotfolderPath: /srv/kitodo-mediaserver/data/hotfolder/
+  importingFolderPath: /srv/kitodo-mediaserver/data/importing/
+  errorFolderPath: /srv/kitodo-mediaserver/data/import_error/

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets OBJID="" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-5.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.loc.gov/standards/premis/ http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/standards/mix/ http://www.loc.gov/standards/mix/mix.xsd" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <mets:dmdSec ID="DMDLOG_0000">
+      <mets:mdWrap MDTYPE="MODS">
+         <mets:xmlData>
+            <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+               <mods:originInfo>
+                  <mods:publisher>Trowitzsch</mods:publisher>
+                  <mods:place>
+                     <mods:placeTerm type="text">Frankfurt, O. :</mods:placeTerm>
+                  </mods:place>
+                  <mods:dateIssued encoding="w3cdtf" keyDate="yes">1886</mods:dateIssued>
+               </mods:originInfo>
+               <mods:titleInfo>
+                  <mods:title>Jg. 1.1886</mods:title>
+                  <mods:subTitle>illustrierte Wochenschrift für praktische Gärtner und Gartenliebhaber.</mods:subTitle>
+               </mods:titleInfo>
+               <mods:titleInfo type="alternative">
+                  <mods:title>illustrierte Wochenschrift für Gärtner, Gartenliebhaber und Landwirte</mods:title>
+               </mods:titleInfo>
+               <mods:part order="1" type="host">
+                  <mods:detail>
+                     <mods:number>1</mods:number>
+                  </mods:detail>
+               </mods:part>
+               <mods:titleInfo type="uniform">
+                  <mods:title>1</mods:title>
+               </mods:titleInfo>
+               <mods:classification authority="ivdcc">Deutsche Gartenbaubibliothek#Periodika (Gartentexte digital)</mods:classification>
+               <mods:language>
+                  <mods:languageTerm authority="iso639-2b" type="code">ger</mods:languageTerm>
+               </mods:language>
+               <mods:accessCondition type="use and reproduction">https://creativecommons.org/publicdomain/mark/1.0/</mods:accessCondition>
+               <mods:location>
+                  <mods:shelfLocator>4Zf113'A</mods:shelfLocator>
+                  <mods:physicalLocation>Universitätsbibliothek der Technischen Universität Berlin</mods:physicalLocation>
+               </mods:location>
+               <mods:originInfo>
+                  <mods:place>
+                     <mods:placeTerm type="text">Berlin</mods:placeTerm>
+                  </mods:place>
+                  <mods:dateCaptured encoding="w3cdtf">2017</mods:dateCaptured>
+                  <mods:publisher>Universitätsbibliothek der Technischen Universität Berlin</mods:publisher>
+                  <mods:edition>[Electronic ed.]</mods:edition>
+               </mods:originInfo>
+               <mods:physicalDescription>
+                  <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+               </mods:physicalDescription>
+            </mods:mods>
+         </mets:xmlData>
+      </mets:mdWrap>
+   </mets:dmdSec>
+</mets:mets>
