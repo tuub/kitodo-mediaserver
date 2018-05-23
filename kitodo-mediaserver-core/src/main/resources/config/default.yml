@@ -37,6 +37,10 @@ importer:
   importingFolderPath: /usr/local/kitodo/mediaserver/importing/
   errorFolderPath: /usr/local/kitodo/mediaserver/import_error/
 
+  validationFileGrps:
+  - ORIGINAL
+
+
 ui:
   pagination:
     elementsPerPage:
