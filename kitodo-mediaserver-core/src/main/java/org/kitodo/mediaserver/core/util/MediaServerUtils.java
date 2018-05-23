@@ -13,6 +13,8 @@ package org.kitodo.mediaserver.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.db.entities.Work;
@@ -70,6 +72,21 @@ public class MediaServerUtils {
                     + " The url must start with the fileserver root url " + rootUrl + " or file://");
 
     }
+
+    /**
+     * Gets an internal path to a file of a given work from a url using work id as separator.
+     *
+     * @param url the original url (e.g. from a mets file)
+     * @param rootPath the root path (e.g. at import)
+     * @param workId the work id
+     * @return a path object with the result
+     */
+    public Path getInternalPathFromUrl(String url, String rootPath, String workId) {
+        String separator = workId + "/";
+        String internalWorkPath = separator + StringUtils.substringAfter(url, separator);
+        return Paths.get(rootPath, internalWorkPath);
+    }
+
 
     /**
      * Check if all requiered parameter are present in a parameter map.

@@ -36,6 +36,10 @@ importer:
   hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/
   importingFolderPath: /usr/local/kitodo/mediaserver/importing/
   errorFolderPath: /usr/local/kitodo/mediaserver/import_error/
+  workIdRegex: \w+
+  validationFileGrps:
+  - ORIGINAL
+
 
 ui:
   pagination:
