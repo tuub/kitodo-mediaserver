@@ -12,6 +12,13 @@
 package org.kitodo.mediaserver.importer.control;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.io.FilenameUtils;
+import org.kitodo.mediaserver.core.exceptions.ValidationException;
+import org.kitodo.mediaserver.importer.api.IMetsValidation;
+import org.kitodo.mediaserver.importer.config.ImporterProperties;
+import org.kitodo.mediaserver.importer.exceptions.ImporterException;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,10 +36,28 @@ public class ImporterFlowControl implements CommandLineRunner {
     private static final Logger LOGGER = LoggerFactory.getLogger(ImporterFlowControl.class);
 
     private ImporterUtils importerUtils;
+    private ImporterProperties importerProperties;
+    private IMetsValidation recordIdentifierValidator;
+    private IMetsValidation fileOccurenceValidator;
 
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
         this.importerUtils = importerUtils;
+    }
+
+    @Autowired
+    public void setImporterProperties(ImporterProperties importerProperties) {
+        this.importerProperties = importerProperties;
+    }
+
+    @Autowired
+    public void setRecordIdentifierValidator(IMetsValidation recordIdentifierValidator) {
+        this.recordIdentifierValidator = recordIdentifierValidator;
+    }
+
+    @Autowired
+    public void setFileOccurenceValidator(IMetsValidation fileOccurenceValidator) {
+        this.fileOccurenceValidator = fileOccurenceValidator;
     }
 
     /**
@@ -64,10 +89,36 @@ public class ImporterFlowControl implements CommandLineRunner {
 
         while ((workDir = importerUtils.getWorkPackage()) != null) {
 
-            System.out.println("Work to import: " + workDir.getName());
+            // Get the mets file
+            File mets = new File(workDir, workDir.getName() + ".xml");
+            if (!mets.exists()) {
+                throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
+            }
 
-            // * Validate the data and the set of files (see below).
-            //
+            try {
+                // Validate and get the record identifier
+                String workId = (String) recordIdentifierValidator.validate(mets, null);
+
+                // If the workId is different from the name of the mets file and/or the work directory,
+                // we have to rename them. TODO
+
+                // Validate required files
+                for (String fileGrp : importerProperties.getValidationFileGrps()) {
+                    LOGGER.info("Checking all files with fileGrp " + fileGrp);
+
+                    Map<String, String> fileValidatorParams = new HashMap<>();
+                    fileValidatorParams.put("workId", workId);
+                    fileValidatorParams.put("fileGrpId", fileGrp);
+
+                    fileOccurenceValidator.validate(mets, fileValidatorParams);
+                }
+            } catch (ValidationException vex) {
+                LOGGER.error("A validation of " + workDir.getName() + " was unsuccesful, "
+                        + "moving to error folder. Error: " + vex);
+                importerUtils.moveDir(workDir, new File(importerProperties.getErrorFolderPath()));
+                continue;
+            }
+
             // * Read the work data from the mets-mods file.
             //
             // * Check in the database if this work of any of its identifiers is already present.

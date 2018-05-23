@@ -1,6 +1,8 @@
 package org.kitodo.mediaserver.core.util;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
@@ -55,6 +57,20 @@ public class MediaServerUtilsTest {
 
         //then
         assertThat(result.getAbsolutePath()).isEqualTo(workPath + "jpeg/hepp.jpg");
+    }
+
+    @Test
+    public void shouldReturnAnInternalPath() {
+        //given
+        String url = "https://www.example.org/files/myWorkId/jpeg/hepp.jpg";
+        String workId = "myWorkId";
+        String rootUrl = "/path/to/import/temp";
+
+        //when
+        Path result = mediaServerUtils.getInternalPathFromUrl(url, rootUrl, workId);
+
+        //then
+        assertThat(result).isEqualTo(Paths.get("/path/to/import/temp/myWorkId/jpeg/hepp.jpg"));
     }
 
     @Test(expected = IllegalArgumentException.class)
