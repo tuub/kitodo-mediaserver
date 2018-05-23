@@ -11,13 +11,8 @@
 
 package org.kitodo.mediaserver.fileserver.config;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamSource;
-import org.apache.commons.io.FileUtils;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
@@ -36,9 +31,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.util.ResourceUtils;
 
 
 /**
@@ -67,9 +62,8 @@ public class FileserverConfiguration {
     @Bean
     public IMetsReader masterFileMetsReader() throws IOException {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
-
-        Resource resource = resourceLoader.getResource("classpath:xslt/masterFileFromMets.xsl");
-        xsltMetsReader.setXslt(resource.getInputStream());
+        File xslt = ResourceUtils.getFile("classpath:xslt/masterFileFromMets.xsl");
+        xsltMetsReader.setXslt(xslt);
         return xsltMetsReader;
     }
 
