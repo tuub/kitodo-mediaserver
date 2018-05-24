@@ -9,21 +9,20 @@
  * LICENSE file that was distributed with this source code.
  */
 
-package org.kitodo.mediaserver.core.db.repositories;
+package org.kitodo.mediaserver.importer.api;
 
-import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
-import org.springframework.data.repository.CrudRepository;
 
 /**
- * Repository for identifiers.
+ * Interface for for inserting / updating work data.
  */
-public interface IdentifierRepository extends CrudRepository<Identifier, String> {
+public interface IWorkDataWriter {
 
     /**
-     * Deletes all identifiers for a given work.
+     * Writes the data work to the database, updating the work if already present. Replaces all identifiers.
      *
      * @param work the work entity
+     * @throws Exception if a severe error occurs
      */
-    void deleteByWork(Work work);
+    void write(Work work);
 }
