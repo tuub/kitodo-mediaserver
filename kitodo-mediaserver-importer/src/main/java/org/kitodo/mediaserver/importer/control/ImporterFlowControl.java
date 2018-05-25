@@ -12,12 +12,15 @@
 package org.kitodo.mediaserver.importer.control;
 
 import java.io.File;
+
+import org.kitodo.mediaserver.core.api.IDataReader;
+import org.kitodo.mediaserver.core.db.entities.Work;
+import org.kitodo.mediaserver.importer.processors.WorkDataReader;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,9 +33,16 @@ public class ImporterFlowControl implements CommandLineRunner {
 
     private ImporterUtils importerUtils;
 
+    private IDataReader workDataReader;
+
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
         this.importerUtils = importerUtils;
+    }
+
+    @Autowired
+    public void setWorkDataReader(IDataReader workDataReader) {
+        this.workDataReader = workDataReader;
     }
 
     /**
@@ -62,9 +72,13 @@ public class ImporterFlowControl implements CommandLineRunner {
 
         File workDir;
 
+        System.out.println("Starting ...");
+
         while ((workDir = importerUtils.getWorkPackage()) != null) {
 
             System.out.println("Work to import: " + workDir.getName());
+
+            Work workResult = workDataReader.read(workDir);
 
             // * Validate the data and the set of files (see below).
             //
