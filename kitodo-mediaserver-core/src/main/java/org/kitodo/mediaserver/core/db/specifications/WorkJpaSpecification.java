@@ -9,7 +9,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-package org.kitodo.mediaserver.ui.works;
+package org.kitodo.mediaserver.core.db.specifications;
 
 import java.util.Arrays;
 import java.util.List;

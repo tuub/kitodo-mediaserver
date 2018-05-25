@@ -49,6 +49,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
+@ComponentScan(value = "org.kitodo.mediaserver.core.services")
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
