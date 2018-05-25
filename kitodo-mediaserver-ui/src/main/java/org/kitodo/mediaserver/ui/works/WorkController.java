@@ -17,11 +17,11 @@ import java.util.Map;
 
 import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
 import org.kitodo.mediaserver.core.db.entities.Work;
+import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
+import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.ui.config.UiProperties;
-import org.kitodo.mediaserver.ui.exceptions.WorkNotFoundException;
 import org.kitodo.mediaserver.ui.util.KeyValueParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;

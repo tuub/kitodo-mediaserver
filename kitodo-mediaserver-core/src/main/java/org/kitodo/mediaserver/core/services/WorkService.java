@@ -9,7 +9,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-package org.kitodo.mediaserver.ui.works;
+package org.kitodo.mediaserver.core.services;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,8 @@ import java.util.Optional;
 
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
-import org.kitodo.mediaserver.ui.exceptions.WorkNotFoundException;
+import org.kitodo.mediaserver.core.db.specifications.WorkJpaSpecification;
+import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

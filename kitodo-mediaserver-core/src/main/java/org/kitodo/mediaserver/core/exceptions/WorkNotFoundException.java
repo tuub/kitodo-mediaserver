@@ -9,7 +9,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-package org.kitodo.mediaserver.ui.exceptions;
+package org.kitodo.mediaserver.core.exceptions;
 
 public class WorkNotFoundException extends Exception {
 

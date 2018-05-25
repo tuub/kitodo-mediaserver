@@ -21,12 +21,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
+import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.ui.config.WebMvcConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -44,6 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = WebMvcConfig.class)
+@ComponentScan(value = "org.kitodo.mediaserver.core.services")
 @AutoConfigureMockMvc
 @DataJpaTest // entityManager Bean
 @EnableSpringDataWebSupport // Pageable initialisation
@@ -54,9 +57,6 @@ public class WorkControllerTest {
 
     @Autowired
     private WorkRepository workRepository;
-
-    @Autowired
-    private WorkService workService;
 
     @Autowired
     private MockMvc mockMvc;
