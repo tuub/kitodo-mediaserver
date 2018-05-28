@@ -18,3 +18,7 @@ importer:
   hotfolderPath: /srv/kitodo/mediaserver/hotfolder/
   importingFolderPath: /srv/kitodo/mediaserver/importing/
   errorFolderPath: /srv/kitodo/mediaserver/import_error/
+
+  validationFileGrps:
+  - PRESENTATION
+  - FULLTEXT

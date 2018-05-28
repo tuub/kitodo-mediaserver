@@ -112,7 +112,7 @@ public class ImporterUtils {
         if (optionalDir.isPresent()) {
             moveDir(optionalDir.get(), importingFolder);
 
-            return optionalDir.get();
+            return new File(importingFolder, optionalDir.get().getName());
         }
 
         return null;
