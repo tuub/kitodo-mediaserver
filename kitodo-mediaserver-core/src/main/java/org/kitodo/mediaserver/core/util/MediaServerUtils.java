@@ -95,6 +95,9 @@ public class MediaServerUtils {
      * @param requiredParams all required parameter
      */
     public void checkForRequiredParameter(Map<String, String> parameter, String... requiredParams) {
+        if (requiredParams.length > 0 && parameter == null) {
+            throw new IllegalArgumentException("The parameter map is null.");
+        }
         for (String param : requiredParams) {
             if (StringUtils.isEmpty(parameter.get(param))) {
                 throw new IllegalArgumentException("Required parameter " + param + " is not in the parameter map.");
