@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/mods.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd">
+    <mets:metsHdr CREATEDATE="2016-05-04T13:09:39">
+        <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
+            <mets:name>Goobi - UGH-1.11.1-v1.11.0-11-gbafb11b - 16−November−2015</mets:name>
+            <mets:note>Goobi</mets:note>
+        </mets:agent>
+    </mets:metsHdr>
+    <mets:dmdSec ID="DMDLOG_0000">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+                    <mods:identifier type="goobi">156804</mods:identifier>
+                    <mods:location>
+                        <mods:physicalLocation authority="marcorg" displayLabel="Saxon State Library, Dresden, Germany">DE-14</mods:physicalLocation>
+                        <mods:shelfLocator>Mscr.Dresd.A.180.d</mods:shelfLocator>
+                    </mods:location>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title lang="ger">Handschriften</mods:title>
+                        </mods:titleInfo>
+                    </mods:relatedItem>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title lang="ger">LDP: SLUB</mods:title>
+                        </mods:titleInfo>
+                    </mods:relatedItem>
+                    <mods:relatedItem type="series">
+                        <mods:titleInfo>
+                            <mods:title lang="ger">Autographe der Reformationszeit</mods:title>
+                        </mods:titleInfo>
+                    </mods:relatedItem>
+                    <mods:recordInfo>
+                        <mods:recordIdentifier source="http://digital.slub-dresden.de/oai/">oai:de:slub-dresden:db:id-457052678</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    <mods:physicalDescription>
+                        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+                        <mods:extent>773 S.</mods:extent>
+                    </mods:physicalDescription>
+                    <mods:identifier type="swb-ppn">457052678</mods:identifier>
+                    <mods:identifier type="purl">http://digital.slub-dresden.de/id457052678</mods:identifier>
+                    <mods:identifier type="urn">urn:nbn:de:bsz:14-db-id4570526782</mods:identifier>
+                    <mods:extension>
+                        <slub:slub xmlns:slub="http://slub-dresden.de/">
+                            <slub:id type="digital">457052678</slub:id>
+                            <slub:id type="tsl-ats">LuthColl</slub:id>
+                            <slub:link displayLabel="Katalognachweis">
+                                <slub:target>http://kalliope-verbund.info/DE-611-HS-2438278</slub:target>
+                            </slub:link>
+                        </slub:slub>
+                    </mods:extension>
+                    <mods:titleInfo>
+                        <mods:title>Colloquia Lutheri conscripta a quibusdam et alia quaedam addita sunt. Thesaurus theologiae - Mscr.Dresd.A.180.d</mods:title>
+                    </mods:titleInfo>
+                    <mods:language>
+                        <mods:languageTerm authority="rfc3066" type="code">ger</mods:languageTerm>
+                    </mods:language>
+                    <mods:language>
+                        <mods:languageTerm authority="rfc3066" type="code">lat</mods:languageTerm>
+                    </mods:language>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Wittenberg</mods:placeTerm>
+                        </mods:place>
+                        <mods:dateOther encoding="w3cdtf" type="order">1544</mods:dateOther>
+                    </mods:originInfo>
+                    <mods:name type="personal">
+                        <mods:role>
+                            <mods:roleTerm authority="marcrelator" type="code">aut</mods:roleTerm>
+                        </mods:role>
+                        <mods:namePart type="family">Luther</mods:namePart>
+                        <mods:namePart type="given">Martin*1483-1546*</mods:namePart>
+                        <mods:displayForm>Luther, Martin*1483-1546*</mods:displayForm>
+                    </mods:name>
+                    <mods:note type="comment">zahlr. Paginierfehler: u.a. Seitenzählung springt von S.254 auf S. 256. - Beilage: Inhaltsverzeichnis zur Handschrift</mods:note>
+                    <mods:name>
+                        <mods:role>
+                            <mods:roleTerm authority="marcrelator" type="code">fnd</mods:roleTerm>
+                        </mods:role>
+                        <mods:displayForm>LDP Sachsen</mods:displayForm>
+                    </mods:name>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+</mets:mets>

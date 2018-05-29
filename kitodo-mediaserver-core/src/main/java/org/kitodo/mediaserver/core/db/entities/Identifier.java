@@ -11,6 +11,8 @@
 
 package org.kitodo.mediaserver.core.db.entities;
 
+import org.apache.commons.lang.StringUtils;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -77,5 +79,25 @@ public class Identifier {
 
     public void setWork(Work work) {
         this.work = work;
+    }
+
+    /**
+     * Implementing equals for test purposes.
+     *
+     * @param obj another object
+     * @return true if equal to this, otherwise false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Identifier other = (Identifier) obj;
+        return StringUtils.equals(getIdentifier(), other.getIdentifier())
+                && StringUtils.equals(getType(), other.getType());
     }
 }
