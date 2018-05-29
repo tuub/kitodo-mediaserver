@@ -91,7 +91,7 @@ public class ImporterConfiguration {
     @Bean
     public IMetsReader fileUrlReader() throws IOException {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        File xslt = ResourceUtils.getFile("classpath:xslt/getPathsFromGivenFileGrp.xsl");
+        File xslt = ResourceUtils.getFile("classpath*:xslt/getPathsFromGivenFileGrp.xsl");
         xsltMetsReader.setXslt(xslt);
         return xsltMetsReader;
     }
@@ -107,7 +107,7 @@ public class ImporterConfiguration {
     @Bean
     public IMetsReader workDataMetsReader() throws Exception {
         XsltMetsReader workDataMetsReader = new XsltMetsReader();
-        workDataMetsReader.setXslt(ResourceUtils.getFile("classpath:xslt/getWorkData.xsl"));
+        workDataMetsReader.setXslt(ResourceUtils.getFile("classpath*:xslt/getWorkData.xsl"));
         return workDataMetsReader;
     }
 
