@@ -93,6 +93,11 @@ public class MediaServerUtilsTest {
         mediaServerUtils.checkForRequiredParameter(parameter, "foo", "qwert");
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowExceptionForNullParameterMap() {
+        mediaServerUtils.checkForRequiredParameter(null, "foo");
+    }
+
     @Test
     public void shouldThrowNoExceptionByPresentArgument() {
         mediaServerUtils.checkForRequiredParameter(parameter, "foo");
@@ -112,5 +117,7 @@ public class MediaServerUtilsTest {
     public void shouldThrowExceptionForInvalidUrl() {
         mediaServerUtils.getWorkFileFromUrl(work, "bullshit", "rootUrl");
     }
+
+
 
 }
