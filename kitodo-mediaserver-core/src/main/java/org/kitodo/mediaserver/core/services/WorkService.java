@@ -144,4 +144,12 @@ public class WorkService {
         actionService.request(work, "workLockAction", parameter);
         actionService.performRequested(work, "workLockAction", parameter);
     }
+
+    /**
+     * Deletes a work.
+     * @param work the work entity
+     */
+    public void deleteWork(Work work) {
+        workRepository.delete(work);
+    }
 }

@@ -17,7 +17,10 @@ mets:
 importer:
   hotfolderPath: /srv/kitodo/mediaserver/hotfolder/
   importingFolderPath: /srv/kitodo/mediaserver/importing/
+  tempWorkFolderPath: /srv/kitodo/mediaserver/import_temp/
   errorFolderPath: /srv/kitodo/mediaserver/import_error/
+  workFilesPath: /srv/kitodo/mediaserver/files/
+  cron: 0 0 * * * *
 
   validationFileGrps:
   - PRESENTATION

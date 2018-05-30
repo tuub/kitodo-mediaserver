@@ -35,8 +35,11 @@ mets:
 importer:
   hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/
   importingFolderPath: /usr/local/kitodo/mediaserver/importing/
+  tempWorkFolderPath: /usr/local/kitodo/mediaserver/import_temp/
   errorFolderPath: /usr/local/kitodo/mediaserver/import_error/
-  workIdRegex: \w+
+  workFilesPath: /usr/local/kitodo/mediaserver/files/
+  workIdRegex: "[\\w-]+"
+  cron: 0 5 2 * * *
   validationFileGrps:
   - ORIGINAL
 
