@@ -12,11 +12,20 @@
 package org.kitodo.mediaserver.core.db.repositories;
 
 import org.kitodo.mediaserver.core.db.entities.Identifier;
+import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  * Repository for identifiers.
  */
 public interface IdentifierRepository extends CrudRepository<Identifier, String> {
+
+
+    /**
+     * Deletes all identifiers for a given work.
+     *
+     * @param work the work entity
+     */
+    void deleteByWork(Work work);
 
 }
