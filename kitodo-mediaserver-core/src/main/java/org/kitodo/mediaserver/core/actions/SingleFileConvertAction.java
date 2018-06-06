@@ -16,9 +16,8 @@ import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
-import org.kitodo.mediaserver.core.api.IAsynchronousAction;
+import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
@@ -35,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * A class defining the convert action of a single file.
  */
-public class SingleFileConvertAction implements IAsynchronousAction {
+public class SingleFileConvertAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleFileConvertAction.class);
 
@@ -116,5 +115,4 @@ public class SingleFileConvertAction implements IAsynchronousAction {
 
         return converter.convert(sourceFile, parameter);
     }
-
 }
