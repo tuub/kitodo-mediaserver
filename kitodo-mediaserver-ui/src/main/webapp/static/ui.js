@@ -112,15 +112,30 @@ $(document).ready(function(){
             // enable action: confirm
 
             let modal = $('#work-enable-modal');
-            modal
-                .modal({
-                    closable: false,
-                    onApprove: function(){
-                        form.find('input[name="enabled"]').val('on');
-                        form.submit();
-                    }
+            let workId = button.attr('data-work-id');
+            let addition = modal.find('p.addition').closest('div');
+            addition.removeClass('hidden');
+
+            // load lock comment and show it in confirm dialog
+            $.ajax(window.UI.baseUrl + (window.UI.baseUrl === '/' ? '' : window.UI.baseUrl) + 'works/' + workId + '/lockcomment')
+                .done(function(data) {
+                    addition.find('p').text(data.response);
                 })
-                .modal('show');
+                .fail(function() {
+                    // TODO: Add multilingual error message
+                    addition.find('p').text("Error / Fehler");
+                })
+                .always(function () {
+                    modal
+                        .modal({
+                            closable: false,
+                            onApprove: function(){
+                                form.find('input[name="enabled"]').val('on');
+                                form.submit();
+                            }
+                        })
+                        .modal('show');
+                });
         }
     });
 

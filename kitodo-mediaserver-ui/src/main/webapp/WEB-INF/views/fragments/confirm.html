@@ -13,10 +13,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<div class="ui mini modal" th:id="${id}" th:fragment="confirm(id, title, content, affirmative, dismissive)">
+<div class="ui mini modal" th:id="${id}"
+     th:fragment="confirm(id, title, content, affirmative, dismissive)"
+     th:with="additionTitle = ${additionTitle}">
     <div class="header" th:text="${title}"></div>
     <div class="content">
         <p th:text="${content}"></p>
+        <div class="hidden">
+            <h4 class="addition header" th:text="${additionTitle}"></h4>
+            <p class="addition"></p>
+        </div>
     </div>
     <div class="actions">
         <div class="ui primary right ok button" th:text="${affirmative}"></div>
