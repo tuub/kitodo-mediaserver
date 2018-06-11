@@ -11,11 +11,12 @@
 
 package org.kitodo.mediaserver.core.services;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import javax.transaction.Transactional;
+import org.kitodo.mediaserver.core.db.entities.ActionData;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.IdentifierRepository;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
@@ -34,6 +35,8 @@ public class WorkService {
 
     private WorkRepository workRepository;
 
+    private ActionService actionService;
+
     private IdentifierRepository identifierRepository;
 
     public WorkRepository getWorkRepository() {
@@ -43,6 +46,11 @@ public class WorkService {
     @Autowired
     public void setWorkRepository(WorkRepository workRepository) {
         this.workRepository = workRepository;
+    }
+
+    @Autowired
+    public void setActionService(ActionService actionService) {
+        this.actionService = actionService;
     }
 
     @Autowired
@@ -105,5 +113,34 @@ public class WorkService {
     public void importWork(Work work) {
         identifierRepository.deleteByWork(work);
         workRepository.save(work);
+    }
+
+    /**
+     * Get the lock comment for a work.
+     * @param work the Work
+     * @return the lock comment
+     */
+    public String getLockComment(Work work) {
+        ActionData actionData = actionService.getLastPerformedAction(work, "workLockAction");
+        if (actionData != null && actionData.getParameter() != null && actionData.getParameter().get("comment") != null) {
+            return actionData.getParameter().get("comment");
+        }
+        return "";
+    }
+
+    /**
+     * Locks or unlocks a work.
+     * @param work the Work
+     * @param enabled lock or unlock
+     * @param comment lock comment
+     * @throws Exception action exceptions
+     */
+    public void lockWork(Work work, Boolean enabled, String comment) throws Exception {
+        Map<String, String> parameter = new HashMap<>();
+        parameter.put("enabled", enabled.toString());
+        parameter.put("comment", comment);
+
+        actionService.request(work, "workLockAction", parameter);
+        actionService.performRequested(work, "workLockAction", parameter);
     }
 }

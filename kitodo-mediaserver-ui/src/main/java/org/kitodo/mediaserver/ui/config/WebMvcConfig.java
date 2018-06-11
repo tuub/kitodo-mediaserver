@@ -13,11 +13,11 @@ package org.kitodo.mediaserver.ui.config;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-
 import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
+import org.kitodo.mediaserver.core.actions.WorkLockAction;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.util.FileDeleter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -44,12 +44,11 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
  * App MVC Configuration.
  */
 @Configuration
-@ComponentScan(basePackages = "org.kitodo.mediaserver.ui")
+@ComponentScan(basePackages = {"org.kitodo.mediaserver.ui", "org.kitodo.mediaserver.core.services"})
 @Import({FileserverProperties.class})
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
-@ComponentScan(value = "org.kitodo.mediaserver.core.services")
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
@@ -147,6 +146,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     /**
+     * The media server utilities.
+     * @return the bean
+     */
+    @Bean
+    public MediaServerUtils mediaServerUtils() {
+        return new MediaServerUtils();
+    }
+
+    /**
      * Delete cached derivatives action.
      * @return CacheDeleteAction
      */
@@ -164,5 +172,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public FileDeleter fileDeleter() {
         FileDeleter fileDeleter = new FileDeleter();
         return fileDeleter;
+    }
+
+    @Bean
+    public WorkLockAction workLockAction() {
+        WorkLockAction workLockAction = new WorkLockAction();
+        return workLockAction;
     }
 }

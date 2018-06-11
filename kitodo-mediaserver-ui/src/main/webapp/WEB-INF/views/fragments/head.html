@@ -21,5 +21,12 @@
     <script th:src="@{/static/jquery/jquery.min.js}"></script>
     <script th:src="@{/static/semantic/semantic.min.js}"></script>
     <script th:src="@{/static/ui.js}"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        window.UI = {
+            baseUrl: /*[[@{/}]]*/ '/'
+        };
+        /*]]>*/
+    </script>
 </head>
 </html>

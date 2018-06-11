@@ -72,7 +72,8 @@
                                                 data-tooltip=${work.enabled} ? #{works.unlocked} : #{works.locked},
                                                 data-work-title=${work.title},
                                                 data-work-enabled=${work.enabled},
-                                                data-work-url=@{'/works/' + ${work.id}}">
+                                                data-work-id=${work.id},
+                                                data-work-url=@{/works/{id}(id=${work.id})}">
                                         <i class="icon"
                                            th:attrappend="class=${work.enabled} ? ' lock open' : ' lock'"
                                            th:classappend="${work.enabled} ? green : grey"></i>
@@ -136,7 +137,8 @@
     title = #{works.unlock_work},
     content = #{works.unlock_work_question},
     affirmative = #{works.unlock},
-    dismissive = #{form.cancel})"></div>
+    dismissive = #{form.cancel},
+    additionTitle = #{works.lock_comment_title})"></div>
 
 </body>
 </html>

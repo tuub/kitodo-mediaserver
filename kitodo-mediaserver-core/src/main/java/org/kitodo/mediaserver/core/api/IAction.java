@@ -13,7 +13,6 @@ package org.kitodo.mediaserver.core.api;
 
 import java.util.Map;
 import org.kitodo.mediaserver.core.db.entities.Work;
-import org.kitodo.mediaserver.core.models.ActionControl;
 
 
 /**

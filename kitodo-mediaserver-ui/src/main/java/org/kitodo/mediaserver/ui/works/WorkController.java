@@ -11,6 +11,7 @@
 
 package org.kitodo.mediaserver.ui.works;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +30,13 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -121,6 +124,20 @@ public class WorkController {
     }
 
     /**
+     * Get lock comment for work.
+     * @param id ID of the work
+     * @return the lock comment
+     * @throws WorkNotFoundException if the work doesn't exist
+     */
+    @GetMapping(value = "/{id}/lockcomment", produces = "application/json")
+    @ResponseBody
+    public Map<String, String> getLockComment(@PathVariable String id) throws WorkNotFoundException {
+        Work work = workService.getWork(id);
+        String comment = workService.getLockComment(work);
+        return Collections.singletonMap("response", comment);
+    }
+
+    /**
      * Enable or disable a work.
      * @param id Id of the work
      * @param enabled new lock state
@@ -133,15 +150,14 @@ public class WorkController {
                        @RequestParam String comment,
                        RedirectAttributes redirectAttributes) {
 
-        // TODO: implement comment function
-
         Work work;
         try {
             work = workService.getWork(id);
-            work.setEnabled(enabled.toLowerCase().equals("on"));
-            workService.updateWork(work);
+            workService.lockWork(work, enabled.toLowerCase().equals("on"), comment);
         } catch (WorkNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorUpdate", "works.error.work_not_found");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorUpdate", "works.error.lock_failed");
         }
         return "redirect:/works";
     }
@@ -158,13 +174,11 @@ public class WorkController {
         try {
             work = workService.getWork(id);
             Map<String, String> parameterMap = new HashMap<>();
-            try {
-                cacheDeleteAction.perform(work, parameterMap);
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.cache_delete_failed");
-            }
+            cacheDeleteAction.perform(work, parameterMap);
         } catch (WorkNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.work_not_found");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.cache_delete_failed");
         }
         return "redirect:/works";
     }
