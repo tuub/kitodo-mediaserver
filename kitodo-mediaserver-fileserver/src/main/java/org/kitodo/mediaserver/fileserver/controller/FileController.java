@@ -82,6 +82,9 @@ public class FileController {
         Work work;
         Optional<Work> optionalWork = workRepository.findById(workId);
 
+        String completePath = request.getRequestURL().toString();
+        String derivativePath = StringUtils.substringAfter(completePath, workId);
+
         if (!optionalWork.isPresent()) {
             String message = "Work with id " + workId + " not found";
             LOGGER.info(message);
@@ -89,15 +92,12 @@ public class FileController {
 
         } else {
             work = optionalWork.get();
-            if (!work.isEnabled()) {
+            if (!work.isEnabled() && !StringUtils.endsWith(derivativePath, workId + ".xml")) {
                 String message = "Work with id " + workId + " is disabled";
                 LOGGER.info(message);
                 throw new HttpForbiddenException(message);
             }
         }
-        String completePath = request.getRequestURL().toString();
-
-        String derivativePath = StringUtils.substringAfter(completePath, workId);
 
         File derivative = new File(work.getPath(), derivativePath);
 
