@@ -13,20 +13,18 @@ package org.kitodo.mediaserver.importer.config;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
-import org.kitodo.mediaserver.importer.processors.WorkDataReader;
-import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
+import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IMetsValidation;
+import org.kitodo.mediaserver.importer.processors.WorkDataReader;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.kitodo.mediaserver.importer.validators.FileOccurrenceValidation;
 import org.kitodo.mediaserver.importer.validators.ImportDataAndFilesValidation;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;

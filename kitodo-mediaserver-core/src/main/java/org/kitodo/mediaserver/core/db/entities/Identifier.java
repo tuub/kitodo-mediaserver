@@ -11,12 +11,11 @@
 
 package org.kitodo.mediaserver.core.db.entities;
 
-import org.apache.commons.lang.StringUtils;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Entity for identifiers for digitized works.

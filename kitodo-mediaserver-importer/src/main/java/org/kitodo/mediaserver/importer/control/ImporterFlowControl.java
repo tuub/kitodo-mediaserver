@@ -12,17 +12,12 @@
 package org.kitodo.mediaserver.importer.control;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.commons.io.FilenameUtils;
+import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ValidationException;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
-import org.kitodo.mediaserver.importer.api.IMetsValidation;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
 import org.kitodo.mediaserver.importer.exceptions.ImporterException;
-import org.kitodo.mediaserver.core.api.IDataReader;
-import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
