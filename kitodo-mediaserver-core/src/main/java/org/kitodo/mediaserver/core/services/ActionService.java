@@ -138,10 +138,21 @@ public class ActionService {
         actionData.setStartTime(Instant.now());
         actionRepository.save(actionData);
 
-        Object result = ((IAction)actionInstance).perform(actionData.getWork(), actionData.getParameter());
+        Object result;
 
-        actionData.setEndTime(Instant.now());
-        actionRepository.save(actionData);
+        try {
+            result = ((IAction) actionInstance).perform(actionData.getWork(), actionData.getParameter());
+
+            actionData.setEndTime(Instant.now());
+            actionRepository.save(actionData);
+
+        } catch (Exception ex) {
+
+            actionData.setStartTime(null);
+            actionRepository.save(actionData);
+
+            throw ex;
+        }
 
         return result;
     }
