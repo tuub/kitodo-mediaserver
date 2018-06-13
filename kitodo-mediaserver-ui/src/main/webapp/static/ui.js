@@ -102,7 +102,9 @@ $(document).ready(function(){
                     },
                     onApprove: function(){
                         let comment = modal.find('textarea[name="comment"]').val();
+                        let reduce = modal.find('input[name="reduce"]').prop('checked');
                         form.find('input[name="comment"]').val(comment);
+                        form.find('input[name="reduce"]').val(reduce ? 'on' : 'off');
                         form.submit();
                     }
                 })

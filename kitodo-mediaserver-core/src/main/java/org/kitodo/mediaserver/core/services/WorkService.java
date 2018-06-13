@@ -135,10 +135,11 @@ public class WorkService {
      * @param comment lock comment
      * @throws Exception action exceptions
      */
-    public void lockWork(Work work, Boolean enabled, String comment) throws Exception {
+    public void lockWork(Work work, Boolean enabled, String comment, Boolean reduceMets) throws Exception {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("enabled", enabled.toString());
         parameter.put("comment", comment);
+        parameter.put("reduceMets", reduceMets.toString());
 
         actionService.request(work, "workLockAction", parameter);
         actionService.performRequested(work, "workLockAction", parameter);

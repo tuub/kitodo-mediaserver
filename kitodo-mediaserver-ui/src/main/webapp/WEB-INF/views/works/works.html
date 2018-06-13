@@ -67,6 +67,7 @@
                                 <form th:action="@{'/works/' + ${work.id}}" method="post" class="fitted item work-lock">
                                     <input type="hidden" name="enabled" th:value="${work.enabled} ? off : on">
                                     <input type="hidden" name="comment" value="">
+                                    <input type="hidden" name="reduce">
                                     <button class="ui basic icon button"
                                             th:attr="
                                                 data-tooltip=${work.enabled} ? #{works.unlocked} : #{works.locked},
@@ -123,6 +124,12 @@
             <div class="field">
                 <label th:text="#{works.comment}"></label>
                 <textarea name="comment"></textarea>
+            </div>
+            <div class="field">
+                <div class="ui toggle checkbox">
+                    <input type="checkbox" class="hidden" name="reduce" th:checked="${reduceMets}">
+                    <label th:text="#{works.reduce_mets_file}"></label>
+                </div>
             </div>
         </form>
     </div>

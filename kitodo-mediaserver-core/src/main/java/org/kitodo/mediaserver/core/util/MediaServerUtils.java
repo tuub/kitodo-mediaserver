@@ -32,16 +32,54 @@ public class MediaServerUtils {
      * @throws FileNotFoundException if the mets file is not found
      */
     public File getMetsFileForWork(Work work) throws FileNotFoundException {
-        if (work == null) {
-            throw new IllegalArgumentException("The work may not be null.");
-        }
+        return getMetsFileForWork(work, false);
+    }
 
-        File metsFile = new File(work.getPath(), work.getId() + ".xml");
+    /**
+     * Gets the METS file for a work. If the work is disabled, there should be a backup METS file with the original content.
+     *
+     * @param work the work
+     * @param original true=find the original METS file; false=the default METS file (which is reduced if the work is disabled)
+     * @return the mets file
+     * @throws FileNotFoundException if the mets file is not found
+     */
+    public File getMetsFileForWork(Work work, Boolean original) throws FileNotFoundException {
+
+        File metsFile = forceGetMetsFileForWork(work, original);
         if (metsFile == null || !metsFile.isFile()) {
             throw new FileNotFoundException("Mets file not found at " + work.getPath());
         }
 
         return metsFile;
+    }
+
+    /**
+     * Gets the original METS file for a work if the work is disabled.
+     *
+     * @param work the work
+     * @return the mets file
+     * @throws FileNotFoundException if the mets file is not found
+     */
+    public File getOriginalMetsFileForWork(Work work) throws FileNotFoundException {
+        return getMetsFileForWork(work, true);
+    }
+
+    /**
+     * Gets the METS file for a work. If the work is disabled, there should be a backup METS file with the original content.
+     *
+     * @param work the work
+     * @param original true=find the original METS file; false=the default METS file (which is reduced if the work is disabled)
+     * @return the mets file
+     */
+    public File forceGetMetsFileForWork(Work work, Boolean original) {
+        if (work == null) {
+            throw new IllegalArgumentException("The work may not be null.");
+        }
+        if (original == null) {
+            throw new IllegalArgumentException("Parameter original must not be null.");
+        }
+
+        return new File(work.getPath(), work.getId() + (original ? "_original" : "") + ".xml");
     }
 
     /**
