@@ -13,15 +13,33 @@ package org.kitodo.mediaserver.fileserver;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
  * Starter of the fileserver application.
  */
 @SpringBootApplication
-public class FileserverApplication {
+public class FileserverApplication extends SpringBootServletInitializer {
 
     /**
-     * Starts the fileserver appplication.
+     * Starts the fileserver application when deployed as war in a separate servlet container.
+     *
+     * @param application the application
+     * @return a builder
+     */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application
+                .sources(FileserverApplication.class)
+                .properties(
+                "spring.config.name:"
+                        + "default,"
+                        + "local,"
+                        + "application");
+    }
+
+    /**
+     * Starts the fileserver appplication when deployed with spring boot.
      *
      * @param args external arguments
      */
