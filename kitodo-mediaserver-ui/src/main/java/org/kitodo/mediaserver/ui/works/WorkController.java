@@ -120,6 +120,7 @@ public class WorkController {
         model.addAttribute("sort", sort);
         model.addAttribute("sizes", uiProperties.getPagination().getElementsPerPage().getAvailableValues());
         model.addAttribute("availableFields", uiProperties.getWorks().getSearchableFields());
+        model.addAttribute("reduceMets", uiProperties.getWorks().getReduceMets());
         return "works/works";
     }
 
@@ -148,12 +149,13 @@ public class WorkController {
     public String edit(@PathVariable String id,
                        @RequestParam String enabled,
                        @RequestParam String comment,
+                       @RequestParam String reduce,
                        RedirectAttributes redirectAttributes) {
 
         Work work;
         try {
             work = workService.getWork(id);
-            workService.lockWork(work, enabled.toLowerCase().equals("on"), comment);
+            workService.lockWork(work, enabled.toLowerCase().equals("on"), comment, reduce.toLowerCase().equalsIgnoreCase("on"));
         } catch (WorkNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorUpdate", "works.error.work_not_found");
         } catch (Exception e) {

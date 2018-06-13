@@ -144,7 +144,7 @@ public class WorkControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void testLockWork() throws Exception {
+    public void testLockWorkWithoutReduceMets() throws Exception {
 
         String workId1 = "work1";
         String workTitle1 = "Title1";
@@ -169,6 +169,7 @@ public class WorkControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("enabled", "off")
                 .param("comment", "")
+                .param("reduce", "off")
             )
             .andExpect( status().is3xxRedirection() )
             .andExpect( redirectedUrl("/works") );

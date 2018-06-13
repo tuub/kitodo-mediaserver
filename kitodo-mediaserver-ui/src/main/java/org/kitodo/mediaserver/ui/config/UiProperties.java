@@ -90,6 +90,8 @@ public class UiProperties {
 
         private List<String> searchableFields;
 
+        private Boolean reduceMets;
+
         public List<String> getSearchableFields() {
             return searchableFields;
         }
@@ -97,5 +99,14 @@ public class UiProperties {
         public void setSearchableFields(List<String> searchableFields) {
             this.searchableFields = searchableFields;
         }
+
+        public Boolean getReduceMets() {
+            return reduceMets;
+        }
+
+        public void setReduceMets(Boolean reduceMets) {
+            this.reduceMets = reduceMets;
+        }
+
     }
 }
