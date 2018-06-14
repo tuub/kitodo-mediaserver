@@ -13,25 +13,39 @@ package org.kitodo.mediaserver.ui;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
  * UI application starter.
  */
 @SpringBootApplication
-public class UiApplication {
+public class UiApplication extends SpringBootServletInitializer {
+
+    /**
+     * Starts the UI application when deployed as war in a separate servlet container.
+     *
+     * @param builder the application builder
+     * @return a builder
+     */
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return configureApplication(builder);
+    }
 
     /**
      * Everything starts here.
      * @param args program arguments
      */
     public static void main(String[] args) {
+        configureApplication(new SpringApplicationBuilder()).run(args);
+    }
 
-        new SpringApplicationBuilder(UiApplication.class)
-                .properties(
-                        "spring.config.name:"
-                                + "default,"
-                                + "local,"
-                                + "application")
-                .build().run(args);
+    private static SpringApplicationBuilder configureApplication(SpringApplicationBuilder builder) {
+        return builder
+            .sources(UiApplication.class)
+            .properties("spring.config.name:"
+                        + "default,"
+                        + "local,"
+                        + "application");
     }
 }
