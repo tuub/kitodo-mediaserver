@@ -24,33 +24,28 @@ public class FileserverApplication extends SpringBootServletInitializer {
     /**
      * Starts the fileserver application when deployed as war in a separate servlet container.
      *
-     * @param application the application
+     * @param builder the application builder
      * @return a builder
      */
     @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application
-                .sources(FileserverApplication.class)
-                .properties(
-                "spring.config.name:"
-                        + "default,"
-                        + "local,"
-                        + "application");
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+        return configureApplication(builder);
     }
 
     /**
-     * Starts the fileserver appplication when deployed with spring boot.
-     *
-     * @param args external arguments
+     * Everything starts here.
+     * @param args program arguments
      */
     public static void main(String[] args) {
+        configureApplication(new SpringApplicationBuilder()).run(args);
+    }
 
-        new SpringApplicationBuilder(FileserverApplication.class)
-                .properties(
-                        "spring.config.name:"
-                                + "default,"
-                                + "local,"
-                                + "application")
-                .build().run(args);
+    private static SpringApplicationBuilder configureApplication(SpringApplicationBuilder builder) {
+        return builder
+            .sources(FileserverApplication.class)
+            .properties("spring.config.name:"
+                + "default,"
+                + "local,"
+                + "application");
     }
 }

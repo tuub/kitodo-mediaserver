@@ -1,3 +1,8 @@
 
 server:
   port: 8980
+
+spring:
+  jmx:
+    # this gives Hikari Datasource an unique name, so Fileserver and UI may run parallel in Tomcat
+    default-domain: datasource-fileserver
