@@ -6,6 +6,9 @@
 #
 #################################################################
 
+logging:
+  path: /srv/kitodo/mediaserver/logs/
+
 fileserver:
   rootUrl: http://localhost:8980/files/
   caching: true

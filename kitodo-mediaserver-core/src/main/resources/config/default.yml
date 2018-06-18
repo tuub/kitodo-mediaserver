@@ -4,7 +4,7 @@
 #
 # DO NOT MAKE ANY LOCAL CHANGES TO THIS FILE!
 #
-# You can override configurations in this fils in local.yml
+# You can override all configurations in this file in local.yml
 #
 #################################################################
 
@@ -13,7 +13,19 @@ spring:
     url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
     username: kitodo
     password: kitodo
+  main:
+    banner-mode: "off"
 
+logging:
+  level:
+    org.springframework: ERROR
+    com.zaxxer.hikari: WARN
+    org.hibernate: WARN
+    org.kitodo: INFO
+  pattern:
+    console:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n"
+  path: /usr/local/kitodo/mediaserver/
 
 fileserver:
   filePathPattern: /files/{workId}/**
