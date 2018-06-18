@@ -12,8 +12,8 @@
 package org.kitodo.mediaserver.core.processors;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
@@ -28,15 +28,16 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.kitodo.mediaserver.core.api.IMetsReader;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * An implementation of IMetsReader using XSLT transformation.
  */
 public class XsltMetsReader implements IMetsReader {
 
-    private File xslt;
+    private ClassPathResource xslt;
 
-    public void setXslt(File xslt) {
+    public void setXslt(ClassPathResource xslt) {
         this.xslt = xslt;
     }
 
@@ -49,7 +50,7 @@ public class XsltMetsReader implements IMetsReader {
      */
     @Override
     public List<String> read(File mets, Map.Entry<String, String> ... parameter)
-            throws ConfigurationException, TransformerException, FileNotFoundException {
+            throws ConfigurationException, TransformerException, IOException {
 
         if (xslt == null) {
             throw new ConfigurationException("The required XSLT input stream is not set, "
@@ -63,7 +64,7 @@ public class XsltMetsReader implements IMetsReader {
         }
 
         TransformerFactory factory = TransformerFactory.newInstance();
-        Transformer transformer = factory.newTransformer(new StreamSource(xslt));
+        Transformer transformer = factory.newTransformer(new StreamSource(xslt.getInputStream()));
 
         Arrays.stream(parameter)
                 .forEach(param -> transformer.setParameter(param.getKey(), param.getValue()));

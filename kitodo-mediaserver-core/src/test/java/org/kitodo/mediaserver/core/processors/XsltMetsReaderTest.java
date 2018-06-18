@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ResourceUtils;
@@ -32,9 +33,7 @@ public class XsltMetsReaderTest {
 
     @Before
     public void init() throws Exception {
-        File xsltFile = ResourceUtils.getFile("classpath:xslt/masterFileFromMets.xsl");
-        xsltMetsReader.setXslt(xsltFile);
-
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/masterFileFromMets.xsl"));
         testMetsFile = ResourceUtils.getFile("classpath:mets/flugblattTestMets.xml");
     }
 

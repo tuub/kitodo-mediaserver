@@ -9,6 +9,7 @@ import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ResourceUtils;
 
@@ -30,8 +31,7 @@ public class WorkDataReaderTest {
 
     @Before
     public void init() throws Exception {
-        File xsltFile  = ResourceUtils.getFile("classpath:xslt/getWorkData.xsl");
-        xsltMetsReader.setXslt(xsltFile);
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/getWorkData.xsl"));
         workDataReader.setMetsReader(xsltMetsReader);
         readResultParser.setMapSeparator(":");
         workDataReader.setReadResultParser(readResultParser);

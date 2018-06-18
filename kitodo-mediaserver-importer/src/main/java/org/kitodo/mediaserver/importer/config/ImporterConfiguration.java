@@ -11,7 +11,6 @@
 
 package org.kitodo.mediaserver.importer.config;
 
-import java.io.File;
 import java.io.IOException;
 import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
 import org.kitodo.mediaserver.core.api.IAction;
@@ -36,8 +35,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.util.ResourceUtils;
 
 /**
  * Spring configuration of the importer module.
@@ -74,10 +73,9 @@ public class ImporterConfiguration {
     }
 
     @Bean
-    public IMetsReader fileUrlReader() throws IOException {
+    public IMetsReader fileUrlReader() {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        File xslt = ResourceUtils.getFile("classpath:xslt/getPathsFromGivenFileGrp.xsl");
-        xsltMetsReader.setXslt(xslt);
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/getPathsFromGivenFileGrp.xsl"));
         return xsltMetsReader;
     }
 
@@ -90,9 +88,9 @@ public class ImporterConfiguration {
     }
 
     @Bean
-    public IMetsReader workDataMetsReader() throws Exception {
+    public IMetsReader workDataMetsReader() {
         XsltMetsReader workDataMetsReader = new XsltMetsReader();
-        workDataMetsReader.setXslt(ResourceUtils.getFile("classpath:xslt/getWorkData.xsl"));
+        workDataMetsReader.setXslt(new ClassPathResource("xslt/getWorkData.xsl"));
         return workDataMetsReader;
     }
 
