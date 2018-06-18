@@ -24,7 +24,9 @@ public class ImporterProperties {
 
     private String hotfolderPath;
     private String importingFolderPath;
+    private String tempWorkFolderPath;
     private String errorFolderPath;
+    private String workFilesPath;
     private String workIdRegex;
     private List<String> validationFileGrps;
 
@@ -44,12 +46,28 @@ public class ImporterProperties {
         this.importingFolderPath = importingFolderPath;
     }
 
+    public String getTempWorkFolderPath() {
+        return tempWorkFolderPath;
+    }
+
+    public void setTempWorkFolderPath(String tempWorkFolderPath) {
+        this.tempWorkFolderPath = tempWorkFolderPath;
+    }
+
     public String getErrorFolderPath() {
         return errorFolderPath;
     }
 
     public void setErrorFolderPath(String errorFolderPath) {
         this.errorFolderPath = errorFolderPath;
+    }
+
+    public String getWorkFilesPath() {
+        return workFilesPath;
+    }
+
+    public void setWorkFilesPath(String workFilesPath) {
+        this.workFilesPath = workFilesPath;
     }
 
     public String getWorkIdRegex() {

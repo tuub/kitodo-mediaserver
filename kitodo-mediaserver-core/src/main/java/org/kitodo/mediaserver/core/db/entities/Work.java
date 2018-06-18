@@ -13,6 +13,7 @@ package org.kitodo.mediaserver.core.db.entities;
 
 import java.util.Set;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class Work {
     private String id;
     private String title;
     private String path;
-    private boolean enabled;
+    private boolean enabled = true;
     private Set<Identifier> identifiers;
 
     protected Work() {}

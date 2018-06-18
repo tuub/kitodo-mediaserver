@@ -59,7 +59,7 @@ public class CacheDeleteAction implements IAction {
 
         // delete files older than...
         Long age = null;
-        if (parameter.containsKey("age")) {
+        if (parameter != null && parameter.containsKey("age")) {
             try {
                 age = Long.parseLong(parameter.get("age"), 10);
             } catch (NumberFormatException ex) {

@@ -126,7 +126,7 @@ public class ImporterUtils {
      * @param targetParentDir the target parent
      * @throws ImporterException if an error occurs
      */
-    public void moveDir(File dir, File targetParentDir) throws ImporterException {
+    private void moveDir(File dir, File targetParentDir) throws ImporterException {
         try {
             FileUtils.moveDirectory(
                     dir,
@@ -154,7 +154,7 @@ public class ImporterUtils {
      * @param targetParentDir the target parent
      * @throws ImporterException if an error occurs
      */
-    public void moveFile(File file, File targetParentDir) throws ImporterException {
+    private void moveFile(File file, File targetParentDir) throws ImporterException {
         try {
             FileUtils.moveFile(
                     file,
