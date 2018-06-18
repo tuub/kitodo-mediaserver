@@ -1,7 +1,12 @@
-server:
-  port: 8981
+
+logging:
+  file: ${logging.path}/ui.log
 
 spring:
   jmx:
     # this gives Hikari Datasource an unique name, so Fileserver and UI may run parallel in Tomcat
     default-domain: datasource-ui
+
+# This is used only when started from the spring-boot maven plugin, irrelevant to deployment in a servlet container
+server:
+  port: 8981
