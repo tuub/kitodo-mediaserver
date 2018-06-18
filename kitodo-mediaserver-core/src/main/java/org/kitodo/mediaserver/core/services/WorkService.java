@@ -15,10 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.transaction.Transactional;
 import org.kitodo.mediaserver.core.db.entities.ActionData;
 import org.kitodo.mediaserver.core.db.entities.Work;
-import org.kitodo.mediaserver.core.db.repositories.IdentifierRepository;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.db.specifications.WorkJpaSpecification;
 import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
@@ -37,8 +35,6 @@ public class WorkService {
 
     private ActionService actionService;
 
-    private IdentifierRepository identifierRepository;
-
     public WorkRepository getWorkRepository() {
         return workRepository;
     }
@@ -51,11 +47,6 @@ public class WorkService {
     @Autowired
     public void setActionService(ActionService actionService) {
         this.actionService = actionService;
-    }
-
-    @Autowired
-    public void setIdentifierRepository(IdentifierRepository identifierRepository) {
-        this.identifierRepository = identifierRepository;
     }
 
     /**
@@ -97,21 +88,6 @@ public class WorkService {
      * @param work the work to be updated
      */
     public void updateWork(Work work) {
-        workRepository.save(work);
-    }
-
-    /**
-     * Save a work at import.
-     *
-     * <p>
-     * This method has to delete all already present identifiers in case the work was previously imported,
-     * they are not automatically replaced.
-     *
-     * @param work the work entity
-     */
-    @Transactional
-    public void importWork(Work work) {
-        identifierRepository.deleteByWork(work);
         workRepository.save(work);
     }
 

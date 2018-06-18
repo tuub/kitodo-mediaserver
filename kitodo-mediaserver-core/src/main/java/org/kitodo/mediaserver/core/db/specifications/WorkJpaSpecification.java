@@ -16,12 +16,10 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -49,8 +47,6 @@ public class WorkJpaSpecification implements Specification<Work> {
     @Override
     public Predicate toPredicate(Root<Work> works, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
-        final Join<Work, Identifier> identifiers = works.join("identifiers", JoinType.LEFT);
-
         Predicate predicate = criteriaBuilder.conjunction();
 
         for (final Map.Entry<String, String> criteria : criterias) {
@@ -74,12 +70,6 @@ public class WorkJpaSpecification implements Specification<Work> {
                             );
                         }
                         break;
-                    case "identifier":
-                        predicate = criteriaBuilder.and(
-                            predicate,
-                            criteriaBuilder.like(identifiers.get(criteria.getKey()), "%" + criteria.getValue() + "%")
-                        );
-                        break;
                     default:
                         predicate = criteriaBuilder.and(
                             predicate,
@@ -98,10 +88,6 @@ public class WorkJpaSpecification implements Specification<Work> {
                 paramPredicate = criteriaBuilder.or(
                     paramPredicate,
                     criteriaBuilder.like(works.get("title"), "%" + criteria.getValue() + "%")
-                );
-                paramPredicate = criteriaBuilder.or(
-                    paramPredicate,
-                    criteriaBuilder.like(identifiers.get("identifier"), "%" + criteria.getValue() + "%")
                 );
                 predicate = criteriaBuilder.and(predicate, paramPredicate);
             }

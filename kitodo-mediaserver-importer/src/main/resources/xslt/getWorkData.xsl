@@ -30,17 +30,10 @@
             <xsl:if test="@LABEL">
                 title:<xsl:value-of select="@LABEL"/>
             </xsl:if>
-            <xsl:if test="@CONTENTIDS">
-                identifier:<xsl:value-of select="@CONTENTIDS"/>
-            </xsl:if>
         </xsl:for-each>
 
         <xsl:for-each select="//mets:dmdSec[@ID=$dmdsec_id]/mets:mdWrap/mets:xmlData/mods:mods/mods:recordInfo/mods:recordIdentifier">
             workid:<xsl:value-of select="."/>
-        </xsl:for-each>
-
-        <xsl:for-each select="//mets:dmdSec[@ID=$dmdsec_id]/mets:mdWrap/mets:xmlData/mods:mods/mods:identifier">
-            identifier.<xsl:value-of select="@type"/>:<xsl:value-of select="."/>
         </xsl:for-each>
 
         <xsl:for-each select="//mets:dmdSec[@ID=$dmdsec_id]/mets:mdWrap/mets:xmlData/mods:mods/mods:titleInfo/mods:title">

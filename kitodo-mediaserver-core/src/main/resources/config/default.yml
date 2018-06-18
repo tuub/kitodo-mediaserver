@@ -77,7 +77,6 @@ ui:
     # Which data base fields are searchable by "field:pattern" in the UI's search field
     searchableFields:
       - id
-      - identifier
       - title
       - enabled
 

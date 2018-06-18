@@ -11,13 +11,8 @@
 
 package org.kitodo.mediaserver.core.db.entities;
 
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 /**
  * Entity for digitized works.
@@ -30,7 +25,6 @@ public class Work {
     private String title;
     private String path;
     private boolean enabled = true;
-    private Set<Identifier> identifiers;
 
     protected Work() {}
 
@@ -72,12 +66,4 @@ public class Work {
         this.enabled = enabled;
     }
 
-    @OneToMany(mappedBy = "work", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public Set<Identifier> getIdentifiers() {
-        return identifiers;
-    }
-
-    public void setIdentifiers(Set<Identifier> identifiers) {
-        this.identifiers = identifiers;
-    }
 }

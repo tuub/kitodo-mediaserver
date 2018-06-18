@@ -16,14 +16,12 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
-import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
 
 
@@ -62,25 +60,6 @@ public class WorkDataReader implements IDataReader {
 
         // Assemble Work object with the values from the map
         Work work = new Work(workDataMap.get("workid"), workDataMap.get("title"));
-
-        Set<Identifier> identifierSet = new HashSet<>();
-        for (String key : workDataMap.keySet()) {
-            if (StringUtils.startsWith(key, "identifier")) {
-                if (StringUtils.isEmpty(workDataMap.get(key))) {
-                    continue;
-                }
-                String type = null;
-                String[] qualifier = key.split("\\.", 2);
-
-                if (qualifier.length > 1) {
-                    type = qualifier[1];
-                }
-
-                identifierSet.add(new Identifier(workDataMap.get(key), type, work));
-            }
-        }
-
-        work.setIdentifiers(identifierSet);
 
         return work;
     }

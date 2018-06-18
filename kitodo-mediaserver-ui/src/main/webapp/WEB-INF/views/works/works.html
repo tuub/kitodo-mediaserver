@@ -55,12 +55,6 @@
                             <div class="meta">
                                 <span th:text="${work.id}">${work.id}</span>
                             </div>
-                            <div class="extra">
-                                <div class="ui label" th:each="identifier : ${work.identifiers}">
-                                    <i class="globe icon"></i>
-                                    <span th:text="${identifier.identifier}">${identifier.identifier}</span>
-                                </div>
-                            </div>
                         </div>
                         <div class="right floated">
                             <div class="ui right floated secondary menu">

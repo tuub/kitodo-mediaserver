@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
-import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -36,22 +35,14 @@ public class WorkRepositoryTest {
     private WorkRepository workRepository;
 
     private Work work1, work2;
-    private Identifier identifier1, identifier2, identifier3;
 
     @Before
     public void init() {
         work1 = new Work("123", "This is my test title");
         work2 = new Work("124", "This is my second test title");
 
-        identifier1 = new Identifier("doi", null, work1);
-        identifier2 = new Identifier("urn", "urn", work1);
-        identifier3 = new Identifier("doi2", "doi", work2);
-
         entityManager.persist(work1);
         entityManager.persist(work2);
-        entityManager.persist(identifier1);
-        entityManager.persist(identifier2);
-        entityManager.persist(identifier3);
         entityManager.flush();
     }
 
@@ -81,23 +72,5 @@ public class WorkRepositoryTest {
 
         Optional<Work> foundNonExisting = workRepository.findById("999");
         assertThat(!foundNonExisting.isPresent());
-    }
-
-    @Test
-    public void testFindByIdentifiers() {
-        Work foundDoi = workRepository.findByIdentifiers(new Identifier("doi", null));
-        assertThat(foundDoi).isNotNull();
-        assertThat(foundDoi).isEqualTo(work1);
-
-        Work foundUrn = workRepository.findByIdentifiers(new Identifier("urn", null));
-        assertThat(foundUrn).isNotNull();
-        assertThat(foundUrn).isEqualTo(work1);
-
-        Work foundDoi2 = workRepository.findByIdentifiers(new Identifier("doi2", "doi"));
-        assertThat(foundDoi2).isNotNull();
-        assertThat(foundDoi2).isEqualTo(work2);
-
-        Work foundNoting = workRepository.findByIdentifiers(new Identifier("nothingInTheDb",null));
-        assertThat(foundNoting).isNull();
     }
 }
