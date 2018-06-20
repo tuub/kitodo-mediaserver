@@ -28,6 +28,9 @@ public class ImporterProperties {
     private String errorFolderPath;
     private String workFilesPath;
     private String workIdRegex;
+    private String workDataReaderXsl;
+    private String fileUrlReaderXsl;
+
     private List<String> validationFileGrps;
 
     public String getHotfolderPath() {
@@ -76,6 +79,22 @@ public class ImporterProperties {
 
     public void setWorkIdRegex(String workIdRegex) {
         this.workIdRegex = workIdRegex;
+    }
+
+    public String getWorkDataReaderXsl() {
+        return workDataReaderXsl;
+    }
+
+    public void setWorkDataReaderXsl(String workDataReaderXsl) {
+        this.workDataReaderXsl = workDataReaderXsl;
+    }
+
+    public String getFileUrlReaderXsl() {
+        return fileUrlReaderXsl;
+    }
+
+    public void setFileUrlReaderXsl(String fileUrlReaderXsl) {
+        this.fileUrlReaderXsl = fileUrlReaderXsl;
     }
 
     public List<String> getValidationFileGrps() {

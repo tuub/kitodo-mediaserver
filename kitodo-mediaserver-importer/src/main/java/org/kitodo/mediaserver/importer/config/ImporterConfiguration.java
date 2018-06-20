@@ -30,6 +30,7 @@ import org.kitodo.mediaserver.importer.processors.WorkDataReader;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.kitodo.mediaserver.importer.validators.FileOccurrenceValidation;
 import org.kitodo.mediaserver.importer.validators.ImportDataAndFilesValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -47,6 +48,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
 @ComponentScan(value = "org.kitodo.mediaserver.core.services")
 public class ImporterConfiguration {
+
+    @Autowired
+    private ImporterProperties importerProperties;
 
     @Bean
     public ImporterUtils importerUtils() {
@@ -75,7 +79,7 @@ public class ImporterConfiguration {
     @Bean
     public IMetsReader fileUrlReader() {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        xsltMetsReader.setXslt(new ClassPathResource("xslt/getPathsFromGivenFileGrp.xsl"));
+        xsltMetsReader.setXslt(new ClassPathResource(importerProperties.getFileUrlReaderXsl()));
         return xsltMetsReader;
     }
 
@@ -90,7 +94,7 @@ public class ImporterConfiguration {
     @Bean
     public IMetsReader workDataMetsReader() {
         XsltMetsReader workDataMetsReader = new XsltMetsReader();
-        workDataMetsReader.setXslt(new ClassPathResource("xslt/getWorkData.xsl"));
+        workDataMetsReader.setXslt(new ClassPathResource(importerProperties.getWorkDataReaderXsl()));
         return workDataMetsReader;
     }
 

@@ -31,6 +31,7 @@ fileserver:
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
+  masterFileReaderXsl: xslt/masterFileFromMets.xsl
 
 conversion:
   jpeg:
@@ -42,6 +43,7 @@ conversion:
 
 mets:
   originalFileGrpSuffix: ORIGINAL
+  workLockReduceMetsXsl: xslt/reduceMets.xsl
 
 
 importer:
@@ -50,6 +52,8 @@ importer:
   tempWorkFolderPath: /usr/local/kitodo/mediaserver/import_temp/
   errorFolderPath: /usr/local/kitodo/mediaserver/import_error/
   workFilesPath: /usr/local/kitodo/mediaserver/files/
+  workDataReaderXsl: xslt/getWorkData.xsl
+  fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
   validationFileGrps:

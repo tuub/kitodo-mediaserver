@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.kitodo.mediaserver.core.api.IAction;
+import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
@@ -35,6 +36,8 @@ public class WorkLockAction implements IAction {
 
     private MediaServerUtils mediaServerUtils;
 
+    private MetsProperties metsProperties;
+
     @Autowired
     public void setWorkRepository(WorkRepository workRepository) {
         this.workRepository = workRepository;
@@ -43,6 +46,11 @@ public class WorkLockAction implements IAction {
     @Autowired
     public void setMediaServerUtils(MediaServerUtils mediaServerUtils) {
         this.mediaServerUtils = mediaServerUtils;
+    }
+
+    @Autowired
+    public void setMetsProperties(MetsProperties metsProperties) {
+        this.metsProperties = metsProperties;
     }
 
     /**
@@ -81,7 +89,7 @@ public class WorkLockAction implements IAction {
 
             // create reduced METS file
             TransformerFactory factory = TransformerFactory.newInstance();
-            ClassPathResource resource = new ClassPathResource("/xslt/reduceMets.xsl");
+            ClassPathResource resource = new ClassPathResource(metsProperties.getWorkLockReduceMetsXsl());
             Transformer transformer = factory.newTransformer(new StreamSource(resource.getInputStream()));
             transformer.transform(new StreamSource(originalMets), new StreamResult(mets));
         }

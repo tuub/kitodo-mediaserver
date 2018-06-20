@@ -61,7 +61,7 @@ public class FileserverConfiguration {
     @Bean
     public IMetsReader masterFileMetsReader() throws IOException {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        xsltMetsReader.setXslt(new ClassPathResource("xslt/masterFileFromMets.xsl"));
+        xsltMetsReader.setXslt(new ClassPathResource(fileserverProperties.getMasterFileReaderXsl()));
         return xsltMetsReader;
     }
 
