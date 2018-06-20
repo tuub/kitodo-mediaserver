@@ -42,7 +42,7 @@ public class XsltMetsReader implements IMetsReader {
     }
 
     /**
-     * Reads data from a mets file and returns it as a list of strings.
+     * Reads data from a mets file and returns it as a distinct list of strings.
      *
      * @param mets      the mets file
      * @param parameter optional key-value pairs
@@ -79,6 +79,7 @@ public class XsltMetsReader implements IMetsReader {
         return Arrays.stream(resultArray)
                 .map(String::trim)
                 .filter(item -> !item.isEmpty())
+                .distinct()
                 .collect(Collectors.toList());
     }
 

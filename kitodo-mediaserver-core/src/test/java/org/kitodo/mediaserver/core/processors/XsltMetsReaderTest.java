@@ -99,4 +99,19 @@ public class XsltMetsReaderTest {
         xsltMetsReader.read(null);
     }
 
+    @Test
+    public void getDistinctWorkTitles() throws Exception {
+        //given
+        xsltMetsReader.setXslt(ResourceUtils.getFile("classpath:xslt/getWorkData.xsl"));
+        String expectedTitle = "title:Aufruf. In Besorgnis um den wachsenden Bildungsnotstand";
+        String expectedWorkId= "workid:UATUB_717-0006";
+
+        //when
+        List<String> result = xsltMetsReader.read(testMetsFile);
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result).containsExactlyInAnyOrder(expectedTitle, expectedWorkId);
+    }
+
 }
