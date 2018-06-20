@@ -102,7 +102,7 @@ public class XsltMetsReaderTest {
     @Test
     public void getDistinctWorkTitles() throws Exception {
         //given
-        xsltMetsReader.setXslt(ResourceUtils.getFile("classpath:xslt/getWorkData.xsl"));
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/getWorkData.xsl"));
         String expectedTitle = "title:Aufruf. In Besorgnis um den wachsenden Bildungsnotstand";
         String expectedWorkId= "workid:UATUB_717-0006";
 
