@@ -31,6 +31,8 @@ fileserver:
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
+  cacheClearCron: "0 3 * * *"
+  cacheClearSince: 2592000 # 30 days
 
 conversion:
   jpeg:
