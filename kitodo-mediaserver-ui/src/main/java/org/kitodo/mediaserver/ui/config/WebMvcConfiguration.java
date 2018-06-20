@@ -20,6 +20,7 @@ import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.util.FileDeleter;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -48,7 +49,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
-public class WebMvcConfig implements WebMvcConfigurer {
+public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {

@@ -20,7 +20,13 @@ $(document).ready(function(){
 
     // initialize all dropdown menus
     $('.ui.dropdown').dropdown({
-        on: 'hover'
+        on: 'click'
+    });
+
+    // initialize language menu dropdown
+    $('.nav .ui.dropdown').dropdown({
+        on: 'hover',
+        action: 'hide'
     });
 
     // initialize all checkboxes
@@ -40,9 +46,8 @@ $(document).ready(function(){
     });
 
     // toggle action for password fields
-    $('.action.input[type="password"] button.icon').click(function(e){
-        e.preventDefault();
-        let button = $(e.target).closest('button');
+    $('.action.input input[type="password"]').siblings('button').click(function(e){
+        let button = $(this);
         let icon = button.find('i');
         let input = button.siblings('input');
 
@@ -81,14 +86,40 @@ $(document).ready(function(){
         $(this).closest('form').submit();
     });
 
+    // works select all or none dropdown
+    $('.select-works input').on('change', function(e){
+        let input = $(this);
+        input.prop('checked', !input.prop('checked'));
+    });
+    $('.select-works .item').on('click', function(e){
+        let input = $(this).find('input');
+        $('form .work-items input[name="workIds"]').prop('checked', input.prop('checked'));
+    });
+
+    // works action dropdown
+    $('.work-actions .dropdown').dropdown({
+        action: 'hide'
+    });
+
+    let selectWork = function(id) {
+        let form = $('form[action="/works"]');
+        form.find('input[name="workIds"]').prop('checked', false);
+        form.find(`.item[data-work-id=${id}] input[name="workIds"]`).prop('checked', true);
+    };
+
+    // works cache delete button
+    $('.button.work-cache-delete').click(function(e){
+        let work = $(this).closest('.item[data-work-id]');
+        selectWork(work.attr('data-work-id'));
+    });
+
     // works lock action button
     $('.work-lock').click(function(e){
-        e.preventDefault();
 
-        let button = $(e.target).closest('button');
-        let form = $(e.target).closest('form');
+        let work = $(this).closest('.item[data-work-id]');
+        let workId = work.attr('data-work-id');
 
-        if (button.attr('data-work-enabled') === 'true') {
+        if (work.attr('data-work-enabled') === 'true') {
 
             // disable action: show comment form
 
@@ -97,15 +128,9 @@ $(document).ready(function(){
                 .modal({
                     closable: false,
                     onShow: function(){
-                        let title = button.attr('data-work-title');
+                        modal.find('form input[name="workIds"]').val(workId);
+                        let title = work.attr('data-work-title');
                         modal.find('.content p').text(title);
-                    },
-                    onApprove: function(){
-                        let comment = modal.find('textarea[name="comment"]').val();
-                        let reduce = modal.find('input[name="reduce"]').prop('checked');
-                        form.find('input[name="comment"]').val(comment);
-                        form.find('input[name="reduce"]').val(reduce ? 'on' : 'off');
-                        form.submit();
                     }
                 })
                 .modal('show');
@@ -113,27 +138,27 @@ $(document).ready(function(){
 
             // enable action: confirm
 
-            let modal = $('#work-enable-modal');
-            let workId = button.attr('data-work-id');
-            let addition = modal.find('p.addition').closest('div');
-            addition.removeClass('hidden');
+            let modal = $('#work-unlock-modal');
+            let addition = modal.find('p.addition');
+
+            let url = `${window.UI.baseUrl}/works/${workId}/lockcomment`
+                .replace(/^[\/]+/, '/');
 
             // load lock comment and show it in confirm dialog
-            $.ajax(window.UI.baseUrl + (window.UI.baseUrl === '/' ? '' : window.UI.baseUrl) + 'works/' + workId + '/lockcomment')
+            $.ajax(url)
                 .done(function(data) {
-                    addition.find('p').text(data.response);
+                    addition.text(data.response);
                 })
-                .fail(function() {
+                .fail(function(jqXHR, textStatus) {
                     // TODO: Add multilingual error message
-                    addition.find('p').text("Error / Fehler");
+                    addition.text('Error / Fehler: ' + textStatus);
                 })
                 .always(function () {
                     modal
                         .modal({
                             closable: false,
-                            onApprove: function(){
-                                form.find('input[name="enabled"]').val('on');
-                                form.submit();
+                            onShow: function(){
+                                modal.find('form input[name="workIds"]').val(workId);
                             }
                         })
                         .modal('show');

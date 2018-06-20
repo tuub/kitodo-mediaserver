@@ -53,11 +53,9 @@ public class UserController {
      * @return view name
      */
     @RequestMapping
-    public String list(Model model, @ModelAttribute("errorDelete") String errorDelete) {
-
-        if (StringUtils.hasText(errorDelete)) {
-            model.addAttribute("error", errorDelete);
-        }
+    public String list(Model model,
+                       @ModelAttribute("error") String error,
+                       @ModelAttribute("success") String success) {
 
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
@@ -100,7 +98,6 @@ public class UserController {
             }
         }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("userDto", userDto);
             return "users/new";
         }
         return "redirect:/users";
@@ -133,7 +130,8 @@ public class UserController {
                              @PathVariable String username,
                              @ModelAttribute @Validated(UserDto.ValidationMain.class) UserDto userDto,
                              BindingResult bindingResult,
-                             Principal principal
+                             Principal principal,
+                             RedirectAttributes redirectAttributes
     ) {
 
         // Deactivating yourself is forbidden
@@ -150,9 +148,9 @@ public class UserController {
             }
         }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("userDto", userDto);
             return "users/edit";
         }
+        redirectAttributes.addFlashAttribute("success", "users.success.user_edited");
         return "redirect:/users";
     }
 
@@ -168,7 +166,7 @@ public class UserController {
 
         // Don't delete yourself
         if (username.equals(principal.getName())) {
-            redirectAttributes.addFlashAttribute("errorDelete", "users.error.same_user");
+            redirectAttributes.addFlashAttribute("error", "users.error.same_user");
         } else {
             userService.deleteUser(username);
         }

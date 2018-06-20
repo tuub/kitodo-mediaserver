@@ -24,37 +24,26 @@
             </div>
         </div>
 
-        <div class="nav ui fluid vertical inverted large menu">
+        <div class="nav ui fluid vertical inverted large left menu">
 
-            <a th:class="@{${activeModule == 'status'} ? 'active' : ''} + ' item'"
-               th:href="@{/status}"
-               th:text="#{status.title}"></a>
+            <a th:class="@{${activeModule == 'works'} ? 'active' : ''} + ' item'" th:href="@{/works}">
+                <i class="left book icon"></i>
+                <span th:text="#{works.title}"></span>
+            </a>
 
-            <a th:class="@{${activeModule == 'works'} ? 'active' : ''} + ' item'"
-               th:href="@{/works}"
-               th:text="#{works.title}"></a>
+            <a th:class="@{${activeModule == 'users'} ? 'active' : ''} + ' item'" th:href="@{/users}">
+                <i class="left users icon"></i>
+                <span th:text="#{users.title}"></span>
+            </a>
 
-            <div th:class="@{${activeModule == 'jobs'} ? 'active' : ''} + ' item'">
-                <div class="text" th:text="#{jobs.title}">Jobs</div>
-                <div class="menu">
-                    <a th:class="@{${activeModule == 'jobs' && activeSubModule == 'all'} ? 'active' : ''} + ' item'"
-                       th:href="@{/jobs}"
-                       th:text="#{jobs.all_jobs}"></a>
-                    <a class="item" href="/jobs/new" th:text="#{jobs.new_job}"></a>
-                </div>
-            </div>
-
-            <a class="item" href="@{/history}">History</a>
-
-            <a class="item" href="@{/settings}" th:text="#{settings.title}"></a>
-
-            <a th:class="@{${activeModule == 'users'} ? 'active' : ''} + ' item'"
-               th:href="@{/users}"
-               th:text="#{users.title}"></a>
-
-            <a class="item" href="@{/help}">Help</a>
+            <a class="item" href="https://github.com/tuub/kitodo-mediaserver/wiki" target="_blank">
+                <i class="left help icon"></i>
+                <span th:text="#{help.title}"></span>
+                <i class="external alternate icon"></i>
+            </a>
 
             <div class="ui dropdown item">
+                <i class="left language icon"></i>
                 <div class="text" th:text="#{language.title}"></div>
                 <i class="dropdown icon"></i>
                 <div class="left menu">
@@ -70,7 +59,7 @@
             </div>
 
             <a th:href="@{/logout}" class="item">
-                <i class="sign out icon"></i>
+                <i class="left sign out icon"></i>
                 <span th:text="#{login.logout}"></span>
             </a>
 
