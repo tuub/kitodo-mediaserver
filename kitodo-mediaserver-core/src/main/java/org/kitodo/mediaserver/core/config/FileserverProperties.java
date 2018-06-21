@@ -23,6 +23,8 @@ public class FileserverProperties {
 
     private boolean caching;
     private String cachePath;
+    private String cacheClearCron;
+    private Long cacheClearSince;
     private String filePathPattern;
     private String rootUrl;
     private String masterFileReaderXsl;
@@ -41,6 +43,22 @@ public class FileserverProperties {
 
     public void setCachePath(String cachePath) {
         this.cachePath = cachePath;
+    }
+
+    public String getCacheClearCron() {
+        return cacheClearCron;
+    }
+
+    public void setCacheClearCron(String cacheClearCron) {
+        this.cacheClearCron = cacheClearCron;
+    }
+
+    public Long getCacheClearSince() {
+        return cacheClearSince;
+    }
+
+    public void setCacheClearSince(Long cacheClearSince) {
+        this.cacheClearSince = cacheClearSince;
     }
 
     public String getFilePathPattern() {

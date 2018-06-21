@@ -32,6 +32,8 @@ fileserver:
   caching: false
   cachePath: /tmp
   masterFileReaderXsl: xslt/masterFileFromMets.xsl
+  cacheClearCron: "0 3 * * *"
+  cacheClearSince: 2592000 # 30 days
 
 conversion:
   jpeg:
@@ -81,7 +83,6 @@ ui:
     # Which data base fields are searchable by "field:pattern" in the UI's search field
     searchableFields:
       - id
-      - identifier
       - title
       - enabled
 

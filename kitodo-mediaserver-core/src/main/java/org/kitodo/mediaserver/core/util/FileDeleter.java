@@ -12,8 +12,11 @@
 package org.kitodo.mediaserver.core.util;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
 import java.util.stream.Stream;
@@ -40,29 +43,44 @@ public class FileDeleter {
      * @throws IOException on access errors
      */
     public void delete(Path path, Long age) throws IOException {
+        delete(path, age, false);
+    }
 
-        Stream<Path> items = Files.list(path);
-        Path item;
-        Instant limit = Instant.now().minusSeconds(age);
+    /**
+     * Deletes all files in a path (and empty folders) that are older than given time.
+     * @param path path to a directory which should be cleared
+     * @param age timespam since last modified in seconds
+     * @param keepRoot whether to keep the root folder or not
+     * @throws IOException on access errors
+     */
+    public void delete(Path path, Long age, Boolean keepRoot) throws IOException {
 
-        while (items.iterator().hasNext()) {
-            item = items.iterator().next();
-            if (Files.isDirectory(item)) {
-                // recursively delete directory child items
-                delete(item, age);
-            } else {
-                // check the modified date and delete if older than limit
-                FileTime fileTime = Files.getLastModifiedTime(item);
-                if (fileTime.toInstant().isBefore(limit)) {
-                    Files.deleteIfExists(item);
+        final Instant limit = Instant.now().minusSeconds(age != null ? age : 0L);
+
+        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                if (exc != null) {
+                    throw exc;
                 }
+                Boolean isRoot = dir.equals(path);
+                if ((!isRoot || !keepRoot) && !Files.list(dir).iterator().hasNext()) {
+                    // directory is empty, delete it too
+                    Files.deleteIfExists(dir);
+                }
+                return FileVisitResult.CONTINUE;
             }
-        }
 
-        if (!Files.list(path).iterator().hasNext()) {
-            // directory is empty, delete it too
-            Files.deleteIfExists(path);
-        }
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                // check the modified date and delete if older than limit
+                if (age == null || attrs.lastModifiedTime().toInstant().isBefore(limit)) {
+                    Files.deleteIfExists(file);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
 
     }
 

@@ -12,7 +12,6 @@
 package org.kitodo.mediaserver.core.db.repositories;
 
 import java.util.List;
-import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -21,14 +20,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  * Repository for works.
  */
 public interface WorkRepository extends PagingAndSortingRepository<Work, String>, JpaSpecificationExecutor<Work> {
-
-    /**
-     * Finds a work with a particular identifier.
-     *
-     * @param identifier the identifier, i.e. a doi or urn
-     * @return a list of works
-     */
-    Work findByIdentifiers(Identifier identifier);
 
     /**
      * Finds all works where the title contains the keyword.
