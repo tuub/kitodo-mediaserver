@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.kitodo.mediaserver.core.db.entities.Identifier;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
@@ -55,38 +54,6 @@ public class WorkDataReaderTest {
         // then
         assertThat(workData).isInstanceOf(Work.class);
         assertThat(workData.getId()).isNotNull();
-    }
-
-    @Test
-    public void includesMultipleIdentifiers() throws Exception {
-        // given
-        File testMetsFile  = ResourceUtils.getFile("classpath:metsfiles/multipleIdentifiersMets.xml");
-
-        // when
-        Work workData = workDataReader.read(testMetsFile);
-
-        // then
-        assertThat(workData).hasFieldOrProperty("identifiers");
-        assertThat(workData.getIdentifiers().size() > 1).isTrue();
-        assertThat(workData.getIdentifiers()).containsExactlyInAnyOrder(
-                new Identifier("156804", "goobi"),
-                new Identifier("urn:nbn:de:bsz:14-db-id4570526782", "urn"),
-                new Identifier("http://digital.slub-dresden.de/id457052678", "purl"),
-                new Identifier("457052678", "swb-ppn")
-        );
-    }
-
-    @Test
-    public void includesNoIdentifier() throws Exception {
-        // given
-        File testMetsFile  = ResourceUtils.getFile("classpath:metsfiles/noIdentifierMets.xml");
-
-        // when
-        Work workData = workDataReader.read(testMetsFile);
-
-        // then
-        assertThat(workData).hasFieldOrProperty("identifiers");
-        assertThat(workData.getIdentifiers().size()).isEqualTo(0);
     }
 
     @Test

@@ -194,7 +194,7 @@ public class ImporterFlowControl implements ApplicationRunner {
                 workDir = new File(newWork.getPath());
 
                 // Insert the work data into the database, updating if old data present.
-                workService.importWork(newWork);
+                workService.updateWork(newWork);
 
                 LOGGER.info("Finished import of work " + workDir.getName());
 
@@ -220,7 +220,7 @@ public class ImporterFlowControl implements ApplicationRunner {
                     try {
                         // restore old work in database
                         LOGGER.info("Rollback: restoring old work data for work " + presentWork.getId());
-                        workService.importWork(presentWork);
+                        workService.updateWork(presentWork);
 
                         // restore old work files
                         if (tempOldWorkFiles != null) {

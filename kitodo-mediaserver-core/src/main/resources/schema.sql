@@ -17,14 +17,6 @@ CREATE TABLE work (
   PRIMARY KEY(id)
 );
 
-CREATE TABLE identifier (
-  identifier varchar(255) NOT NULL,
-  type varchar(255),
-  work_id varchar(255) NOT NULL,
-  PRIMARY KEY (identifier),
-  FOREIGN KEY (work_id) REFERENCES work(id)
-);
-
 CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(60) NOT NULL,
