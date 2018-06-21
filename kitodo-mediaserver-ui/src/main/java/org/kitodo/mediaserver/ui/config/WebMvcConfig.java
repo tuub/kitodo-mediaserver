@@ -16,6 +16,7 @@ import java.util.Locale;
 import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
 import org.kitodo.mediaserver.core.actions.WorkLockAction;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.util.FileDeleter;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -43,7 +44,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
  */
 @Configuration
 @ComponentScan(basePackages = {"org.kitodo.mediaserver.ui", "org.kitodo.mediaserver.core.services"})
-@Import({FileserverProperties.class})
+@Import({FileserverProperties.class, MetsProperties.class})
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")

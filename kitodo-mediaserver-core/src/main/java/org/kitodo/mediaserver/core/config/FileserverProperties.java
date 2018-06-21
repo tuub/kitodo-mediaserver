@@ -27,6 +27,7 @@ public class FileserverProperties {
     private Long cacheClearSince;
     private String filePathPattern;
     private String rootUrl;
+    private String masterFileReaderXsl;
 
     public boolean isCaching() {
         return caching;
@@ -74,5 +75,13 @@ public class FileserverProperties {
 
     public void setRootUrl(String rootUrl) {
         this.rootUrl = rootUrl;
+    }
+
+    public String getMasterFileReaderXsl() {
+        return masterFileReaderXsl;
+    }
+
+    public void setMasterFileReaderXsl(String masterFileReaderXsl) {
+        this.masterFileReaderXsl = masterFileReaderXsl;
     }
 }

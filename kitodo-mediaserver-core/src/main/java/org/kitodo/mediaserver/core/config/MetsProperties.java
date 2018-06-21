@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Configuration;
 public class MetsProperties {
 
     private String originalFileGrpSuffix;
+    private String workLockReduceMetsXsl;
 
     public String getOriginalFileGrpSuffix() {
         return originalFileGrpSuffix;
@@ -29,5 +30,13 @@ public class MetsProperties {
 
     public void setOriginalFileGrpSuffix(String originalFileGrpSuffix) {
         this.originalFileGrpSuffix = originalFileGrpSuffix;
+    }
+
+    public String getWorkLockReduceMetsXsl() {
+        return workLockReduceMetsXsl;
+    }
+
+    public void setWorkLockReduceMetsXsl(String workLockReduceMetsXsl) {
+        this.workLockReduceMetsXsl = workLockReduceMetsXsl;
     }
 }
