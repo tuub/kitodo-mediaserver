@@ -59,7 +59,6 @@ public class Terminal implements CommandLineRunner {
             parsedCommands = commandLine.parse(args);
         } catch (CommandLine.ParameterException ex) {
             LOGGER.error("Exception while parsing command line arguments.", ex);
-            System.err.println(ex.toString());
             commandLine.usage(System.out);
             exit(1);
         }
@@ -85,7 +84,6 @@ public class Terminal implements CommandLineRunner {
                     ((Callable)cmdLine.getCommand()).call();
                 } catch (Exception ex) {
                     LOGGER.error("Exception while calling a CLI command.", ex);
-                    System.err.println("Command '" + cmdLine.getCommandName() + "' failed: " + ex);
                     exit(1);
                 }
             }

@@ -13,6 +13,7 @@ package org.kitodo.mediaserver.cli.config;
 
 import org.kitodo.mediaserver.cli.commands.CacheClearCommand;
 import org.kitodo.mediaserver.cli.commands.ImportCommand;
+import org.kitodo.mediaserver.cli.commands.InitDbCommand;
 import org.kitodo.mediaserver.cli.commands.MainCommand;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.springframework.context.annotation.Bean;
@@ -37,11 +38,13 @@ public class CliConfiguration {
     @Bean
     public CommandLine commandLine(MainCommand mainCommand,
                                    CacheClearCommand cacheClearCommand,
-                                   ImportCommand importCommand) {
+                                   ImportCommand importCommand,
+                                   InitDbCommand initDbCommand) {
 
         CommandLine commandLine = new CommandLine(mainCommand);
         commandLine.addSubcommand("cacheclear", cacheClearCommand);
         commandLine.addSubcommand("import", importCommand);
+        commandLine.addSubcommand("initdb", initDbCommand);
         return commandLine;
     }
 }
