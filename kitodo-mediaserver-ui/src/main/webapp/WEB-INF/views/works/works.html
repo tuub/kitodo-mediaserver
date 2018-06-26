@@ -11,7 +11,6 @@
   -->
 
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       th:with="lang=${#locale.language}" th:lang="${lang}">
 <head th:replace="fragments/head::head(#{works.title})"></head>
 <body>
@@ -44,55 +43,115 @@
 
                 <h2 th:text="#{works.available_works}"></h2>
 
-                <div class="ui negative message" th:if="${error != null}">
-                    <p th:text="#{${error}}"></p>
-                </div>
+                <form class="ui form" th:action="@{'/works'}" method="post">
 
-                <div class="ui divided items">
-                    <div class="item" th:each="work : ${page.content}">
-                        <div class="left floated content">
-                            <div class="header" th:text="${work.title}">${work.title}</div>
-                            <div class="meta">
-                                <span th:text="${work.id}">${work.id}</span>
+                    <div class="ui positive message" th:if="${not #strings.isEmpty(success)}">
+                        <p th:text="#{${success}}"></p>
+                    </div>
+
+                    <div class="ui negative message" th:if="${not #strings.isEmpty(error)}">
+                        <p th:text="#{${error}}"></p>
+                    </div>
+
+                    <div class="ui secondary menu work-actions">
+
+                        <div class="ui dropdown item">
+                            <div class="text" th:text="#{form.select}"></div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu select-works">
+                                <div class="item">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" checked>
+                                        <label>All</label>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox">
+                                        <label>None</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="right floated">
-                            <div class="ui right floated secondary menu">
-                                <form th:action="@{'/works/' + ${work.id}}" method="post" class="fitted item work-lock">
-                                    <input type="hidden" name="enabled" th:value="${work.enabled} ? off : on">
-                                    <input type="hidden" name="comment" value="">
-                                    <input type="hidden" name="reduce">
-                                    <button class="ui basic icon button"
-                                            th:attr="
-                                                data-tooltip=${work.enabled} ? #{works.unlocked} : #{works.locked},
-                                                data-work-title=${work.title},
-                                                data-work-enabled=${work.enabled},
-                                                data-work-id=${work.id},
-                                                data-work-url=@{/works/{id}(id=${work.id})}">
-                                        <i class="icon"
-                                           th:attrappend="class=${work.enabled} ? ' lock open' : ' lock'"
-                                           th:classappend="${work.enabled} ? green : grey"></i>
-                                    </button>
-                                </form>
+
+                        <div class="ui dropdown item">
+                            <div class="text" th:text="#{works.action}"></div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <button class="item" type="submit" name="action" value="cache-clear">
+                                    <i class="bolt icon"></i>
+                                    <span th:text="#{works.delete_cache}"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="ui divider"></div>
+
+                    <div class="ui info message" th:if="${#lists.isEmpty(page.content)}">
+                        <p th:text="#{works.no_works_found}"></p>
+                    </div>
+
+                    <div class="ui divided items work-items">
+                        <div class="item" th:each="work : ${page.content}"
+                             th:attr="
+                                data-work-id=${work.id},
+                                data-work-title=${work.title},
+                                data-work-enabled=${work.enabled}">
+
+                            <div class="left floated">
+                                <div class="ui checkbox">
+                                    <input type="checkbox" name="workIds" th:value="${work.id}">
+                                </div>
                             </div>
 
-                            <div class="ui right floated secondary menu">
-                                <!--/*
-                                For future use here could be buttons to recreate cached derivatives
-                                <a class="item" data-tooltip="recreate cache">
-                                    <i class="image outline icon"></i>
-                                </a>
-                                */-->
-                                <form th:action="@{/works/{id}/cache/delete(id=${work.id})}" method="post" class="fitted item work-cache-delete">
-                                    <button class="ui basic icon button" th:attr="data-tooltip=#{works.delete_cache}">
-                                        <i class="bolt icon"></i>
-                                    </button>
-                                </form>
+                            <div class="left floated content">
+                                <div class="header" th:text="${work.title}">${work.title}</div>
+                                <div class="meta">
+                                    <span th:text="${work.id}">${work.id}</span>
+                                </div>
+                            </div>
+
+                            <div class="right floated">
+
+                                <div class="ui right floated secondary menu">
+                                    <div class="fitted item work-lock">
+                                        <button type="button" class="ui basic icon button"
+                                                th:attrappend="data-tooltip=${work.enabled} ? #{works.unlocked} : #{works.locked}">
+                                            <i class="icon"
+                                               th:attrappend="class=${work.enabled} ? ' lock open' : ' lock'"
+                                               th:classappend="${work.enabled} ? green : grey"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="ui right floated secondary menu">
+                                    <!--/*
+                                    For future use here could be buttons to recreate cached derivatives
+                                    <a class="item" data-tooltip="recreate cache">
+                                        <i class="image outline icon"></i>
+                                    </a>
+                                    */-->
+                                    <div class="fitted item">
+                                        <button class="ui basic icon button work-cache-delete"
+                                                type="submit" name="action" value="cache-clear"
+                                                th:attr="data-tooltip=#{works.delete_cache}">
+                                            <i class="bolt icon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
                             </div>
 
                         </div>
                     </div>
-                </div>
+
+
+
+                </form>
+
+                <div class="ui divider"></div>
 
                 <div th:replace="fragments/pagination::pagination(
                     url = '/works',
@@ -112,34 +171,47 @@
 <div class="ui mini modal" id="lock-work-modal">
     <div class="header" th:text="#{works.lock_work}"></div>
     <div class="content">
-        <p></p>
-        <form class="ui form">
-            <input type="hidden" name="enabled" value="off">
+        <form class="ui form" th:action="@{'/works'}" method="post" id="lock-work-form">
+            <input type="hidden" name="workIds" value="">
+            <input type="hidden" name="params[enabled]" value="off">
             <div class="field">
                 <label th:text="#{works.comment}"></label>
-                <textarea name="comment"></textarea>
+                <textarea name="params[comment]"></textarea>
             </div>
             <div class="field">
                 <div class="ui toggle checkbox">
-                    <input type="checkbox" class="hidden" name="reduce" th:checked="${reduceMets}">
+                    <input type="checkbox" class="hidden" name="params[reduce]" th:checked="${reduceMets}">
                     <label th:text="#{works.reduce_mets_file}"></label>
                 </div>
             </div>
         </form>
     </div>
     <div class="actions">
-        <div class="ui primary right ok button" th:text="#{works.lock}"></div>
+        <button type="submit" name="action" value="work-lock" form="lock-work-form"
+                class="ui primary right ok button" th:text="#{works.lock}"></button>
         <div class="ui cancel button" th:text="#{form.cancel}"></div>
     </div>
 </div>
 
-<div th:replace="fragments/confirm::confirm(
-    id = 'work-enable-modal',
-    title = #{works.unlock_work},
-    content = #{works.unlock_work_question},
-    affirmative = #{works.unlock},
-    dismissive = #{form.cancel},
-    additionTitle = #{works.lock_comment_title})"></div>
+<div class="ui mini modal" id="work-unlock-modal">
+    <div class="header" th:text="#{works.unlock_work}"></div>
+    <div class="content">
+        <form class="ui form" th:action="@{'/works'}" method="post" id="work-unlock-form">
+            <input type="hidden" name="workIds" value="">
+            <input type="hidden" name="params[enabled]" value="on">
+            <input type="hidden" name="params[comment]" value="">
+            <input type="hidden" name="params[reduce]" value="">
+            <p th:text="#{works.unlock_work_question}"></p>
+            <h4 class="addition header" th:text="#{works.lock_comment_title}"></h4>
+            <p class="addition"></p>
+        </form>
+    </div>
+    <div class="actions">
+        <button type="submit" name="action" value="work-lock" form="work-unlock-form"
+                class="ui primary right ok button" th:text="#{works.unlock}"></button>
+        <div class="ui cancel button" th:text="#{form.cancel}"></div>
+    </div>
+</div>
 
 </body>
 </html>

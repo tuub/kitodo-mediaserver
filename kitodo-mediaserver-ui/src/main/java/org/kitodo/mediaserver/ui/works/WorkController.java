@@ -15,13 +15,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
 import org.kitodo.mediaserver.core.db.entities.Work;
+import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.ui.config.UiProperties;
 import org.kitodo.mediaserver.ui.util.KeyValueParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +50,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/works")
 public class WorkController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorkController.class);
+
     private WorkService workService;
+
+    private WorkRepository workRepository;
 
     private UiProperties uiProperties;
 
@@ -59,6 +67,11 @@ public class WorkController {
     @Autowired
     public void setWorkService(WorkService workService) {
         this.workService = workService;
+    }
+
+    @Autowired
+    public void setWorkRepository(WorkRepository workRepository) {
+        this.workRepository = workRepository;
     }
 
     public UiProperties getUiProperties() {
@@ -91,11 +104,8 @@ public class WorkController {
     public String list(Model model,
                        @PageableDefault(sort = "title") Pageable pageable,
                        @RequestParam(required = false) String search,
-                       @ModelAttribute("errorUpdate") String errorUpdate) {
-
-        if (StringUtils.hasText(errorUpdate)) {
-            model.addAttribute("error", errorUpdate);
-        }
+                       @ModelAttribute("success") String success,
+                       @ModelAttribute("error") String error) {
 
         Page<Work> page;
 
@@ -125,6 +135,88 @@ public class WorkController {
     }
 
     /**
+     * Perform actions on one ore more works.
+     *
+     * @param workIds An array of work IDs to perform the actions on
+     * @param action the action name to perform
+     * @param params a parameter map for the actions
+     * @param redirectAttributes for sending error messages to next view
+     * @return the view name to render
+     */
+    @PostMapping
+    public String action(@RequestParam(required = false) List<String> workIds,
+                         @RequestParam String action,
+                         @RequestParam Map<String, String> params,
+                         RedirectAttributes redirectAttributes) {
+
+        if (workIds == null) {
+            redirectAttributes.addFlashAttribute("error", "works.error.no_work_selected");
+            return "redirect:/works";
+        }
+
+        // Parse dynamic action parameters. Keep only keys with specific pattern
+        Pattern pattern = Pattern.compile("^params\\[([a-z]+)\\]$");
+        Matcher matcher;
+        Map<String, String> parsedParams = new HashMap<>();
+        for (Map.Entry<String, String> param : params.entrySet()) {
+            matcher = pattern.matcher(param.getKey());
+            if (matcher.find()) {
+                parsedParams.put(matcher.group(1), param.getValue());
+            }
+        }
+
+        Iterable<Work> works = workRepository.findAllById(workIds);
+
+        // run action for every work
+        for (Work work : works) {
+            switch (action) {
+
+                case "cache-clear":
+                    try {
+                        cacheDeleteAction.perform(work, new HashMap<>());
+                    } catch (Exception e) {
+                        LOGGER.error("Failed to clear cache.", e);
+                        redirectAttributes.addFlashAttribute("error", "works.error.cache_delete_failed");
+                    }
+                    break;
+
+                case "work-lock":
+                    try {
+                        workService.lockWork(
+                            work,
+                            parsedParams.getOrDefault("enabled", "").equalsIgnoreCase("on"),
+                            parsedParams.getOrDefault("comment", ""),
+                            parsedParams.getOrDefault("reduce", "").equalsIgnoreCase("on")
+                        );
+                    } catch (Exception e) {
+                        LOGGER.error("Failed to lock/unlock work.", e);
+                        redirectAttributes.addFlashAttribute("error", "works.error.lock_failed");
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // set success message
+        if (!redirectAttributes.getFlashAttributes().containsKey("error")) {
+            switch (action) {
+                case "cache-clear":
+                    redirectAttributes.addFlashAttribute("success", "works.success.cache_delete");
+                    break;
+                case "work-lock":
+                    redirectAttributes.addFlashAttribute("success", "works.success.work_locked");
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return "redirect:/works";
+    }
+
+    /**
      * Get lock comment for work.
      * @param id ID of the work
      * @return the lock comment
@@ -136,52 +228,5 @@ public class WorkController {
         Work work = workService.getWork(id);
         String comment = workService.getLockComment(work);
         return Collections.singletonMap("response", comment);
-    }
-
-    /**
-     * Enable or disable a work.
-     * @param id Id of the work
-     * @param enabled new lock state
-     * @param redirectAttributes cookies for error handling
-     * @return view name
-     */
-    @PostMapping("/{id}")
-    public String edit(@PathVariable String id,
-                       @RequestParam String enabled,
-                       @RequestParam String comment,
-                       @RequestParam String reduce,
-                       RedirectAttributes redirectAttributes) {
-
-        Work work;
-        try {
-            work = workService.getWork(id);
-            workService.lockWork(work, enabled.toLowerCase().equals("on"), comment, reduce.toLowerCase().equalsIgnoreCase("on"));
-        } catch (WorkNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorUpdate", "works.error.work_not_found");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorUpdate", "works.error.lock_failed");
-        }
-        return "redirect:/works";
-    }
-
-    /**
-     * Delete the work cache.
-     * @param id Id of the work
-     * @param redirectAttributes cookies for error handling
-     * @return view name
-     */
-    @PostMapping("/{id}/cache/delete")
-    public String cacheDelete(@PathVariable String id, RedirectAttributes redirectAttributes) {
-        Work work;
-        try {
-            work = workService.getWork(id);
-            Map<String, String> parameterMap = new HashMap<>();
-            cacheDeleteAction.perform(work, parameterMap);
-        } catch (WorkNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.work_not_found");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorCacheDelete", "works.error.cache_delete_failed");
-        }
-        return "redirect:/works";
     }
 }

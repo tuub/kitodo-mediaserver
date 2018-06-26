@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<html xmlns:th="http://www.thymeleaf.org"
+      th:with="lang=${#locale.language}" th:lang="${lang}">
+<head th:replace="fragments/head::head('Error')"></head>
+<body th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+
+    <main class="login ui page container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <div class="ui red segment">
+
+                    <h1 class="ui header">
+                        <div class="content" th:text="${httpStatus}"></div>
+                        <div class="sub header" th:text="${httpStatus.reasonPhrase}"></div>
+                    </h1>
+
+                    <div class="ui left aligned message">
+                        <p th:utext="${error}"></p>
+                    </div>
+
+                    <a class="ui button" href="/" th:href="@{/}">Back to Home</a>
+
+                </div>
+
+                <div class="ui center aligned grid">
+                    <div class="column">
+                        <img th:src="@{/static/images/favicon.png}">
+                        Kitodo Mediaserver UI
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

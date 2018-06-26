@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kitodo.mediaserver.core.db.entities.User;
 import org.kitodo.mediaserver.core.db.repositories.UserRepository;
-import org.kitodo.mediaserver.ui.config.WebMvcConfig;
+import org.kitodo.mediaserver.ui.config.WebMvcConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = WebMvcConfig.class)
+@ContextConfiguration(classes = WebMvcConfiguration.class)
 @ComponentScan(value = "org.kitodo.mediaserver.core.services")
 @AutoConfigureMockMvc
 @DataJpaTest
@@ -186,9 +186,7 @@ public class UserControllerTest {
                     .sessionAttr("userDto", user1)
             )
             .andExpect( status().is3xxRedirection() )
-            .andExpect( model().attribute("userDto", hasProperty("username", is(username1))) )
-            .andExpect( model().attribute("userDto", hasProperty("name", is(newName))) )
-            .andExpect( model().attribute("userDto", hasProperty("password", is(newPassword))) )
+            .andExpect( flash().attribute("success", is("users.success.user_edited")) )
             .andExpect( redirectedUrl("/users") );
 
         assertThat(userRepository.count()).isEqualTo(1);
@@ -263,7 +261,7 @@ public class UserControllerTest {
             )
             .andExpect( status().is3xxRedirection() )
             .andExpect( redirectedUrl("/users") )
-            .andExpect( flash().attribute("errorDelete", isEmptyOrNullString()) );
+            .andExpect( flash().attribute("error", isEmptyOrNullString()) );
 
         assertThat(userRepository.count()).isEqualTo(1);
     }
@@ -287,7 +285,7 @@ public class UserControllerTest {
             )
             .andExpect( status().is3xxRedirection() )
             .andExpect( redirectedUrl("/users") )
-            .andExpect( flash().attribute("errorDelete", is("users.error.same_user")) );
+            .andExpect( flash().attribute("error", is("users.error.same_user")) );
 
         assertThat(userRepository.count()).isEqualTo(1);
     }

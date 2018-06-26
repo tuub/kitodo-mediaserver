@@ -21,8 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
-import org.kitodo.mediaserver.core.services.WorkService;
-import org.kitodo.mediaserver.ui.config.WebMvcConfig;
+import org.kitodo.mediaserver.ui.config.WebMvcConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -45,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = WebMvcConfig.class)
+@ContextConfiguration(classes = WebMvcConfiguration.class)
 @ComponentScan(value = "org.kitodo.mediaserver.core.services")
 @AutoConfigureMockMvc
 @DataJpaTest // entityManager Bean
@@ -164,12 +163,14 @@ public class WorkControllerTest {
         assertThat(workRepository.count()).isEqualTo(2);
 
         mockMvc
-            .perform( post("/works/" + work2.getId())
+            .perform( post("/works")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("enabled", "off")
-                .param("comment", "")
-                .param("reduce", "off")
+                .param("workIds", work2.getId())
+                .param("action", "work-lock")
+                .param("params[enabled]", "off")
+                .param("params[comment]", "")
+                .param("params[reduce]", "")
             )
             .andExpect( status().is3xxRedirection() )
             .andExpect( redirectedUrl("/works") );
