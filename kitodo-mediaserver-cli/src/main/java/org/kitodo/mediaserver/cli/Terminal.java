@@ -14,8 +14,8 @@ package org.kitodo.mediaserver.cli;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import org.kitodo.mediaserver.cli.commands.CacheClearCommand;
-import org.kitodo.mediaserver.cli.commands.MainCommand;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -29,10 +29,11 @@ import picocli.CommandLine;
 @Component
 public class Terminal implements CommandLineRunner {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Terminal.class);
+
     private ApplicationContext applicationContext;
 
-    private MainCommand mainCommand;
-    private CacheClearCommand cacheClearCommand;
+    private CommandLine commandLine;
 
     @Autowired
     public void setApplicationContext(ApplicationContext applicationContext) {
@@ -40,13 +41,8 @@ public class Terminal implements CommandLineRunner {
     }
 
     @Autowired
-    public void setMainCommand(MainCommand mainCommand) {
-        this.mainCommand = mainCommand;
-    }
-
-    @Autowired
-    public void setCacheClearCommand(CacheClearCommand cacheClearCommand) {
-        this.cacheClearCommand = cacheClearCommand;
+    public void setCommandLine(CommandLine commandLine) {
+        this.commandLine = commandLine;
     }
 
     /**
@@ -57,14 +53,12 @@ public class Terminal implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        CommandLine commandLine = new CommandLine(mainCommand);
-        commandLine.addSubcommand("cacheclear", cacheClearCommand);
-
         // parse command line arguments
         List<CommandLine> parsedCommands = new ArrayList<>();
         try {
             parsedCommands = commandLine.parse(args);
         } catch (CommandLine.ParameterException ex) {
+            LOGGER.error("Exception while parsing command line arguments.", ex);
             System.err.println(ex.toString());
             commandLine.usage(System.out);
             exit(1);
@@ -90,6 +84,7 @@ public class Terminal implements CommandLineRunner {
                 try {
                     ((Callable)cmdLine.getCommand()).call();
                 } catch (Exception ex) {
+                    LOGGER.error("Exception while calling a CLI command.", ex);
                     System.err.println("Command '" + cmdLine.getCommandName() + "' failed: " + ex);
                     exit(1);
                 }

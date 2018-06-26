@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
  * Flow control class for the importer.
  */
 @Component
-public class ImporterFlowControl implements ApplicationRunner {
+public class ImporterFlowControl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImporterFlowControl.class);
 
@@ -92,30 +92,11 @@ public class ImporterFlowControl implements ApplicationRunner {
     }
 
     /**
-     * Runs the importer algorithm.
-     *
-     * @param args cli arguments
-     * @throws Exception if a severe error occurs
-     */
-    @Override
-    public void run(ApplicationArguments args) throws Exception {
-
-        //TODO schedule
-
-        try {
-            importWorks();
-        } catch (Exception e) {
-            LOGGER.error("A severe error occurred during import: " + e, e);
-            //TODO Notify
-        }
-    }
-
-    /**
      * Controls the importer algorithm.
      *
      * @throws Exception if a severe error occurs
      */
-    private void importWorks() throws Exception {
+    public void importWorks() throws Exception {
 
         File workDir;
 

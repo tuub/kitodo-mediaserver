@@ -87,6 +87,8 @@ public class CacheClearCommand implements Callable, Runnable {
         Path path = Paths.get(fileserverProperties.getCachePath());
         FileDeleter fileDeleter = new FileDeleter();
         fileDeleter.delete(path, fileserverProperties.getCacheClearSince(), true);
+
+        LOGGER.info("Finished cache clearing.");
     }
 
     /**
