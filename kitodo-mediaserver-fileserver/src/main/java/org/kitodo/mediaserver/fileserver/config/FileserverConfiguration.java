@@ -17,12 +17,14 @@ import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
+import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
+import org.kitodo.mediaserver.core.processors.Watermarker;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,5 +128,10 @@ public class FileserverConfiguration {
         singleFileConvertAction.setConverter(singleFileOnDemandConverter());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
+    }
+
+    @Bean
+    public IWatermarker watermarker() throws Exception {
+        return new Watermarker();
     }
 }

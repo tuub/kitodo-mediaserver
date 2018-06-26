@@ -17,6 +17,9 @@ fileserver:
 mets:
   originalFileGrpSuffix: PRESENTATION
 
+indexing:
+  indexScriptUrl: http://localhost/kitodo-indextest.php
+
 importer:
   hotfolderPath: /srv/kitodo/mediaserver/hotfolder/
   importingFolderPath: /srv/kitodo/mediaserver/importing/
@@ -28,3 +31,24 @@ importer:
   validationFileGrps:
   - PRESENTATION
   - FULLTEXT
+
+  watermark:
+    enabled: true
+    minSize: 600
+    renderMode: text
+    gravity: "southwest"
+    offsetX: 25
+    offsetY: 0
+    textMode:
+      content: "Example Text"
+      font: "Arial"
+      colorRGB: "34,65,255"
+      size: 16
+    imageMode:
+      path: /srv/kitodo/assets/watermark.png
+      opacity: 75
+    extendCanvas:
+      enabled: true
+      backgroundColorRGB: "0,0,0"
+      addX: 0
+      addY: 25

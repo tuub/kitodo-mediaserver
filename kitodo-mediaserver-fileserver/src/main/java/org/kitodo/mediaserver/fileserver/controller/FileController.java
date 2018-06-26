@@ -134,7 +134,7 @@ public class FileController {
                     inputStream = singleFileConvertAction.perform(work, parameterMap);
 
                 } catch (Exception e) {
-                    LOGGER.error(e.toString());
+                    LOGGER.error("Unexpected error : " + e, e);
                 }
 
             }
