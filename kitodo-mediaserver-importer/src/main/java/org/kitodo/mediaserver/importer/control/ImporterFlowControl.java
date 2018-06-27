@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
@@ -30,8 +32,6 @@ import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 /**
@@ -156,9 +156,10 @@ public class ImporterFlowControl {
                     // Move old work files to a temporary folder.
                     if (new File(presentWork.getPath()).isDirectory()) {
                         tempOldWorkFiles = Paths.get(importerProperties.getTempWorkFolderPath(), presentWork.getId());
-                        Files.move(
-                                Paths.get(presentWork.getPath()),
-                                tempOldWorkFiles
+                        LOGGER.debug("Move from='" + presentWork.getPath() + "' to='" + tempOldWorkFiles + "'");
+                        FileUtils.moveDirectory(
+                            new File(presentWork.getPath()),
+                            tempOldWorkFiles.toFile()
                         );
                     } else {
                         LOGGER.warn("The alleged root path " + presentWork.getPath() + " of the already present work "
@@ -168,10 +169,17 @@ public class ImporterFlowControl {
                 }
 
                 // Move work files to the production root.
-                Files.move(
-                        workDir.toPath(),
-                        Paths.get(newWork.getPath())
-                );
+                try {
+                    LOGGER.debug("Move from='" + workDir + "' to='" + newWork.getPath() + "'");
+                    FileUtils.moveDirectory(
+                        workDir,
+                        new File(newWork.getPath())
+                    );
+                } catch (FileExistsException ex) {
+                    LOGGER.error("Work directory '" + newWork.getPath() + "' already exists but there is no DB entry for workId='"
+                        + newWork.getId() + "'. Not importing work from '" + workDir + "'");
+                    throw ex;
+                }
                 workDir = new File(newWork.getPath());
 
                 // Insert the work data into the database, updating if old data present.
@@ -206,9 +214,10 @@ public class ImporterFlowControl {
                         // restore old work files
                         if (tempOldWorkFiles != null) {
                             LOGGER.info("Rollback: restoring old files for work " + presentWork.getId());
-                            Files.move(
-                                    tempOldWorkFiles,
-                                    Paths.get(presentWork.getPath())
+                            LOGGER.debug("Move from='" + tempOldWorkFiles + "' to='" + presentWork.getPath() + "'");
+                            FileUtils.moveDirectory(
+                                tempOldWorkFiles.toFile(),
+                                new File(presentWork.getPath())
                             );
                         }
                     } catch (Exception rollbackExc) {
@@ -217,12 +226,14 @@ public class ImporterFlowControl {
                     }
                 }
 
-                // move import files to error folder
                 try {
+                    // move import files to error folder
                     LOGGER.info("Rollback: moving all files for work " + workDir.getName() + " to error folder.");
-                    Files.move(
-                            workDir.toPath(),
-                            Paths.get(importerProperties.getErrorFolderPath(), workDir.getName() + "_" + LocalDateTime.now())
+                    LOGGER.debug("Move from='" + workDir + "' to='" + new File(importerProperties.getErrorFolderPath(),
+                        workDir.getName() + "_" + LocalDateTime.now()) + "'");
+                    FileUtils.moveDirectory(
+                        workDir,
+                        new File(importerProperties.getErrorFolderPath(), workDir.getName() + "_" + LocalDateTime.now())
                     );
                 } catch (Exception rollbackExc) {
                     LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);

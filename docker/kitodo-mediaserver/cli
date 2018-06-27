@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Command line wrapper for Kitodo.Mediaserver CLI
+
+java $JAVA_OPTS -jar ${MS_PATH}/kitodo-mediaserver-cli.jar "$@"
+
+exit $?
