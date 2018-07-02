@@ -30,6 +30,7 @@ public class ImporterProperties {
     private String workIdRegex;
     private String workDataReaderXsl;
     private String fileUrlReaderXsl;
+    private String cron;
 
     private List<String> validationFileGrps;
 
@@ -103,5 +104,13 @@ public class ImporterProperties {
 
     public void setValidationFileGrps(List<String> validationFileGrps) {
         this.validationFileGrps = validationFileGrps;
+    }
+
+    public String getCron() {
+        return cron;
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
     }
 }

@@ -22,10 +22,16 @@
 
     <artifactId>kitodo-mediaserver-cli</artifactId>
 
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>org.kitodo</groupId>
             <artifactId>kitodo-mediaserver-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.kitodo</groupId>
+            <artifactId>kitodo-mediaserver-importer</artifactId>
         </dependency>
 
         <dependency>
