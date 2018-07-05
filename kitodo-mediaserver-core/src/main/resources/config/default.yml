@@ -19,6 +19,16 @@ spring:
         dialect: org.hibernate.dialect.MySQL57Dialect
   main:
     banner-mode: "off"
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    smtp:
+      auth: false
+      starttls:
+        enable: false
+        required: false
 
 logging:
   level:
@@ -30,6 +40,11 @@ logging:
     console:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n"
   path: /usr/local/kitodo/mediaserver/
+
+notifier:
+  emailFrom: "kitodo@example.org"
+  emailTo: "admin@example.org"
+  timestampFormat: "yyyy-MM-dd HH:mm:ss"
 
 fileserver:
   rootUrl: https://example.com/files/
