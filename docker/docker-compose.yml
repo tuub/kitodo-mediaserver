@@ -1,0 +1,56 @@
+version: "2.2"
+
+services:
+
+  mediaserver:
+    image: tubub/kitodo-mediaserver:1.0-SNAPSHOT
+    ports:
+      - 8980:8980
+      - 8981:8981
+    volumes:
+      # config directory
+      - /usr/local/kitodo-mediaserver/config:/usr/local/kitodo-mediaserver/config
+      # data directorys
+      - /srv/kitodo/mediaserver/cache:/srv/kitodo/mediaserver/cache
+      - /srv/kitodo/mediaserver/files:/srv/kitodo/mediaserver/files
+      - /srv/kitodo/mediaserver/hotfolder:/srv/kitodo/mediaserver/hotfolder
+      - /srv/kitodo/mediaserver/importing:/srv/kitodo/mediaserver/importing
+      - /srv/kitodo/mediaserver/import_error:/srv/kitodo/mediaserver/import_error
+      # logs
+      - /srv/kitodo/mediaserver/logs:/srv/kitodo/mediaserver/logs
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      # MS_CREATE_TABLES=1 - create the database tables
+      - MS_CREATE_TABLES=1
+      # MS_SCHEDULER_IMPORT=1 - run the cron job to import new works
+      - MS_SCHEDULER_IMPORT=1
+      # MS_SCHEDULER_CACHECLEAR=1 - run the cron job to clean old derivative files
+      - MS_SCHEDULER_CACHECLEAR=1
+
+  database:
+    image: mysql:5.7
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      # MySQL database files
+      - /srv/kitodo-mediaserver/database:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=mediaserver
+      - MYSQL_USER=kitodo
+      - MYSQL_PASSWORD=kitodo
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+
+  # optional: phpmyadmin to manage database
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+    ports:
+      - '8080:80'
