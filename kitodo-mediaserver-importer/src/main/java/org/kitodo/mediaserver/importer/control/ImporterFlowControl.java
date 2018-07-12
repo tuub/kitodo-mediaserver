@@ -123,21 +123,23 @@ public class ImporterFlowControl {
                 // Read the work data from the mets/mods file.
                 newWork = workDataReader.read(mets);
 
-                // Validate import data
-                importValidation.validate(newWork, mets);
-
-                newWork.setPath(Paths.get(importerProperties.getWorkFilesPath(), newWork.getId()).toString());
-
                 //check that naming of folder and mets.xml concedes with workId, otherwise rename
                 if (!StringUtils.equals(newWork.getId(), workDir.getName())) {
                     LOGGER.info("Id of work to import: " + newWork.getId() + " is different from the mets file name "
                             + workDir.getName() + ", renaming.");
 
-                    Files.move(mets.toPath(), Paths.get(mets.getParent(), newWork.getId() + ".xml"));
+                    String newMetsName = newWork.getId() + ".xml";
+                    Files.move(mets.toPath(), Paths.get(mets.getParent(), newMetsName));
                     Path newPath = Paths.get(workDir.getParent(), newWork.getId());
                     Files.move(workDir.toPath(), newPath);
                     workDir = newPath.toFile();
+                    mets = new File(workDir, newMetsName);
                 }
+
+                // Validate import data
+                importValidation.validate(newWork, mets);
+
+                newWork.setPath(Paths.get(importerProperties.getWorkFilesPath(), newWork.getId()).toString());
 
                 // Check in the database if this work is already present
                 // and if there are identifiers associated to another work.
