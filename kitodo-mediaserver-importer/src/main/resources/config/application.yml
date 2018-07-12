@@ -1,3 +1,0 @@
-
-logging:
-  file: ${logging.path}/importer.log
