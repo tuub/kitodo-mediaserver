@@ -11,12 +11,24 @@
 
 package org.kitodo.mediaserver.core.util;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.kitodo.mediaserver.core.db.entities.Work;
 
 /**
@@ -125,6 +137,16 @@ public class MediaServerUtils {
         return Paths.get(rootPath, internalWorkPath);
     }
 
+    /**
+     * Constructs the url of a mets file.
+     *
+     * @param rootUrl the rool url of the mediaserver
+     * @param workId the id of the work
+     * @return the url
+     */
+    public String getUrlStringForMetsFile(String rootUrl, String workId) {
+        return rootUrl + "/" + workId + "/" + workId + ".xml";
+    }
 
     /**
      * Check if all requiered parameter are present in a parameter map.
@@ -142,4 +164,35 @@ public class MediaServerUtils {
             }
         }
     }
+
+    /**
+     * Calls a url to perform a task (like indexing). Only returns a status code.
+     *
+     * @param urlString the url
+     * @param args a map of arguments
+     * @return a status code
+     * @throws Exception by severe errors
+     */
+    public int callUrlWithArgs(String urlString, Map<String, String> args) throws Exception {
+        CloseableHttpClient client = HttpClients.createDefault();
+        int status;
+
+        try {
+            URIBuilder builder = new URIBuilder(urlString);
+            for (String key : args.keySet()) {
+                builder.addParameter(key, args.get(key));
+            }
+            HttpGet get = new HttpGet(builder.build());
+            CloseableHttpResponse response = client.execute(get);
+
+            status = response.getStatusLine().getStatusCode();
+            response.close();
+            client.close();
+
+        } finally {
+            client.close();
+        }
+        return status;
+    }
+
 }
