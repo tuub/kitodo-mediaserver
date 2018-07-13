@@ -15,15 +15,20 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.core.util.FileDeleter;
+import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IWorkChecker;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
@@ -44,12 +49,14 @@ public class ImporterFlowControl {
 
     private ImporterUtils importerUtils;
     private ImporterProperties importerProperties;
+    private FileserverProperties fileserverProperties;
     private IImportValidation importValidation;
     private IDataReader workDataReader;
     private IWorkChecker workChecker;
     private WorkService workService;
     private FileDeleter fileDeleter;
     private IAction cacheDeleteAction;
+    private MediaServerUtils mediaServerUtils;
 
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
@@ -91,6 +98,16 @@ public class ImporterFlowControl {
         this.cacheDeleteAction = cacheDeleteAction;
     }
 
+    @Autowired
+    public void setMediaServerUtils(MediaServerUtils mediaServerUtils) {
+        this.mediaServerUtils = mediaServerUtils;
+    }
+
+    @Autowired
+    public void setFileserverProperties(FileserverProperties fileserverProperties) {
+        this.fileserverProperties = fileserverProperties;
+    }
+
     /**
      * Controls the importer algorithm.
      *
@@ -99,6 +116,7 @@ public class ImporterFlowControl {
     public void importWorks() throws Exception {
 
         File workDir;
+        File mets = null;
 
         LOGGER.info("Looking for works to import in folder " + importerProperties.getHotfolderPath());
 
@@ -115,7 +133,7 @@ public class ImporterFlowControl {
 
             try {
                 // Get the mets file
-                File mets = new File(workDir, workDir.getName() + ".xml");
+                mets = new File(workDir, workDir.getName() + ".xml");
                 if (!mets.exists()) {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
@@ -261,14 +279,33 @@ public class ImporterFlowControl {
 
                     // TODO Order all defined asynchronous import actions (creation of additional files…).
 
-                    LOGGER.info("Triggering indexing of work " + workDir.getName());
-                    // TODO Trigger indexing in presentation system (configurable).
+                    // Perform indexing of the work
+                    if (StringUtils.isNotBlank(importerProperties.getIndexScriptUrl())) {
+                        LOGGER.info("Triggering indexing of work " + workDir.getName()
+                                + ". Calling " + importerProperties.getIndexScriptUrl());
 
+                        Map<String, String> indexingArgs = new HashMap<>();
+                        String urlString = mediaServerUtils.getUrlStringForMetsFile(
+                                fileserverProperties.getRootUrl(),
+                                newWork.getId()
+                        );
+                        indexingArgs.put(importerProperties.getIndexScriptMetsUrlArgName(), urlString);
+                        LOGGER.debug("indexing args: " + indexingArgs);
+
+                        int status = mediaServerUtils.callUrlWithArgs(importerProperties.getIndexScriptUrl(), indexingArgs);
+                        if (status > 299) {
+                            LOGGER.error("The work " + workDir.getName() + " could not be indexed, http status code: " + status);
+                        } else {
+                            newWork.setIndexTime(Instant.now());
+                            workService.updateWork(newWork);
+                            LOGGER.info("The work " + workDir.getName() + " successfully indexed, http status code: " + status);
+                        }
+                    }
 
                 } catch (Exception e) {
                     String message = "An error occured after import of work " + workDir.getName()
                             + ". The import itself was succuessfully performed not all the subsequent actions."
-                            + " The work has possibly not been indexed. Error: " + e;
+                            + " The work has probably not been indexed. Error: " + e;
                     LOGGER.error(message, e);
                     // TODO notify
                 }

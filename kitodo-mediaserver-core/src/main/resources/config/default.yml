@@ -28,6 +28,7 @@ logging:
   path: /usr/local/kitodo/mediaserver/
 
 fileserver:
+  rootUrl: https://example.com/files/
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
@@ -58,6 +59,8 @@ importer:
   fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
+  indexScriptUrl: https://example.com/indexWork.php
+  indexScriptMetsUrlArgName: doc
   validationFileGrps:
   - ORIGINAL
 

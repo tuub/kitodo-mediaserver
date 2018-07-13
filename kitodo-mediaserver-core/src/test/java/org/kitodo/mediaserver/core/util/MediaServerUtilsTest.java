@@ -73,6 +73,19 @@ public class MediaServerUtilsTest {
         assertThat(result).isEqualTo(Paths.get("/path/to/import/temp/myWorkId/jpeg/hepp.jpg"));
     }
 
+    @Test
+    public void shouldReturnUrlForMetsFile() {
+        //given
+        String workid = "123456";
+        String rootUrl = "https://example.org/files";
+
+        //when
+        String url = mediaServerUtils.getUrlStringForMetsFile(rootUrl, workid);
+
+        //then
+        assertThat(url).isEqualTo("https://example.org/files/123456/123456.xml");
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionForNonPresentArgument() {
         mediaServerUtils.checkForRequiredParameter(parameter, "kilroy");

@@ -31,6 +31,8 @@ public class ImporterProperties {
     private String workDataReaderXsl;
     private String fileUrlReaderXsl;
     private String cron;
+    private String indexScriptUrl;
+    private String indexScriptMetsUrlArgName;
 
     private List<String> validationFileGrps;
 
@@ -112,5 +114,21 @@ public class ImporterProperties {
 
     public void setCron(String cron) {
         this.cron = cron;
+    }
+
+    public String getIndexScriptUrl() {
+        return indexScriptUrl;
+    }
+
+    public void setIndexScriptUrl(String indexScriptUrl) {
+        this.indexScriptUrl = indexScriptUrl;
+    }
+
+    public String getIndexScriptMetsUrlArgName() {
+        return indexScriptMetsUrlArgName;
+    }
+
+    public void setIndexScriptMetsUrlArgName(String indexScriptMetsUrlArgName) {
+        this.indexScriptMetsUrlArgName = indexScriptMetsUrlArgName;
     }
 }

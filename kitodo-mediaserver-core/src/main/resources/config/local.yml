@@ -24,6 +24,7 @@ importer:
   errorFolderPath: /srv/kitodo/mediaserver/import_error/
   workFilesPath: /srv/kitodo/mediaserver/files/
   cron: 0 0 * * * *
+  indexScriptUrl: http://localhost/kitodo-indextest.php
 
   validationFileGrps:
   - PRESENTATION
