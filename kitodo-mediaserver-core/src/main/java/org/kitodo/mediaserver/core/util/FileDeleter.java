@@ -17,14 +17,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.nio.file.attribute.FileTime;
 import java.time.Instant;
-import java.util.stream.Stream;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileSystemUtils;
 
 /**
  * Deletes files (and folders).
  */
+@Component
 public class FileDeleter {
 
     /**

@@ -31,7 +31,7 @@ public class ImporterProperties {
     private String workDataReaderXsl;
     private String fileUrlReaderXsl;
     private String cron;
-
+    private boolean indexWorkAfterImport;
     private List<String> validationFileGrps;
 
     public String getHotfolderPath() {
@@ -112,5 +112,13 @@ public class ImporterProperties {
 
     public void setCron(String cron) {
         this.cron = cron;
+    }
+
+    public boolean isIndexWorkAfterImport() {
+        return indexWorkAfterImport;
+    }
+
+    public void setIndexWorkAfterImport(boolean indexWorkAfterImport) {
+        this.indexWorkAfterImport = indexWorkAfterImport;
     }
 }
