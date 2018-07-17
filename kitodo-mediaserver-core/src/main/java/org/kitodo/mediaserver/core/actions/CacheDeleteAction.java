@@ -22,10 +22,12 @@ import org.kitodo.mediaserver.core.util.FileDeleter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Delete cached derivatives.
  */
+@Component("cacheDeleteAction")
 public class CacheDeleteAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheDeleteAction.class);

@@ -15,12 +15,13 @@ import java.util.Optional;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.importer.api.IWorkChecker;
-import org.kitodo.mediaserver.importer.exceptions.ImporterException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * A JPA implementation of the work checker.
  */
+@Component("jpaWorkChecker")
 public class JpaWorkChecker implements IWorkChecker {
 
     private WorkRepository workRepository;

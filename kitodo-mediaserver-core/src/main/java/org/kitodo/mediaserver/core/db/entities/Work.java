@@ -11,6 +11,7 @@
 
 package org.kitodo.mediaserver.core.db.entities;
 
+import java.time.Instant;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -25,6 +26,7 @@ public class Work {
     private String title;
     private String path;
     private boolean enabled = true;
+    private Instant indexTime;
 
     protected Work() {}
 
@@ -66,4 +68,11 @@ public class Work {
         this.enabled = enabled;
     }
 
+    public Instant getIndexTime() {
+        return indexTime;
+    }
+
+    public void setIndexTime(Instant indexTime) {
+        this.indexTime = indexTime;
+    }
 }
