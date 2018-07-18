@@ -18,9 +18,11 @@ import static org.mockito.Mockito.when;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @ComponentScan(basePackages = {"org.kitodo.mediaserver.core.services"})
+@EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 public class TestConfiguration {
 
     @Bean
