@@ -13,6 +13,10 @@ spring:
     url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
     username: kitodo
     password: kitodo
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
   main:
     banner-mode: "off"
 
