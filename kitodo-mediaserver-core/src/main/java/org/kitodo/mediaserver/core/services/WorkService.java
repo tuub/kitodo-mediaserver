@@ -84,6 +84,16 @@ public class WorkService {
     }
 
     /**
+     * Get all works belonging to a given collection.
+     *
+     * @param collectionName the name of the collection
+     * @return a list of works
+     */
+    public List<Work> getAllWorksInCollection(String collectionName) {
+        return workRepository.findByCollectionsName(collectionName);
+    }
+
+    /**
      * Update a single work.
      * @param work the work to be updated
      */
