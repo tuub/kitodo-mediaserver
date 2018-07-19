@@ -44,7 +44,7 @@ public class WorkDataReaderTest {
     }
 
     @Test
-    public void generatesWorkObject() throws Exception {
+    public void generatesWorkObjectWithCompleteData() throws Exception {
         // given
         File testMetsFile  = ResourceUtils.getFile("classpath:metsfiles/singleIdentifierMets.xml");
 
@@ -52,8 +52,13 @@ public class WorkDataReaderTest {
         Work workData = workDataReader.read(testMetsFile);
 
         // then
-        assertThat(workData).isInstanceOf(Work.class);
         assertThat(workData.getId()).isNotNull();
+        assertThat(workData.getId()).isEqualTo("BV002570873_1");
+        assertThat(workData.getTitle()).isEqualTo("Jg. 1.1886 ; illustrierte Wochenschrift für Gärtner, Gartenliebhaber und Landwirte ; 1");
+        assertThat(workData.getHostId()).isEqualTo("BV002570873");
+        assertThat(workData.getCollections()).isNotEmpty();
+        assertThat(workData.getCollections().size()).isEqualTo(1);
+        assertThat(workData.getCollections().iterator().next().getName()).isEqualTo("Deutsche Gartenbaubibliothek#Periodika (Gartentexte digital)");
     }
 
     @Test
@@ -81,4 +86,18 @@ public class WorkDataReaderTest {
         // then
         assertThat(workData.getTitle()).contains(expected1, expected2);
     }
+
+    @Test
+    public void hasMultipleCollections() throws Exception {
+        // given
+        File testMetsFile  = ResourceUtils.getFile("classpath:metsfiles/multipleCollectionsMets.xml");
+
+        // when
+        Work workData = workDataReader.read(testMetsFile);
+
+        // then
+        assertThat(workData.getCollections()).isNotEmpty();
+        assertThat(workData.getCollections().size()).isEqualTo(2);
+    }
+
 }
