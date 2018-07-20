@@ -24,7 +24,7 @@ public interface IAction {
      * Performs the action.
      *
      * <p>
-     * Implementations of these method may or may not return an object.
+     * Implementations of this method may or may not return an object.
      *
      * @param work a work entity
      * @param parameter a map of parameter
