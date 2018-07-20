@@ -59,7 +59,6 @@ public class ConversionProperties {
     @ConfigurationProperties(prefix = "conversion.watermark")
     public static class Watermark {
 
-        // FIXME: enum, only two values allowed (text OR image)
         private boolean enabled;
         private Integer minSize;
         private String renderMode;
