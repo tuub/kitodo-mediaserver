@@ -43,10 +43,31 @@ fileserver:
 conversion:
   jpeg:
     defaultSize: 1000
-  useGraphicsMagick: true
+  useGraphicsMagick: false
   pathExtractionPatterns:
     - .*/jpeg/(max|min|thumb|default)/.*
     - .*/jpeg/(150|600|1000|2000)/.*
+
+  watermark:
+    enabled: true
+    minSize: 600
+    renderMode: text
+    gravity: "southwest"
+    offsetX: 25
+    offsetY: 0
+    textMode:
+      content: "Example Text"
+      font: "Arial"
+      colorRGB: "34,65,255"
+      size: 16
+    imageMode:
+      path: /srv/kitodo/assets/watermark.png
+      opacity: 75
+    extendCanvas:
+      enabled: true
+      backgroundColorRGB: "0,0,0"
+      addX: 0
+      addY: 25
 
 mets:
   originalFileGrpSuffix: ORIGINAL
