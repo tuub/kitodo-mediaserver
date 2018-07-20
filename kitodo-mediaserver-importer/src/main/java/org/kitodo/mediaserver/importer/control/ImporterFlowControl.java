@@ -15,15 +15,21 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.config.IndexingProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.core.util.FileDeleter;
+import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IWorkChecker;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
@@ -50,6 +56,7 @@ public class ImporterFlowControl {
     private WorkService workService;
     private FileDeleter fileDeleter;
     private IAction cacheDeleteAction;
+    private IAction viewerIndexingAction;
 
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
@@ -91,6 +98,12 @@ public class ImporterFlowControl {
         this.cacheDeleteAction = cacheDeleteAction;
     }
 
+    @Autowired
+    public void setViewerIndexingAction(IAction viewerIndexingAction) {
+        this.viewerIndexingAction = viewerIndexingAction;
+    }
+
+
     /**
      * Controls the importer algorithm.
      *
@@ -99,6 +112,7 @@ public class ImporterFlowControl {
     public void importWorks() throws Exception {
 
         File workDir;
+        File mets = null;
 
         LOGGER.info("Looking for works to import in folder " + importerProperties.getHotfolderPath());
 
@@ -115,7 +129,7 @@ public class ImporterFlowControl {
 
             try {
                 // Get the mets file
-                File mets = new File(workDir, workDir.getName() + ".xml");
+                mets = new File(workDir, workDir.getName() + ".xml");
                 if (!mets.exists()) {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
@@ -257,18 +271,28 @@ public class ImporterFlowControl {
                         fileDeleter.delete(tempOldWorkFiles);
                     }
 
-                    // TODO Perform all defined direct import actions (doi registration…).
+                    // Perform indexing of the work
+                    if (importerProperties.isIndexWorkAfterImport()) {
+                        LOGGER.info("Triggering indexing of work " + newWork.getId());
 
-                    // TODO Order all defined asynchronous import actions (creation of additional files…).
+                        try {
+                            viewerIndexingAction.perform(newWork, null);
 
-                    LOGGER.info("Triggering indexing of work " + workDir.getName());
-                    // TODO Trigger indexing in presentation system (configurable).
+                            // TODO Perform all indexing dependent actions (doi registration…).
 
+                        } catch (Exception e) {
+                            LOGGER.error("Error indexing " + newWork.getId() + ": " + e, e);
+                        }
+
+                        // TODO Perform all defined non indexing dependent actions
+
+                        // TODO Order all defined asynchronous import actions (creation of additional files…).
+                    }
 
                 } catch (Exception e) {
                     String message = "An error occured after import of work " + workDir.getName()
                             + ". The import itself was succuessfully performed not all the subsequent actions."
-                            + " The work has possibly not been indexed. Error: " + e;
+                            + " The work has probably not been indexed. Error: " + e;
                     LOGGER.error(message, e);
                     // TODO notify
                 }

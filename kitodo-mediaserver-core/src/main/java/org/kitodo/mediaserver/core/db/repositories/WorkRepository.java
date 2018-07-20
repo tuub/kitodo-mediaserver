@@ -29,5 +29,12 @@ public interface WorkRepository extends PagingAndSortingRepository<Work, String>
      */
     List<Work> findByTitleContaining(String keyword);
 
+    /**
+     * Finds all works belonging to a collection.
+     *
+     * @param collectionName the name of the collection
+     * @return a list of works
+     */
+    List<Work> findByCollectionsName(String collectionName);
 }
 

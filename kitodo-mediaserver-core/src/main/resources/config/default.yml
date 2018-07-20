@@ -13,12 +13,16 @@ spring:
     url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
     username: kitodo
     password: kitodo
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
   main:
     banner-mode: "off"
 
 logging:
   level:
-    org.springframework: ERROR
+    org.springframework: WARN
     com.zaxxer.hikari: WARN
     org.hibernate: WARN
     org.kitodo: INFO
@@ -28,6 +32,7 @@ logging:
   path: /usr/local/kitodo/mediaserver/
 
 fileserver:
+  rootUrl: https://example.com/files/
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
@@ -68,6 +73,10 @@ mets:
   originalFileGrpSuffix: ORIGINAL
   workLockReduceMetsXsl: xslt/reduceMets.xsl
 
+indexing:
+  indexScriptUrl: https://example.com/indexWork.php
+  indexScriptMetsUrlArgName: doc
+
 
 importer:
   hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/
@@ -79,6 +88,7 @@ importer:
   fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
+  indexWorkAfterImport: true
   validationFileGrps:
   - ORIGINAL
 

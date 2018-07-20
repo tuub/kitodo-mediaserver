@@ -26,10 +26,12 @@ import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 /**
  * Locks or unlocks a work.
  */
+@Component("workLockAction")
 public class WorkLockAction implements IAction {
 
     private WorkRepository workRepository;

@@ -36,6 +36,15 @@
             workid:<xsl:value-of select="."/>
         </xsl:for-each>
 
+        <xsl:for-each select="//mets:dmdSec[@ID=$dmdsec_id]/mets:mdWrap/mets:xmlData/mods:mods/mods:relatedItem[@type='host']/mods:recordInfo/mods:recordIdentifier">
+            hostid:<xsl:value-of select="."/>
+        </xsl:for-each>
+
+        <xsl:for-each select="//mets:dmdSec[@ID=$dmdsec_id]/mets:mdWrap/mets:xmlData/mods:mods/mods:classification[@authority='ivdcc']">
+            collection:<xsl:value-of select="."/>
+        </xsl:for-each>
+
+
         <xsl:for-each select="//mets:dmdSec[@ID=$dmdsec_id]/mets:mdWrap/mets:xmlData/mods:mods/mods:titleInfo/mods:title">
             title:<xsl:value-of select="."/>
         </xsl:for-each>

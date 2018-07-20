@@ -11,8 +11,14 @@
 
 package org.kitodo.mediaserver.core.db.entities;
 
+import java.time.Instant;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 /**
  * Entity for digitized works.
@@ -20,11 +26,13 @@ import javax.persistence.Id;
 @Entity
 public class Work {
 
-
     private String id;
     private String title;
     private String path;
+    private String hostId;
     private boolean enabled = true;
+    private Instant indexTime;
+    private Set<Collection> collections;
 
     protected Work() {}
 
@@ -58,12 +66,40 @@ public class Work {
         this.path = path;
     }
 
+    public String getHostId() {
+        return hostId;
+    }
+
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
+
     public boolean isEnabled() {
         return enabled;
     }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public Instant getIndexTime() {
+        return indexTime;
+    }
+
+    public void setIndexTime(Instant indexTime) {
+        this.indexTime = indexTime;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "work_collection",
+            joinColumns = @JoinColumn(name = "work_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "collection_name", referencedColumnName = "name"))
+    public Set<Collection> getCollections() {
+        return collections;
+    }
+
+    public void setCollections(Set<Collection> collections) {
+        this.collections = collections;
     }
 
 }

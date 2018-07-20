@@ -169,6 +169,47 @@ public class ActionServiceTest {
         assertThat(actionData1.getEndTime()).isBetween(Instant.now().minusSeconds(2), Instant.now());
     }
 
+    @Test
+    public void shouldPerformActionImmediately() throws Exception {
+        //given
+        init();
+
+        //when
+        Object action = actionService.performImmediately(work1, "mockAction", null);
+
+        //then
+        assertThat(action).isNotNull();
+        assertThat(action).isInstanceOf(String.class);
+        assertThat(action).isEqualTo("performed");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void performImmediatelyWithNoWorkThrowsException() throws Exception {
+        //given
+        init();
+
+        //when
+        actionService.performImmediately(null, "mockAction", null);
+    }
+
+    @Test(expected = ClassNotFoundException.class)
+    public void performImmediatelyWithInvalidActionThrowsException() throws Exception {
+        //given
+        init();
+
+        //when
+        actionService.performImmediately(work1, "invalidAction", null);
+    }
+
+    @Test(expected = ActionServiceException.class)
+    public void performImmediatelyWithBeanNotAnActionThrowsException() throws Exception {
+        //given
+        init();
+
+        //when
+        actionService.performImmediately(work1, "mockNoAction", null);
+    }
+
     @Test(expected = ClassNotFoundException.class)
     public void performRequestedActionWithInvalidActionName() throws Exception {
 
