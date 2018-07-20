@@ -68,8 +68,13 @@ importer:
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
   indexWorkAfterImport: true
+
   validationFileGrps:
   - ORIGINAL
+
+  actionsBeforeIndexing:
+  actionsAfterSuccessfulIndexing:
+  actionsToRequestAsynchronously:
 
 
 ui:

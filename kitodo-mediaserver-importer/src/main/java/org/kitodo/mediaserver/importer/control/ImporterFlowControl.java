@@ -15,21 +15,18 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
-import org.kitodo.mediaserver.core.config.FileserverProperties;
-import org.kitodo.mediaserver.core.config.IndexingProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
+import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.core.util.FileDeleter;
-import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IWorkChecker;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
@@ -54,6 +51,7 @@ public class ImporterFlowControl {
     private IDataReader workDataReader;
     private IWorkChecker workChecker;
     private WorkService workService;
+    private ActionService actionService;
     private FileDeleter fileDeleter;
     private IAction cacheDeleteAction;
     private IAction viewerIndexingAction;
@@ -86,6 +84,11 @@ public class ImporterFlowControl {
     @Autowired
     public void setWorkService(WorkService workService) {
         this.workService = workService;
+    }
+
+    @Autowired
+    public void setActionService(ActionService actionService) {
+        this.actionService = actionService;
     }
 
     @Autowired
@@ -264,12 +267,15 @@ public class ImporterFlowControl {
 
             // Actions to be performed after a successful import, that are not critical for the import as such and doesn't need a rollback.
             if (importSuccessful) {
-                LOGGER.info("Performing subsequent actions for work " + workDir.getName());
+
                 try {
                     // Delete temporary files.
                     if (tempOldWorkFiles != null) {
                         fileDeleter.delete(tempOldWorkFiles);
                     }
+
+                    LOGGER.info("Performing actions before indexing work " + workDir.getName());
+                    performActions(importerProperties.getActionsBeforeIndexing(), newWork, false);
 
                     // Perform indexing of the work
                     if (importerProperties.isIndexWorkAfterImport()) {
@@ -278,16 +284,17 @@ public class ImporterFlowControl {
                         try {
                             viewerIndexingAction.perform(newWork, null);
 
-                            // TODO Perform all indexing dependent actions (doi registration…).
+                            LOGGER.info("Performing actions after indexing work " + workDir.getName());
+                            performActions(importerProperties.getActionsAfterSuccessfulIndexing(), newWork, false);
 
                         } catch (Exception e) {
-                            LOGGER.error("Error indexing " + newWork.getId() + ": " + e, e);
+                            LOGGER.error("Error indexing " + newWork.getId() + ": " + e + ". Actions after indexing not performed", e);
                         }
 
-                        // TODO Perform all defined non indexing dependent actions
-
-                        // TODO Order all defined asynchronous import actions (creation of additional files…).
                     }
+
+                    LOGGER.info("Requesting actions after indexing work " + workDir.getName());
+                    performActions(importerProperties.getActionsToRequestAsynchronously(), newWork, true);
 
                 } catch (Exception e) {
                     String message = "An error occured after import of work " + workDir.getName()
@@ -299,6 +306,27 @@ public class ImporterFlowControl {
             }
         }
         LOGGER.info("Nothing (more) to import.");
+    }
+
+    private void performActions(List<Map<String, Map<String, String>>> actionList, Work work, boolean request) throws Exception {
+        for (Map<String, Map<String, String>> actionMap : actionList) {
+            if (actionMap.keySet() == null || actionMap.keySet().size() != 1) {
+                LOGGER.error("The list of actions must be an unambiguous list with single action names as keys."
+                        + " Please check your configuration.");
+            } else {
+                for (String action : actionMap.keySet()) {
+                    String message = "action " + action + " with parameter map " + actionMap.get(action);
+
+                    if (request) {
+                        LOGGER.info("Requesting " + message);
+                        actionService.request(work, action, actionMap.get(action));
+                    } else {
+                        LOGGER.info("Performing " + message);
+                        actionService.performImmediately(work, action, actionMap.get(action));
+                    }
+                }
+            }
+        }
     }
 
 }
