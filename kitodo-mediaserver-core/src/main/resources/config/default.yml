@@ -116,6 +116,8 @@ ui:
       - id
       - title
       - enabled
+      - hostId
+      - collection
 
     # When disabling a work wether to reduce the METS/MODS file. Default value
     reduceMets: true

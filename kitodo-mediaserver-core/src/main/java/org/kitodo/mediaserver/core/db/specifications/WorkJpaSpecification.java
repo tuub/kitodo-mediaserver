@@ -16,10 +16,12 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.kitodo.mediaserver.core.db.entities.Collection;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -48,6 +50,8 @@ public class WorkJpaSpecification implements Specification<Work> {
     public Predicate toPredicate(Root<Work> works, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
         Predicate predicate = criteriaBuilder.conjunction();
+        Join<Work, Collection> collections = works.join("collections", JoinType.LEFT);
+        query.distinct(true);
 
         for (final Map.Entry<String, String> criteria : criterias) {
 
@@ -59,20 +63,34 @@ public class WorkJpaSpecification implements Specification<Work> {
                         // boolean field "enabled" may have multiple value variants
                         // ignore field if there is an invalid value
                         if (Arrays.asList("true", "1", "on", "yes").contains(criteria.getValue().toLowerCase())) {
-                            predicate = criteriaBuilder.and(
-                                predicate,
+                            predicate = criteriaBuilder.and(predicate,
                                 criteriaBuilder.isTrue(works.get(criteria.getKey()))
                             );
                         } else if (Arrays.asList("false", "0", "off", "no").contains(criteria.getValue().toLowerCase())) {
-                            predicate = criteriaBuilder.and(
-                                predicate,
+                            predicate = criteriaBuilder.and(predicate,
                                 criteriaBuilder.isFalse(works.get(criteria.getKey()))
                             );
                         }
                         break;
+                    case "collection":
+                        predicate = criteriaBuilder.and(predicate,
+                            criteriaBuilder.like(collections.get("name"), "%" + criteria.getValue() + "%")
+                        );
+                        break;
+                    case "hostId":
+                        Predicate paramPredicate = criteriaBuilder.disjunction();
+                        // search works with hostId==workId
+                        paramPredicate = criteriaBuilder.or(paramPredicate,
+                            criteriaBuilder.like(works.get("id"), "%" + criteria.getValue() + "%")
+                        );
+                        // search for hostId (same as default)
+                        paramPredicate = criteriaBuilder.or(paramPredicate,
+                            criteriaBuilder.like(works.get(criteria.getKey()), "%" + criteria.getValue() + "%")
+                        );
+                        predicate = criteriaBuilder.and(predicate, paramPredicate);
+                        break;
                     default:
-                        predicate = criteriaBuilder.and(
-                            predicate,
+                        predicate = criteriaBuilder.and(predicate,
                             criteriaBuilder.like(works.get(criteria.getKey()), "%" + criteria.getValue() + "%")
                         );
                         break;
@@ -81,13 +99,17 @@ public class WorkJpaSpecification implements Specification<Work> {
             } else {
                 // no key given: search for value in all fields
                 Predicate paramPredicate = criteriaBuilder.disjunction();
-                paramPredicate = criteriaBuilder.or(
-                    paramPredicate,
+                paramPredicate = criteriaBuilder.or(paramPredicate,
                     criteriaBuilder.like(works.get("id"), "%" + criteria.getValue() + "%")
                 );
-                paramPredicate = criteriaBuilder.or(
-                    paramPredicate,
+                paramPredicate = criteriaBuilder.or(paramPredicate,
                     criteriaBuilder.like(works.get("title"), "%" + criteria.getValue() + "%")
+                );
+                paramPredicate = criteriaBuilder.or(paramPredicate,
+                    criteriaBuilder.like(works.get("hostId"), "%" + criteria.getValue() + "%")
+                );
+                paramPredicate = criteriaBuilder.or(paramPredicate,
+                    criteriaBuilder.like(collections.get("name"), "%" + criteria.getValue() + "%")
                 );
                 predicate = criteriaBuilder.and(predicate, paramPredicate);
             }
