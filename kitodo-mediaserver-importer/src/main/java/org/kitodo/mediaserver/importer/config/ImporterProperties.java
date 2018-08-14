@@ -12,6 +12,7 @@
 package org.kitodo.mediaserver.importer.config;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,6 +34,9 @@ public class ImporterProperties {
     private String cron;
     private boolean indexWorkAfterImport;
     private List<String> validationFileGrps;
+    private List<Map<String, Map<String, String>>> actionsBeforeIndexing;
+    private List<Map<String, Map<String, String>>> actionsAfterSuccessfulIndexing;
+    private List<Map<String, Map<String, String>>> actionsToRequestAsynchronously;
 
     public String getHotfolderPath() {
         return hotfolderPath;
@@ -120,5 +124,29 @@ public class ImporterProperties {
 
     public void setIndexWorkAfterImport(boolean indexWorkAfterImport) {
         this.indexWorkAfterImport = indexWorkAfterImport;
+    }
+
+    public List<Map<String, Map<String, String>>> getActionsBeforeIndexing() {
+        return actionsBeforeIndexing;
+    }
+
+    public void setActionsBeforeIndexing(List<Map<String, Map<String, String>>> actionsBeforeIndexing) {
+        this.actionsBeforeIndexing = actionsBeforeIndexing;
+    }
+
+    public List<Map<String, Map<String, String>>> getActionsAfterSuccessfulIndexing() {
+        return actionsAfterSuccessfulIndexing;
+    }
+
+    public void setActionsAfterSuccessfulIndexing(List<Map<String, Map<String, String>>> actionsAfterSuccessfulIndexing) {
+        this.actionsAfterSuccessfulIndexing = actionsAfterSuccessfulIndexing;
+    }
+
+    public List<Map<String, Map<String, String>>> getActionsToRequestAsynchronously() {
+        return actionsToRequestAsynchronously;
+    }
+
+    public void setActionsToRequestAsynchronously(List<Map<String, Map<String, String>>> actionsToRequestAsynchronously) {
+        this.actionsToRequestAsynchronously = actionsToRequestAsynchronously;
     }
 }
