@@ -30,9 +30,9 @@ public class Work {
     private String title;
     private String path;
     private String hostId;
-    private boolean enabled = true;
     private Instant indexTime;
     private Set<Collection> collections;
+    private String allowedNetwork = "global";
 
     protected Work() {}
 
@@ -74,14 +74,6 @@ public class Work {
         this.hostId = hostId;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public Instant getIndexTime() {
         return indexTime;
     }
@@ -100,6 +92,14 @@ public class Work {
 
     public void setCollections(Set<Collection> collections) {
         this.collections = collections;
+    }
+
+    public String getAllowedNetwork() {
+        return allowedNetwork;
+    }
+
+    public void setAllowedNetwork(String allowedNetwork) {
+        this.allowedNetwork = allowedNetwork;
     }
 
 }

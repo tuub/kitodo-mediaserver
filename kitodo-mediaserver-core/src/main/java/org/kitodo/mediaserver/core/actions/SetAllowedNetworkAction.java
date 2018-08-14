@@ -31,8 +31,8 @@ import org.springframework.stereotype.Component;
 /**
  * Locks or unlocks a work.
  */
-@Component("workLockAction")
-public class WorkLockAction implements IAction {
+@Component("setAllowedNetworkAction")
+public class SetAllowedNetworkAction implements IAction {
 
     private WorkRepository workRepository;
 
@@ -56,25 +56,25 @@ public class WorkLockAction implements IAction {
     }
 
     /**
-     * Locks or unlocks the work.
+     * Sets the allowedNetwork on a work, sets a comment and optionally creates a reduced METS/MODS file.
+     *
      * @param work      a work entity
-     * @param parameter a map of parameter; enabled: lock or unlock, comment: lock comment
+     * @param parameter a map of parameter; network, comment, reduceMets
      * @return always null
      * @throws Exception no exception thrown in this implementation
      */
     @Override
     public Object perform(Work work, Map<String, String> parameter) throws Exception {
 
-        mediaServerUtils.checkForRequiredParameter(parameter, "enabled", "reduceMets");
-
-        Boolean enabled = Boolean.parseBoolean(parameter.get("enabled"));
-        Boolean reduceMets = Boolean.parseBoolean(parameter.get("reduceMets"));
+        String network = parameter.getOrDefault("network", "");
+        Boolean reduceMets = Boolean.parseBoolean(parameter.getOrDefault("reduceMets", Boolean.FALSE.toString()));
 
         File mets;
         File originalMets;
 
-        if (enabled) {
+        if (!"disabled".equals(network)) {
             // restore original METS file (if file exists)
+
             mets = mediaServerUtils.getMetsFileForWork(work);
             try {
                 originalMets = mediaServerUtils.getOriginalMetsFileForWork(work);
@@ -83,20 +83,25 @@ public class WorkLockAction implements IAction {
             } catch (FileNotFoundException ex) {
                 // if no original METS file found, just don't use it -> ignore this exception
             }
+
         } else if (reduceMets) {
             // backup original METS file
+
             mets = mediaServerUtils.getMetsFileForWork(work);
             originalMets = mediaServerUtils.forceGetMetsFileForWork(work, true);
-            Files.move(mets.toPath(), originalMets.toPath());
 
-            // create reduced METS file
-            TransformerFactory factory = TransformerFactory.newInstance();
-            ClassPathResource resource = new ClassPathResource(metsProperties.getWorkLockReduceMetsXsl());
-            Transformer transformer = factory.newTransformer(new StreamSource(resource.getInputStream()));
-            transformer.transform(new StreamSource(originalMets), new StreamResult(mets));
+            if (!originalMets.exists()) {
+                Files.move(mets.toPath(), originalMets.toPath());
+
+                // create reduced METS file
+                TransformerFactory factory = TransformerFactory.newInstance();
+                ClassPathResource resource = new ClassPathResource(metsProperties.getWorkLockReduceMetsXsl());
+                Transformer transformer = factory.newTransformer(new StreamSource(resource.getInputStream()));
+                transformer.transform(new StreamSource(originalMets), new StreamResult(mets));
+            }
         }
 
-        work.setEnabled(enabled);
+        work.setAllowedNetwork(network);
         workRepository.save(work);
 
         return null;

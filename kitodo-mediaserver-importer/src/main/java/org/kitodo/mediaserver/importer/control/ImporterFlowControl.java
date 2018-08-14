@@ -167,7 +167,7 @@ public class ImporterFlowControl {
 
                     LOGGER.info("Work " + newWork.getId() + " already present, replacing");
 
-                    newWork.setEnabled(presentWork.isEnabled());
+                    newWork.setAllowedNetwork(presentWork.getAllowedNetwork());
 
                     // Files created and cached by the fileserver must be deleted.
                     cacheDeleteAction.perform(presentWork, null);

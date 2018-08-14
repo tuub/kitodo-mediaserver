@@ -69,15 +69,15 @@ public class WorkControllerTest {
 
         String workId1 = "work1";
         String workTitle1 = "Title1";
-        Boolean workEnabled1 = true;
+        String workAllowedNetwork1 = "global";
         String workId2 = "work2";
         String workTitle2 = "Title2";
-        Boolean workEnabled2 = true;
+        String workAllowedNetwork2 = "global";
 
         Work work1 = new Work(workId1, workTitle1);
-        work1.setEnabled(workEnabled1);
+        work1.setAllowedNetwork(workAllowedNetwork1);
         Work work2 = new Work(workId2, workTitle2);
-        work2.setEnabled(workEnabled2);
+        work2.setAllowedNetwork(workAllowedNetwork2);
         entityManager.persist(work1);
         entityManager.persist(work2);
         entityManager.flush();
@@ -92,14 +92,14 @@ public class WorkControllerTest {
                 allOf(
                     hasProperty("id", is(workId1)),
                     hasProperty("title", is(workTitle1)),
-                    hasProperty("enabled", is(workEnabled1))
+                    hasProperty("allowedNetwork", is(workAllowedNetwork1))
                 )
             ))) )
             .andExpect( model().attribute("page", hasProperty("content", hasItem(
                 allOf(
                     hasProperty("id", is(workId2)),
                     hasProperty("title", is(workTitle2)),
-                    hasProperty("enabled", is(workEnabled2))
+                    hasProperty("allowedNetwork", is(workAllowedNetwork2))
                 )
             ))) )
             .andExpect( view().name("works/works") );
@@ -113,15 +113,15 @@ public class WorkControllerTest {
 
         String workId1 = "work1";
         String workTitle1 = "Title1";
-        Boolean workEnabled1 = true;
+        String workAllowedNetwork1 = "global";
         String workId2 = "work2";
         String workTitle2 = "Title huh";
-        Boolean workEnabled2 = true;
+        String workAllowedNetwork2 = "global";
 
         Work work1 = new Work(workId1, workTitle1);
-        work1.setEnabled(workEnabled1);
+        work1.setAllowedNetwork(workAllowedNetwork1);
         Work work2 = new Work(workId2, workTitle2);
-        work2.setEnabled(workEnabled2);
+        work2.setAllowedNetwork(workAllowedNetwork2);
         entityManager.persist(work1);
         entityManager.persist(work2);
         entityManager.flush();
@@ -136,7 +136,7 @@ public class WorkControllerTest {
                 allOf(
                     hasProperty("id", is(workId2)),
                     hasProperty("title", is(workTitle2)),
-                    hasProperty("enabled", is(workEnabled2))
+                    hasProperty("allowedNetwork", is(workAllowedNetwork2))
                 )
             ))) )
             .andExpect( view().name("works/works") );
@@ -150,15 +150,15 @@ public class WorkControllerTest {
 
         String workId1 = "huh";
         String workTitle1 = "Title1";
-        Boolean workEnabled1 = true;
+        String workAllowedNetwork1 = "global";
         String workId2 = "work2";
         String workTitle2 = "Title huh";
-        Boolean workEnabled2 = true;
+        String workAllowedNetwork2 = "global";
 
         Work work1 = new Work(workId1, workTitle1);
-        work1.setEnabled(workEnabled1);
+        work1.setAllowedNetwork(workAllowedNetwork1);
         Work work2 = new Work(workId2, workTitle2);
-        work2.setEnabled(workEnabled2);
+        work2.setAllowedNetwork(workAllowedNetwork2);
         entityManager.persist(work1);
         entityManager.persist(work2);
         entityManager.flush();
@@ -173,7 +173,7 @@ public class WorkControllerTest {
                 allOf(
                     hasProperty("id", is(workId2)),
                     hasProperty("title", is(workTitle2)),
-                    hasProperty("enabled", is(workEnabled2))
+                    hasProperty("allowedNetwork", is(workAllowedNetwork2))
                 )
             ))) )
             .andExpect( view().name("works/works") );
@@ -183,19 +183,19 @@ public class WorkControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    public void testLockWorkWithoutReduceMets() throws Exception {
+    public void testDisableWorkWithoutReduceMets() throws Exception {
 
         String workId1 = "work1";
         String workTitle1 = "Title1";
-        Boolean workEnabled1 = true;
+        String workAllowedNetwork1 = "global";
         String workId2 = "work2";
         String workTitle2 = "Title huh";
-        Boolean workEnabled2 = true;
+        String workAllowedNetwork2 = "global";
 
         Work work1 = new Work(workId1, workTitle1);
-        work1.setEnabled(workEnabled1);
+        work1.setAllowedNetwork(workAllowedNetwork1);
         Work work2 = new Work(workId2, workTitle2);
-        work2.setEnabled(workEnabled2);
+        work2.setAllowedNetwork(workAllowedNetwork2);
         entityManager.persist(work1);
         entityManager.persist(work2);
         entityManager.flush();
@@ -207,15 +207,15 @@ public class WorkControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("workIds", work2.getId())
-                .param("action", "work-lock")
-                .param("params[enabled]", "off")
+                .param("action", "set-network")
+                .param("params[network]", "disabled")
                 .param("params[comment]", "")
                 .param("params[reduce]", "")
             )
             .andExpect( status().is3xxRedirection() )
             .andExpect( redirectedUrl("/works") );
 
-        assertThat(work2.isEnabled()).isFalse();
+        assertThat(work2.getAllowedNetwork()).isEqualTo("disabled");
         assertThat(workRepository.count()).isEqualTo(2);
     }
 
@@ -225,10 +225,10 @@ public class WorkControllerTest {
 
         String workId1 = "work1";
         String workTitle1 = "Title1";
-        Boolean workEnabled1 = true;
+        String workAllowedNetwork1 = "global";
         String workId2 = "work2";
         String workTitle2 = "Title huh";
-        Boolean workEnabled2 = true;
+        String workAllowedNetwork2 = "global";
         Collection collection1 = new Collection("collection1");
         Collection collection2 = new Collection("collection2");
         Set<Collection> collections1 = new HashSet<>();
@@ -236,10 +236,10 @@ public class WorkControllerTest {
         collections1.add(collection2);
 
         Work work1 = new Work(workId1, workTitle1);
-        work1.setEnabled(workEnabled1);
+        work1.setAllowedNetwork(workAllowedNetwork1);
         work1.setCollections(collections1);
         Work work2 = new Work(workId2, workTitle2);
-        work2.setEnabled(workEnabled2);
+        work2.setAllowedNetwork(workAllowedNetwork2);
         entityManager.persist(work1);
         entityManager.persist(work2);
         entityManager.flush();
@@ -266,20 +266,20 @@ public class WorkControllerTest {
         String workId1 = "work1";
         String workTitle1 = "Title1";
         String workHostId1 = "HostId1";
-        Boolean workEnabled1 = true;
+        String workAllowedNetwork1 = "global";
         String workId2 = "work2";
         String workTitle2 = "Title huh";
-        Boolean workEnabled2 = true;
+        String workAllowedNetwork2 = "global";
         String workTitle3 = "Title hah";
-        Boolean workEnabled3 = true;
+        String workAllowedNetwork3 = "global";
 
         Work work1 = new Work(workId1, workTitle1);
-        work1.setEnabled(workEnabled1);
+        work1.setAllowedNetwork(workAllowedNetwork1);
         work1.setHostId(workHostId1);
         Work work2 = new Work(workId2, workTitle2);
-        work2.setEnabled(workEnabled2);
+        work2.setAllowedNetwork(workAllowedNetwork2);
         Work work3 = new Work(workHostId1, workTitle3);
-        work2.setEnabled(workEnabled2);
+        work3.setAllowedNetwork(workAllowedNetwork3);
         entityManager.persist(work1);
         entityManager.persist(work2);
         entityManager.persist(work3);
