@@ -46,6 +46,7 @@ public class UiApplication extends SpringBootServletInitializer {
             .properties("spring.config.name:"
                         + "default,"
                         + "local,"
-                        + "application");
+                        + "application,"
+                        + "dev");
     }
 }
