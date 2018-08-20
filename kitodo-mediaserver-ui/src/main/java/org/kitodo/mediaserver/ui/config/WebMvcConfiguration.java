@@ -12,6 +12,8 @@
 package org.kitodo.mediaserver.ui.config;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.MessageSource;
@@ -28,8 +30,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 
 /**
@@ -89,9 +92,23 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
      */
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver resolver = new SessionLocaleResolver();
-        // default language is english
-        resolver.setDefaultLocale(Locale.ENGLISH);
+
+        List<LocaleResolver> localeResolvers = new ArrayList<>();
+
+        // use language cookie or fallback to Accept-Language HTTP header
+        CookieLocaleResolver cookieLocaleResolver = new CookieLocaleResolver();
+        cookieLocaleResolver.setDefaultLocale(null);
+        cookieLocaleResolver.setCookieMaxAge(31536000);
+        localeResolvers.add(cookieLocaleResolver);
+
+        // default language
+        FixedLocaleResolver fixedLocaleResolver = new FixedLocaleResolver();
+        fixedLocaleResolver.setDefaultLocale(Locale.ENGLISH);
+        localeResolvers.add(fixedLocaleResolver);
+
+        ChainedLocaleResolver resolver = new ChainedLocaleResolver();
+        resolver.setLocaleResolvers(localeResolvers);
+
         return resolver;
     }
 
