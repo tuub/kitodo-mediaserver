@@ -108,8 +108,33 @@
 
                             <div class="left floated content">
                                 <div class="header" th:text="${work.title}">${work.title}</div>
-                                <div class="meta">
-                                    <span th:text="${work.id}">${work.id}</span>
+                                <div class="extra">
+                                    <div class="ui list">
+                                        <div class="item" title="id">
+                                            <i class="caret right icon"></i>
+                                            <div class="content" th:text="${work.id}">${work.id}</div>
+                                        </div>
+                                        <div class="item" title="hostId" th:if="${work.hostId}">
+                                            <i class="sitemap icon"></i>
+                                            <div class="content">
+                                                <a class="item"
+                                                   th:href="@{/works(search=${'hostId:&quot;'+work.hostId+'&quot;'})}"
+                                                   th:text="${work.hostId}"></a>
+                                            </div>
+                                        </div>
+                                        <div class="item" title="collections"
+                                             th:if="${not #lists.isEmpty(work.collections)}">
+                                            <i class="folder icon"></i>
+                                            <div class="content">
+                                                <th:block th:each="collection, iter : ${work.collections}">
+                                                    <a class="item"
+                                                       th:href="@{/works(search=${'collection:&quot;'+collection.name+'&quot;'})}"
+                                                       th:text="${collection.name}"></a>
+                                                    <th:block th:if="${not iter.last}">, </th:block>
+                                                </th:block>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

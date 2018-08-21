@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
  */
 public class KeyValueParser {
 
-    private static final String patternstr = "(?:(?:([\\w\\d]+):)?(?:\"([^\"]*)\"|([^\\s]+)))+";
+    private static final String patternstr = "(?:(?:([\\w\\d]+):\\s*)?(?:\"([^\"]*)\"|([^\\s]+)))+";
 
     private List<String> allowedKeys;
 

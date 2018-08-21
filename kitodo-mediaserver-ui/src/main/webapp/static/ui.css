@@ -78,6 +78,11 @@ label {
     cursor: pointer!important;
 }
 
+/* works: match icon widths */
+.work-items.items .extra i.icon {
+    width: 22px;
+}
+
 /* pagination: page numbers */
 span.pagination {
     margin-right: 1em;
