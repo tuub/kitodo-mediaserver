@@ -21,7 +21,7 @@ ui:
     searchableFields:
       - id
       - title
-      - enabled
+      - allowedNetwork
       - hostId
       - collection
 

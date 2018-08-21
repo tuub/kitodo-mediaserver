@@ -39,6 +39,9 @@ fileserver:
   masterFileReaderXsl: xslt/masterFileFromMets.xsl
   cacheClearCron: "0 3 * * * *"
   cacheClearSince: 2592000 # 30 days
+  allowedNetworks:
+    global: 0.0.0.0/0,::/0
+    disabled: 0.0.0.0/32,::/128
 
 conversion:
   jpeg:
@@ -120,7 +123,7 @@ ui:
     searchableFields:
       - id
       - title
-      - enabled
+      - allowedNetwork
       - hostId
       - collection
 

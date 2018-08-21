@@ -59,19 +59,6 @@ public class WorkJpaSpecification implements Specification<Work> {
 
                 // key given: search in specific field named like key
                 switch (criteria.getKey()) {
-                    case "enabled":
-                        // boolean field "enabled" may have multiple value variants
-                        // ignore field if there is an invalid value
-                        if (Arrays.asList("true", "1", "on", "yes").contains(criteria.getValue().toLowerCase())) {
-                            predicate = criteriaBuilder.and(predicate,
-                                criteriaBuilder.isTrue(works.get(criteria.getKey()))
-                            );
-                        } else if (Arrays.asList("false", "0", "off", "no").contains(criteria.getValue().toLowerCase())) {
-                            predicate = criteriaBuilder.and(predicate,
-                                criteriaBuilder.isFalse(works.get(criteria.getKey()))
-                            );
-                        }
-                        break;
                     case "collection":
                         predicate = criteriaBuilder.and(predicate,
                             criteriaBuilder.like(collections.get("name"), "%" + criteria.getValue() + "%")

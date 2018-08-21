@@ -83,6 +83,11 @@ label {
     width: 22px;
 }
 
+/* works: action buttons should have 100% width */
+.work-actions button {
+    width: 100%;
+}
+
 /* pagination: page numbers */
 span.pagination {
     margin-right: 1em;

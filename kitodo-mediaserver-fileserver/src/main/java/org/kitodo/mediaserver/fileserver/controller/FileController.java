@@ -11,11 +11,14 @@
 
 package org.kitodo.mediaserver.fileserver.controller;
 
+import inet.ipaddr.IPAddress;
+import inet.ipaddr.IPAddressString;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -92,10 +95,32 @@ public class FileController {
 
         } else {
             work = optionalWork.get();
-            if (!work.isEnabled() && !StringUtils.endsWith(derivativePath, workId + ".xml")) {
-                String message = "Work with id " + workId + " is disabled";
-                LOGGER.info(message);
-                throw new HttpForbiddenException(message);
+
+            // get remote IP address. Use header set by proxy (Kitodo.Presentation)
+            String senderIp = request.getHeader("X-Forwarded-For");
+            if (senderIp == null) {
+                // X-Forwarded-For header does not exist. Use default remote address instead.
+                senderIp = request.getRemoteAddr();
+            }
+
+            // if no network is set, grant access for everyone
+            if (!StringUtils.isEmpty(work.getAllowedNetwork())) {
+
+                // get allowed subnets for this work
+                List<String> subnets = fileserverProperties.getAllowedNetworks().get(work.getAllowedNetwork());
+                if (subnets == null) {
+                    String message = "Work with id '" + workId
+                        + "' does not have a valid allowedNetwork '" + work.getAllowedNetwork() + "'";
+                    LOGGER.error(message);
+                    throw new HttpForbiddenException(message);
+                }
+
+                // if work is disabled and request is not on METS/MODS, block the request
+                if (!isAllowedIpAddress(senderIp, subnets) && !StringUtils.endsWith(derivativePath, workId + ".xml")) {
+                    String message = "Work with id " + workId + " is disabled or the source IP address is not allowed";
+                    LOGGER.info(message);
+                    throw new HttpForbiddenException(message);
+                }
             }
         }
 
@@ -150,5 +175,29 @@ public class FileController {
             LOGGER.error(e.toString(), e);
             throw new HttpNotFoundException(e.toString());
         }
+    }
+
+    /**
+     * Check if an IP address is allowed to access a work.
+     *
+     * @param senderIp The IP addres to check
+     * @param subnets The allowed IP subnet
+     */
+    private boolean isAllowedIpAddress(String senderIp, List<String> subnets) {
+        IPAddress ipnet;
+        for (String subnet : subnets) {
+            try {
+                ipnet = new IPAddressString(subnet).getAddress();
+                if (ipnet.contains(new IPAddressString(senderIp).getAddress())) {
+                    return true;
+                }
+            } catch (Exception ex) {
+                LOGGER.warn("Could not verify source IP address authorization for '"
+                    + senderIp + "' on subnet '" + subnet + "'", ex);
+            }
+        }
+        LOGGER.info("Source IP address '" + senderIp + "' is not part of allowedNetwork with subnets '"
+            + String.join(",", subnets) + "'");
+        return false;
     }
 }
