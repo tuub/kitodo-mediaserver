@@ -20,6 +20,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
@@ -126,5 +128,18 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         validator.setValidationMessageSource(messageSource());
         return validator;
     }
+
+    /**
+     * TODO:
+     Find a solution for not having to explicitly having bean definition in every configuration class!
+     If removed tests in WebMVC crash.
+     */
+
+
+    @Bean
+    public JavaMailSender getMailSender() {
+        return new JavaMailSenderImpl();
+    }
+
 
 }
