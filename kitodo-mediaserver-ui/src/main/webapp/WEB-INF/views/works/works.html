@@ -78,13 +78,20 @@
                             <span class="text" th:text="#{works.action}"></span>
                             <i class="dropdown icon"></i>
                             <div class="menu">
-                                <button class="item" type="submit" name="action" value="cache-clear">
-                                    <i class="bolt icon"></i>
-                                    <span th:text="#{works.delete_cache}"></span>
-                                </button>
+                                <div class="header" th:text="#{works.buildin_actions}"></div>
                                 <button class="item" type="button" id="button-set-network">
                                     <i class="globe icon"></i>
                                     <span th:text="#{works.network_access_rule}"></span>
+                                </button>
+                                <div class="divider" th:if="not ${#maps.isEmpty(actions)}"></div>
+                                <div class="header"
+                                     th:if="not  ${#maps.isEmpty(actions)}"
+                                     th:text="#{works.custom_actions}"></div>
+                                <button class="item" type="submit" name="action"
+                                        th:each="action : ${actions}"
+                                        th:if="${action.value.enabled}"
+                                        th:value="${action.key}">
+                                    <span th:text="${action.value.label}"></span>
                                 </button>
                             </div>
                         </div>

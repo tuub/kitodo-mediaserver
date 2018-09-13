@@ -15,13 +15,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
+import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.ui.config.UiProperties;
 import org.kitodo.mediaserver.ui.util.KeyValueParser;
@@ -61,7 +64,7 @@ public class WorkController {
 
     private FileserverProperties fileserverProperties;
 
-    private CacheDeleteAction cacheDeleteAction;
+    private ActionService actionService;
 
     public WorkService getWorkService() {
         return workService;
@@ -91,13 +94,9 @@ public class WorkController {
         this.fileserverProperties = fileserverProperties;
     }
 
-    public CacheDeleteAction getCacheDeleteAction() {
-        return cacheDeleteAction;
-    }
-
     @Autowired
-    public void setCacheDeleteAction(CacheDeleteAction cacheDeleteAction) {
-        this.cacheDeleteAction = cacheDeleteAction;
+    public void setActionService(ActionService actionService) {
+        this.actionService = actionService;
     }
 
     /**
@@ -140,6 +139,7 @@ public class WorkController {
         model.addAttribute("availableFields", uiProperties.getWorks().getSearchableFields());
         model.addAttribute("reduceMets", uiProperties.getWorks().getReduceMets());
         model.addAttribute("allowedNetworks", fileserverProperties.getAllowedNetworks());
+        model.addAttribute("actions", uiProperties.getWorks().getActions());
         return "works/works";
     }
 
@@ -176,18 +176,12 @@ public class WorkController {
 
         Iterable<Work> works = workRepository.findAllById(workIds);
 
+        Map<String, UiProperties.ActionDefinition> actions = uiProperties.getWorks().getActions();
+        UiProperties.ActionDefinition actionEntry = (actions != null ? actions.get(action) : null);
+
         // run action for every work
         for (Work work : works) {
             switch (action) {
-
-                case "cache-clear":
-                    try {
-                        cacheDeleteAction.perform(work, new HashMap<>());
-                    } catch (Exception e) {
-                        LOGGER.error("Failed to clear cache.", e);
-                        redirectAttributes.addFlashAttribute("error", "works.error.cache_delete_failed");
-                    }
-                    break;
 
                 case "set-network":
                     try {
@@ -204,6 +198,14 @@ public class WorkController {
                     break;
 
                 default:
+                    if (actionEntry != null && actionEntry.isEnabled()) {
+                        try {
+                            actionService.performImmediately(work, actionEntry.getAction(), actionEntry.getParameters());
+                        } catch (Exception e) {
+                            LOGGER.error("Failed to run action '" + actionEntry.getAction() + "' on work '" + work.getId() + "'", e);
+                            redirectAttributes.addFlashAttribute("error", "works.error.run_action_failed");
+                        }
+                    }
                     break;
             }
         }
@@ -211,13 +213,13 @@ public class WorkController {
         // set success message
         if (!redirectAttributes.getFlashAttributes().containsKey("error")) {
             switch (action) {
-                case "cache-clear":
-                    redirectAttributes.addFlashAttribute("success", "works.success.cache_delete");
-                    break;
                 case "set-network":
                     redirectAttributes.addFlashAttribute("success", "works.success.network_set");
                     break;
                 default:
+                    if (actionEntry != null) {
+                        redirectAttributes.addFlashAttribute("success", "works.success.run_action_succeeded");
+                    }
                     break;
             }
         }

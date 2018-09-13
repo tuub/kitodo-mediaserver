@@ -12,8 +12,8 @@
 package org.kitodo.mediaserver.ui.config;
 
 import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
  * Properties class for the UI configuration.
  */
 @Configuration
-@ConfigurationProperties(prefix = "ui")
+@ConfigurationProperties(prefix = "ui", ignoreInvalidFields = true)
 public class UiProperties {
 
     @Valid
@@ -61,20 +61,7 @@ public class UiProperties {
 
         public static class ElementsPerPage {
 
-            //@Min(value = 1, message = "defaultValue must be greater than 0")
-            //public Integer defaultValue;
-
             private List<Integer> availableValues;
-
-            /*
-            public Integer getDefaultValue() {
-                return defaultValue;
-            }
-
-            public void setDefaultValue(Integer defaultValue) {
-                this.defaultValue = defaultValue;
-            }
-            */
 
             public List<Integer> getAvailableValues() {
                 return availableValues;
@@ -92,6 +79,8 @@ public class UiProperties {
 
         private Boolean reduceMets;
 
+        private Map<String, ActionDefinition> actions;
+
         public List<String> getSearchableFields() {
             return searchableFields;
         }
@@ -108,5 +97,56 @@ public class UiProperties {
             this.reduceMets = reduceMets;
         }
 
+        public Map<String, ActionDefinition> getActions() {
+            return actions;
+        }
+
+        public void setActions(Map<String, ActionDefinition> actions) {
+            this.actions = actions;
+        }
+
+    }
+
+    public static class ActionDefinition {
+
+        private String label;
+
+        private String action;
+
+        private boolean enabled;
+
+        private Map<String, String> parameters;
+
+        public String getLabel() {
+            return label;
+        }
+
+        public void setLabel(String label) {
+            this.label = label;
+        }
+
+        public String getAction() {
+            return action;
+        }
+
+        public void setAction(String action) {
+            this.action = action;
+        }
+
+        public boolean isEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        public Map<String, String> getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(Map<String, String> parameters) {
+            this.parameters = parameters;
+        }
     }
 }
