@@ -1,0 +1,30 @@
+<!--
+  ~ (c) Kitodo. Key to digital objects e. V. <contact@kitodo.org>
+  ~
+  ~ This file is part of the Kitodo project.
+  ~
+  ~ It is licensed under GNU General Public License version 3 or later.
+  ~
+  ~ For the full copyright and license information, please read the
+  ~ LICENSE file that was distributed with this source code.
+  -->
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div class="ui message"
+     th:fragment="works-message-list(class, message, works)"
+     th:classappend="${class}">
+    <p th:text="#{${message}}"></p>
+    <div class="ui bulleted list" th:if="${!#lists.isEmpty(works)}">
+        <div class="item" th:each="work : ${works}">
+            <h5 class="ui header" th:text="${work.title}"></h5>
+            <span th:text="${work.id}"></span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -45,13 +45,13 @@
 
                 <form class="ui form" th:action="@{'/works'}" method="post">
 
-                    <div class="ui positive message" th:if="${not #strings.isEmpty(success)}">
-                        <p th:text="#{${success}}"></p>
-                    </div>
+                    <th:block th:if="${!#strings.isEmpty(success)}">
+                        <div th:replace="fragments/works-message-list::works-message-list(positive, ${success}, ${succeededWorks})"></div>
+                    </th:block>
 
-                    <div class="ui negative message" th:if="${not #strings.isEmpty(error)}">
-                        <p th:text="#{${error}}"></p>
-                    </div>
+                    <th:block th:if="${!#strings.isEmpty(error)}">
+                        <div th:replace="fragments/works-message-list::works-message-list(negative, ${error}, ${failedWorks})"></div>
+                    </th:block>
 
                     <div class="ui secondary menu work-actions">
 

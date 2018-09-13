@@ -11,13 +11,11 @@
 
 package org.kitodo.mediaserver.ui.works;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
@@ -112,7 +110,9 @@ public class WorkController {
                        @PageableDefault(sort = "title") Pageable pageable,
                        @RequestParam(required = false) String search,
                        @ModelAttribute("success") String success,
-                       @ModelAttribute("error") String error) {
+                       @ModelAttribute("error") String error,
+                       @ModelAttribute("succeededWorks") ArrayList<Work> succeededWorks,
+                       @ModelAttribute("failedWorks") ArrayList<Work> failedWorks) {
 
         Page<Work> page;
 
@@ -179,6 +179,9 @@ public class WorkController {
         Map<String, UiProperties.ActionDefinition> actions = uiProperties.getWorks().getActions();
         UiProperties.ActionDefinition actionEntry = (actions != null ? actions.get(action) : null);
 
+        List<Work> succeededWorks = new ArrayList<>();
+        List<Work> failedWorks = new ArrayList<>();
+
         // run action for every work
         for (Work work : works) {
             switch (action) {
@@ -191,9 +194,11 @@ public class WorkController {
                             parsedParams.getOrDefault("comment", ""),
                             parsedParams.getOrDefault("reduce", "").equalsIgnoreCase("on")
                         );
+                        succeededWorks.add(work);
                     } catch (Exception e) {
                         LOGGER.error("Failed to set allowedNetwork for work '" + work.getId() + "'", e);
                         redirectAttributes.addFlashAttribute("error", "works.error.set_network_failed");
+                        failedWorks.add(work);
                     }
                     break;
 
@@ -201,9 +206,11 @@ public class WorkController {
                     if (actionEntry != null && actionEntry.isEnabled()) {
                         try {
                             actionService.performImmediately(work, actionEntry.getAction(), actionEntry.getParameters());
+                            succeededWorks.add(work);
                         } catch (Exception e) {
                             LOGGER.error("Failed to run action '" + actionEntry.getAction() + "' on work '" + work.getId() + "'", e);
                             redirectAttributes.addFlashAttribute("error", "works.error.run_action_failed");
+                            failedWorks.add(work);
                         }
                     }
                     break;
@@ -211,7 +218,7 @@ public class WorkController {
         }
 
         // set success message
-        if (!redirectAttributes.getFlashAttributes().containsKey("error")) {
+        if (!succeededWorks.isEmpty()) {
             switch (action) {
                 case "set-network":
                     redirectAttributes.addFlashAttribute("success", "works.success.network_set");
@@ -223,6 +230,9 @@ public class WorkController {
                     break;
             }
         }
+
+        redirectAttributes.addFlashAttribute("succeededWorks", succeededWorks);
+        redirectAttributes.addFlashAttribute("failedWorks", failedWorks);
 
         return "redirect:/works";
     }
