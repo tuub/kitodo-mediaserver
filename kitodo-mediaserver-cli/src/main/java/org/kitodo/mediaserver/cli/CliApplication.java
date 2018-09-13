@@ -31,7 +31,8 @@ public class CliApplication {
                 "spring.config.name:"
                     + "default,"
                     + "local,"
-                    + "application")
+                    + "application,"
+                    + "dev")
             .build().run(args);
     }
 }

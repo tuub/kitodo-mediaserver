@@ -17,6 +17,9 @@ fileserver:
 mets:
   originalFileGrpSuffix: PRESENTATION
 
+indexing:
+  indexScriptUrl: http://localhost/kitodo-indextest.php
+
 importer:
   hotfolderPath: /srv/kitodo/mediaserver/hotfolder/
   importingFolderPath: /srv/kitodo/mediaserver/importing/

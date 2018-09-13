@@ -13,9 +13,10 @@ package org.kitodo.mediaserver.cli.config;
 
 import org.kitodo.mediaserver.cli.commands.CacheClearCommand;
 import org.kitodo.mediaserver.cli.commands.ImportCommand;
-import org.kitodo.mediaserver.cli.commands.InitDbCommand;
 import org.kitodo.mediaserver.cli.commands.MainCommand;
+import org.kitodo.mediaserver.cli.commands.UpdateDbCommand;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -39,12 +40,24 @@ public class CliConfiguration {
     public CommandLine commandLine(MainCommand mainCommand,
                                    CacheClearCommand cacheClearCommand,
                                    ImportCommand importCommand,
-                                   InitDbCommand initDbCommand) {
+                                   UpdateDbCommand updateDbCommand) {
 
         CommandLine commandLine = new CommandLine(mainCommand);
         commandLine.addSubcommand("cacheclear", cacheClearCommand);
         commandLine.addSubcommand("import", importCommand);
-        commandLine.addSubcommand("initdb", initDbCommand);
+        commandLine.addSubcommand("updatedb", updateDbCommand);
         return commandLine;
+    }
+
+    /**
+     * Disable Flyway migration on app startup.
+     *
+     * @return An empty strategy
+     */
+    @Bean
+    public FlywayMigrationStrategy noFlywayMigrationStrategy() {
+        return flyway -> {
+            // do nothing
+        };
     }
 }

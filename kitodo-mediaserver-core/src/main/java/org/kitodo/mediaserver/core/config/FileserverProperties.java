@@ -11,6 +11,8 @@
 
 package org.kitodo.mediaserver.core.config;
 
+import java.util.List;
+import java.util.Map;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,6 +30,7 @@ public class FileserverProperties {
     private String filePathPattern;
     private String rootUrl;
     private String masterFileReaderXsl;
+    private Map<String, List<String>> allowedNetworks;
 
     public boolean isCaching() {
         return caching;
@@ -83,5 +86,13 @@ public class FileserverProperties {
 
     public void setMasterFileReaderXsl(String masterFileReaderXsl) {
         this.masterFileReaderXsl = masterFileReaderXsl;
+    }
+
+    public Map<String, List<String>> getAllowedNetworks() {
+        return allowedNetworks;
+    }
+
+    public void setAllowedNetworks(Map<String, List<String>> allowedNetworks) {
+        this.allowedNetworks = allowedNetworks;
     }
 }

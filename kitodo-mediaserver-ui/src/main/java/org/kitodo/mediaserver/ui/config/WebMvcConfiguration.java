@@ -13,21 +13,15 @@ package org.kitodo.mediaserver.ui.config;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
-import org.kitodo.mediaserver.core.actions.WorkLockAction;
-import org.kitodo.mediaserver.core.config.FileserverProperties;
-import org.kitodo.mediaserver.core.config.MetsProperties;
-import org.kitodo.mediaserver.core.util.FileDeleter;
-import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
@@ -44,8 +38,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
  * App MVC Configuration.
  */
 @Configuration
-@ComponentScan(basePackages = {"org.kitodo.mediaserver.ui", "org.kitodo.mediaserver.core.services"})
-@Import({FileserverProperties.class, MetsProperties.class})
+@ComponentScan(basePackages = {"org.kitodo.mediaserver.ui", "org.kitodo.mediaserver.core"})
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
@@ -137,37 +130,16 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * The media server utilities.
-     * @return the bean
+     * TODO:
+     Find a solution for not having to explicitly having bean definition in every configuration class!
+     If removed tests in WebMVC crash.
      */
-    @Bean
-    public MediaServerUtils mediaServerUtils() {
-        return new MediaServerUtils();
-    }
 
-    /**
-     * Delete cached derivatives action.
-     * @return CacheDeleteAction
-     */
-    @Bean
-    public CacheDeleteAction cacheDeleteAction() {
-        CacheDeleteAction cacheDeleteAction = new CacheDeleteAction();
-        return cacheDeleteAction;
-    }
-
-    /**
-     * Deletes files (and folders).
-     * @return FileDeleter
-     */
-    @Bean
-    public FileDeleter fileDeleter() {
-        FileDeleter fileDeleter = new FileDeleter();
-        return fileDeleter;
-    }
 
     @Bean
-    public WorkLockAction workLockAction() {
-        WorkLockAction workLockAction = new WorkLockAction();
-        return workLockAction;
+    public JavaMailSender getMailSender() {
+        return new JavaMailSenderImpl();
     }
+
+
 }

@@ -24,10 +24,12 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
 import org.kitodo.mediaserver.importer.exceptions.ImporterException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * Utilities for the importer.
  */
+@Component
 public class ImporterUtils {
 
     private ImporterProperties importerProperties;

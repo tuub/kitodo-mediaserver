@@ -107,64 +107,70 @@ $(document).ready(function(){
         form.find(`.item[data-work-id=${id}] input[name="workIds"]`).prop('checked', true);
     };
 
-    // works cache delete button
-    $('.button.work-cache-delete').click(function(e){
-        let work = $(this).closest('.item[data-work-id]');
-        selectWork(work.attr('data-work-id'));
-    });
+    // works allowedNetwork label: comment tooltip
+    $('.work-items .allowedNetwork>.label').popup({
+        inline: true,
+        hoverable: true,
+        onShow: function () {
 
-    // works lock action button
-    $('.work-lock').click(function(e){
+            let tooltip = $(this).closest('.allowedNetwork').find('.popup');
+            let commentfield = tooltip.find('.content');
+            let status = $('<div class="ui message"><p>');
 
-        let work = $(this).closest('.item[data-work-id]');
-        let workId = work.attr('data-work-id');
-
-        if (work.attr('data-work-enabled') === 'true') {
-
-            // disable action: show comment form
-
-            let modal = $('#lock-work-modal');
-            modal
-                .modal({
-                    closable: false,
-                    onShow: function(){
-                        modal.find('form input[name="workIds"]').val(workId);
-                        let title = work.attr('data-work-title');
-                        modal.find('.content p').text(title);
-                    }
-                })
-                .modal('show');
-        } else {
-
-            // enable action: confirm
-
-            let modal = $('#work-unlock-modal');
-            let addition = modal.find('p.addition');
-
+            let workId = $(this).closest('[data-work-id]').data('work-id');
             let url = `${window.UI.baseUrl}/works/${workId}/lockcomment`
                 .replace(/^[\/]+/, '/');
 
-            // load lock comment and show it in confirm dialog
+            tooltip.dimmer('show');
+
+            // load network comment and show it in tooltip
             $.ajax(url)
                 .done(function(data) {
-                    addition.text(data.response);
+                    commentfield.text(data.response);
                 })
                 .fail(function(jqXHR, textStatus) {
                     // TODO: Add multilingual error message
-                    addition.text('Error / Fehler: ' + textStatus);
+                    commentfield.text('Error / Fehler: ' + textStatus);
                 })
                 .always(function () {
-                    modal
-                        .modal({
-                            closable: false,
-                            onShow: function(){
-                                modal.find('form input[name="workIds"]').val(workId);
-                            }
-                        })
-                        .modal('show');
+                    tooltip.dimmer('hide');
                 });
         }
     });
 
+    // works action button: set-network
+    $('#button-set-network').click(function(e){
+
+        let modal = $('#work-set-network-modal');
+        let workIds = $(this)
+            .closest('form')
+            .find('.work-items input[name="workIds"]:checked')
+            .map(function(){
+                return $(this).val();
+            })
+            .get();
+
+        modal.find('input[name="workIds"]').val(workIds.join(','));
+
+        modal.modal({
+            closable: false,
+            onShow: function(){
+                // TODO
+            }
+        })
+        .modal('show');
+    });
+
+    // works set-network modal: toggle reduceMets switch visibility
+    let toggleReduceMetsSwitch = function(){
+        let reducefield = $('#work-set-network-modal .field.reduce');
+        if ($(this).val() == 'disabled') {
+            reducefield.show(200);
+        } else {
+            reducefield.hide(200);
+        }
+    };
+    $('#work-set-network-modal input[name="params[network]"]').on('change', toggleReduceMetsSwitch);
+    toggleReduceMetsSwitch();
 
 });

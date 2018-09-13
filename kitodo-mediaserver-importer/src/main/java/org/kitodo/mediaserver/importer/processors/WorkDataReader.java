@@ -16,12 +16,14 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
+import org.kitodo.mediaserver.core.db.entities.Collection;
 import org.kitodo.mediaserver.core.db.entities.Work;
 
 
@@ -32,6 +34,7 @@ public class WorkDataReader implements IDataReader {
 
     private IMetsReader metsReader;
     private IReadResultParser readResultParser;
+    private String valueConcatSeparator = " ; ";
 
     public void setMetsReader(IMetsReader metsReader) {
         this.metsReader = metsReader;
@@ -39,6 +42,10 @@ public class WorkDataReader implements IDataReader {
 
     public void setReadResultParser(IReadResultParser readResultParser) {
         this.readResultParser = readResultParser;
+    }
+
+    public void setValueConcatSeparator(String valueConcatSeparator) {
+        this.valueConcatSeparator = valueConcatSeparator;
     }
 
     /**
@@ -60,6 +67,15 @@ public class WorkDataReader implements IDataReader {
 
         // Assemble Work object with the values from the map
         Work work = new Work(workDataMap.get("workid"), workDataMap.get("title"));
+        work.setHostId(workDataMap.get("hostid"));
+        if (StringUtils.isNotBlank(workDataMap.get("collection"))) {
+            Set<Collection> collections = new HashSet<>();
+
+            for (String collection : workDataMap.get("collection").split(valueConcatSeparator)) {
+                collections.add(new Collection(collection));
+            }
+            work.setCollections(collections);
+        }
 
         return work;
     }

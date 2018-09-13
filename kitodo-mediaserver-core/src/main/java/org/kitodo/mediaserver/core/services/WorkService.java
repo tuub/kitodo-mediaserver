@@ -84,6 +84,16 @@ public class WorkService {
     }
 
     /**
+     * Get all works belonging to a given collection.
+     *
+     * @param collectionName the name of the collection
+     * @return a list of works
+     */
+    public List<Work> getAllWorksInCollection(String collectionName) {
+        return workRepository.findByCollectionsName(collectionName);
+    }
+
+    /**
      * Update a single work.
      * @param work the work to be updated
      */
@@ -96,8 +106,8 @@ public class WorkService {
      * @param work the Work
      * @return the lock comment
      */
-    public String getLockComment(Work work) {
-        ActionData actionData = actionService.getLastPerformedAction(work, "workLockAction");
+    public String getNetworkComment(Work work) {
+        ActionData actionData = actionService.getLastPerformedAction(work, "setAllowedNetworkAction");
         if (actionData != null && actionData.getParameter() != null && actionData.getParameter().get("comment") != null) {
             return actionData.getParameter().get("comment");
         }
@@ -105,20 +115,21 @@ public class WorkService {
     }
 
     /**
-     * Locks or unlocks a work.
+     * Sets the allowedNetwork on a work.
+     *
      * @param work the Work
-     * @param enabled lock or unlock
-     * @param comment lock comment
+     * @param network network to set
+     * @param comment comment
      * @throws Exception action exceptions
      */
-    public void lockWork(Work work, Boolean enabled, String comment, Boolean reduceMets) throws Exception {
+    public void setAllowedNetwork(Work work, String network, String comment, Boolean reduceMets) throws Exception {
         Map<String, String> parameter = new HashMap<>();
-        parameter.put("enabled", enabled.toString());
+        parameter.put("network", network);
         parameter.put("comment", comment);
         parameter.put("reduceMets", reduceMets.toString());
 
-        actionService.request(work, "workLockAction", parameter);
-        actionService.performRequested(work, "workLockAction", parameter);
+        actionService.request(work, "setAllowedNetworkAction", parameter);
+        actionService.performRequested(work, "setAllowedNetworkAction", parameter);
     }
 
     /**

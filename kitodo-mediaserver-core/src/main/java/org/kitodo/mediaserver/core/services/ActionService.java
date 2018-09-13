@@ -84,12 +84,7 @@ public class ActionService {
      */
     public Object performRequested(Work work, String actionName, Map<String, String> parameter) throws Exception {
 
-        if (work == null) {
-            throw new IllegalArgumentException("Parameter work must not be null.");
-        }
-        if (!StringUtils.hasText(actionName)) {
-            throw new IllegalArgumentException("Parameter actionName must not be null.");
-        }
+        checkParams(work, actionName);
 
         // Does this action request exist?
         ActionData actionData = getUnperformedAction(work, actionName, parameter);
@@ -119,29 +114,16 @@ public class ActionService {
                 + "' for workId=" + actionData.getWork().getId() + " is already running: startTime=" + persistentActionData.getStartTime());
         }
 
-        Object actionInstance;
-
-        // Does the action bean exist?
-        try {
-            actionInstance = applicationContext.getBean(actionData.getActionName());
-        } catch (BeansException ex) {
-            throw new ClassNotFoundException("No Bean found for actionName='" + actionData.getActionName() + "'");
-        }
-
-        // Is the bean a usable Action?
-        if (!(actionInstance instanceof IAction)) {
-            throw new ActionServiceException("Saved actionName='" + actionData.getActionName()
-                + "' for workId=" + actionData.getWork().getId() + " is not a valid action bean.");
-        }
-
         // Run the action...
         actionData.setStartTime(Instant.now());
         actionRepository.save(actionData);
 
+        IAction actionInstance = getActionInstance(actionData.getActionName());
+
         Object result;
 
         try {
-            result = ((IAction) actionInstance).perform(actionData.getWork(), actionData.getParameter());
+            result = actionInstance.perform(actionData.getWork(), actionData.getParameter());
 
             actionData.setEndTime(Instant.now());
             actionRepository.save(actionData);
@@ -157,7 +139,48 @@ public class ActionService {
         return result;
     }
 
+    /**
+     * Performs an named action immediately without persisting.
+     * Use case: when actions are configured to be performed under certain conditions.
+     *
+     * @param work the work on which the action is performed
+     * @param actionName the name of the action bean
+     * @param parameter a map of parameter
+     * @return the result of the action
+     * @throws Exception by severe errors
+     */
+    public Object performImmediately(Work work, String actionName, Map<String, String> parameter) throws Exception {
 
+        checkParams(work, actionName);
+
+        IAction actionInstance = getActionInstance(actionName);
+
+        return actionInstance.perform(work, parameter);
+    }
+
+    /**
+     * Gets the bean instance of an action.
+     *
+     * @param actionName the name of the action
+     * @return the action instance bean
+     * @throws Exception if there is no such bean or the bean is no IAction implementation
+     */
+    private IAction getActionInstance(String actionName) throws Exception {
+        Object actionInstance;
+
+        // Does the action bean exist?
+        try {
+            actionInstance = applicationContext.getBean(actionName);
+        } catch (BeansException ex) {
+            throw new ClassNotFoundException("No Bean found for actionName='" + actionName + "'");
+        }
+
+        // Is the bean a usable Action?
+        if (!(actionInstance instanceof IAction)) {
+            throw new ActionServiceException("The Bean with actionName='" + actionName + "' is not a valid action.");
+        }
+        return (IAction) actionInstance;
+    }
 
     /**
      * Finds the last finished action.
@@ -215,5 +238,21 @@ public class ActionService {
         }
         return null;
     }
+
+    /**
+     * Checks parameter for valid values.
+     *
+     * @param work a work entity
+     * @param actionName an action name
+     */
+    private void checkParams(Work work, String actionName) {
+        if (work == null) {
+            throw new IllegalArgumentException("Parameter work must not be null.");
+        }
+        if (!StringUtils.hasText(actionName)) {
+            throw new IllegalArgumentException("Parameter actionName must not be null.");
+        }
+    }
+
 
 }

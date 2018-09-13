@@ -1,4 +1,0 @@
-
-# This property makes sure that the build doesn't break.
-logging:
-  file:

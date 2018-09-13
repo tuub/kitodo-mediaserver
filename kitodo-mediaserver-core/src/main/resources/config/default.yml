@@ -13,12 +13,26 @@ spring:
     url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
     username: kitodo
     password: kitodo
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
   main:
     banner-mode: "off"
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    smtp:
+      auth: false
+      starttls:
+        enable: false
+        required: false
 
 logging:
   level:
-    org.springframework: ERROR
+    org.springframework: WARN
     com.zaxxer.hikari: WARN
     org.hibernate: WARN
     org.kitodo: INFO
@@ -27,25 +41,59 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n"
   path: /usr/local/kitodo/mediaserver/
 
+notifier:
+  emailFrom: "kitodo@example.org"
+  emailTo: "admin@example.org"
+  timestampFormat: "yyyy-MM-dd HH:mm:ss"
+
 fileserver:
+  rootUrl: https://example.com/files/
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
   masterFileReaderXsl: xslt/masterFileFromMets.xsl
-  cacheClearCron: "0 3 * * *"
+  cacheClearCron: "0 3 * * * *"
   cacheClearSince: 2592000 # 30 days
+  allowedNetworks:
+    global: 0.0.0.0/0,::/0
+    disabled: 0.0.0.0/32,::/128
 
 conversion:
   jpeg:
     defaultSize: 1000
-  useGraphicsMagick: true
+  useGraphicsMagick: false
   pathExtractionPatterns:
     - .*/jpeg/(max|min|thumb|default)/.*
     - .*/jpeg/(150|600|1000|2000)/.*
 
+  watermark:
+    enabled: true
+    minSize: 600
+    renderMode: text
+    gravity: "southwest"
+    offsetX: 25
+    offsetY: 0
+    textMode:
+      content: "Example Text"
+      font: "Arial"
+      colorRGB: "34,65,255"
+      size: 16
+    imageMode:
+      path: /srv/kitodo/assets/watermark.png
+      opacity: 75
+    extendCanvas:
+      enabled: true
+      backgroundColorRGB: "0,0,0"
+      addX: 0
+      addY: 25
+
 mets:
   originalFileGrpSuffix: ORIGINAL
   workLockReduceMetsXsl: xslt/reduceMets.xsl
+
+indexing:
+  indexScriptUrl: https://example.com/indexWork.php
+  indexScriptMetsUrlArgName: doc
 
 
 importer:
@@ -58,8 +106,14 @@ importer:
   fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
+  indexWorkAfterImport: true
+
   validationFileGrps:
   - ORIGINAL
+
+  actionsBeforeIndexing:
+  actionsAfterSuccessfulIndexing:
+  actionsToRequestAsynchronously:
 
 
 ui:
@@ -84,7 +138,9 @@ ui:
     searchableFields:
       - id
       - title
-      - enabled
+      - allowedNetwork
+      - hostId
+      - collection
 
     # When disabling a work wether to reduce the METS/MODS file. Default value
     reduceMets: true

@@ -11,8 +11,14 @@
 
 package org.kitodo.mediaserver.core.db.entities;
 
+import java.time.Instant;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 /**
  * Entity for digitized works.
@@ -20,11 +26,13 @@ import javax.persistence.Id;
 @Entity
 public class Work {
 
-
     private String id;
     private String title;
     private String path;
-    private boolean enabled = true;
+    private String hostId;
+    private Instant indexTime;
+    private Set<Collection> collections;
+    private String allowedNetwork = "global";
 
     protected Work() {}
 
@@ -58,12 +66,40 @@ public class Work {
         this.path = path;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public String getHostId() {
+        return hostId;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setHostId(String hostId) {
+        this.hostId = hostId;
+    }
+
+    public Instant getIndexTime() {
+        return indexTime;
+    }
+
+    public void setIndexTime(Instant indexTime) {
+        this.indexTime = indexTime;
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "work_collection",
+            joinColumns = @JoinColumn(name = "work_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "collection_name", referencedColumnName = "name"))
+    public Set<Collection> getCollections() {
+        return collections;
+    }
+
+    public void setCollections(Set<Collection> collections) {
+        this.collections = collections;
+    }
+
+    public String getAllowedNetwork() {
+        return allowedNetwork;
+    }
+
+    public void setAllowedNetwork(String allowedNetwork) {
+        this.allowedNetwork = allowedNetwork;
     }
 
 }

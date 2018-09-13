@@ -16,10 +16,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.db.entities.Work;
+import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.core.util.FileDeleter;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
@@ -30,8 +35,6 @@ import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 /**
@@ -48,8 +51,10 @@ public class ImporterFlowControl {
     private IDataReader workDataReader;
     private IWorkChecker workChecker;
     private WorkService workService;
+    private ActionService actionService;
     private FileDeleter fileDeleter;
     private IAction cacheDeleteAction;
+    private IAction viewerIndexingAction;
 
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
@@ -82,6 +87,11 @@ public class ImporterFlowControl {
     }
 
     @Autowired
+    public void setActionService(ActionService actionService) {
+        this.actionService = actionService;
+    }
+
+    @Autowired
     public void setFileDeleter(FileDeleter fileDeleter) {
         this.fileDeleter = fileDeleter;
     }
@@ -91,6 +101,12 @@ public class ImporterFlowControl {
         this.cacheDeleteAction = cacheDeleteAction;
     }
 
+    @Autowired
+    public void setViewerIndexingAction(IAction viewerIndexingAction) {
+        this.viewerIndexingAction = viewerIndexingAction;
+    }
+
+
     /**
      * Controls the importer algorithm.
      *
@@ -99,6 +115,7 @@ public class ImporterFlowControl {
     public void importWorks() throws Exception {
 
         File workDir;
+        File mets = null;
 
         LOGGER.info("Looking for works to import in folder " + importerProperties.getHotfolderPath());
 
@@ -115,7 +132,7 @@ public class ImporterFlowControl {
 
             try {
                 // Get the mets file
-                File mets = new File(workDir, workDir.getName() + ".xml");
+                mets = new File(workDir, workDir.getName() + ".xml");
                 if (!mets.exists()) {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
@@ -123,21 +140,23 @@ public class ImporterFlowControl {
                 // Read the work data from the mets/mods file.
                 newWork = workDataReader.read(mets);
 
-                // Validate import data
-                importValidation.validate(newWork, mets);
-
-                newWork.setPath(Paths.get(importerProperties.getWorkFilesPath(), newWork.getId()).toString());
-
                 //check that naming of folder and mets.xml concedes with workId, otherwise rename
                 if (!StringUtils.equals(newWork.getId(), workDir.getName())) {
                     LOGGER.info("Id of work to import: " + newWork.getId() + " is different from the mets file name "
                             + workDir.getName() + ", renaming.");
 
-                    Files.move(mets.toPath(), Paths.get(mets.getParent(), newWork.getId() + ".xml"));
+                    String newMetsName = newWork.getId() + ".xml";
+                    Files.move(mets.toPath(), Paths.get(mets.getParent(), newMetsName));
                     Path newPath = Paths.get(workDir.getParent(), newWork.getId());
                     Files.move(workDir.toPath(), newPath);
                     workDir = newPath.toFile();
+                    mets = new File(workDir, newMetsName);
                 }
+
+                // Validate import data
+                importValidation.validate(newWork, mets);
+
+                newWork.setPath(Paths.get(importerProperties.getWorkFilesPath(), newWork.getId()).toString());
 
                 // Check in the database if this work is already present
                 // and if there are identifiers associated to another work.
@@ -148,7 +167,7 @@ public class ImporterFlowControl {
 
                     LOGGER.info("Work " + newWork.getId() + " already present, replacing");
 
-                    newWork.setEnabled(presentWork.isEnabled());
+                    newWork.setAllowedNetwork(presentWork.getAllowedNetwork());
 
                     // Files created and cached by the fileserver must be deleted.
                     cacheDeleteAction.perform(presentWork, null);
@@ -156,9 +175,10 @@ public class ImporterFlowControl {
                     // Move old work files to a temporary folder.
                     if (new File(presentWork.getPath()).isDirectory()) {
                         tempOldWorkFiles = Paths.get(importerProperties.getTempWorkFolderPath(), presentWork.getId());
-                        Files.move(
-                                Paths.get(presentWork.getPath()),
-                                tempOldWorkFiles
+                        LOGGER.debug("Move from='" + presentWork.getPath() + "' to='" + tempOldWorkFiles + "'");
+                        FileUtils.moveDirectory(
+                            new File(presentWork.getPath()),
+                            tempOldWorkFiles.toFile()
                         );
                     } else {
                         LOGGER.warn("The alleged root path " + presentWork.getPath() + " of the already present work "
@@ -168,10 +188,17 @@ public class ImporterFlowControl {
                 }
 
                 // Move work files to the production root.
-                Files.move(
-                        workDir.toPath(),
-                        Paths.get(newWork.getPath())
-                );
+                try {
+                    LOGGER.debug("Move from='" + workDir + "' to='" + newWork.getPath() + "'");
+                    FileUtils.moveDirectory(
+                        workDir,
+                        new File(newWork.getPath())
+                    );
+                } catch (FileExistsException ex) {
+                    LOGGER.error("Work directory '" + newWork.getPath() + "' already exists but there is no DB entry for workId='"
+                        + newWork.getId() + "'. Not importing work from '" + workDir + "'");
+                    throw ex;
+                }
                 workDir = new File(newWork.getPath());
 
                 // Insert the work data into the database, updating if old data present.
@@ -206,9 +233,10 @@ public class ImporterFlowControl {
                         // restore old work files
                         if (tempOldWorkFiles != null) {
                             LOGGER.info("Rollback: restoring old files for work " + presentWork.getId());
-                            Files.move(
-                                    tempOldWorkFiles,
-                                    Paths.get(presentWork.getPath())
+                            LOGGER.debug("Move from='" + tempOldWorkFiles + "' to='" + presentWork.getPath() + "'");
+                            FileUtils.moveDirectory(
+                                tempOldWorkFiles.toFile(),
+                                new File(presentWork.getPath())
                             );
                         }
                     } catch (Exception rollbackExc) {
@@ -217,12 +245,14 @@ public class ImporterFlowControl {
                     }
                 }
 
-                // move import files to error folder
                 try {
+                    // move import files to error folder
                     LOGGER.info("Rollback: moving all files for work " + workDir.getName() + " to error folder.");
-                    Files.move(
-                            workDir.toPath(),
-                            Paths.get(importerProperties.getErrorFolderPath(), workDir.getName() + "_" + LocalDateTime.now())
+                    LOGGER.debug("Move from='" + workDir + "' to='" + new File(importerProperties.getErrorFolderPath(),
+                        workDir.getName() + "_" + LocalDateTime.now()) + "'");
+                    FileUtils.moveDirectory(
+                        workDir,
+                        new File(importerProperties.getErrorFolderPath(), workDir.getName() + "_" + LocalDateTime.now())
                     );
                 } catch (Exception rollbackExc) {
                     LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
@@ -237,31 +267,66 @@ public class ImporterFlowControl {
 
             // Actions to be performed after a successful import, that are not critical for the import as such and doesn't need a rollback.
             if (importSuccessful) {
-                LOGGER.info("Performing subsequent actions for work " + workDir.getName());
+
                 try {
                     // Delete temporary files.
                     if (tempOldWorkFiles != null) {
                         fileDeleter.delete(tempOldWorkFiles);
                     }
 
-                    // TODO Perform all defined direct import actions (doi registration…).
+                    LOGGER.info("Performing actions before indexing work " + workDir.getName());
+                    performActions(importerProperties.getActionsBeforeIndexing(), newWork, false);
 
-                    // TODO Order all defined asynchronous import actions (creation of additional files…).
+                    // Perform indexing of the work
+                    if (importerProperties.isIndexWorkAfterImport()) {
+                        LOGGER.info("Triggering indexing of work " + newWork.getId());
 
-                    LOGGER.info("Triggering indexing of work " + workDir.getName());
-                    // TODO Trigger indexing in presentation system (configurable).
+                        try {
+                            viewerIndexingAction.perform(newWork, null);
 
+                            LOGGER.info("Performing actions after indexing work " + workDir.getName());
+                            performActions(importerProperties.getActionsAfterSuccessfulIndexing(), newWork, false);
+
+                        } catch (Exception e) {
+                            LOGGER.error("Error indexing " + newWork.getId() + ": " + e + ". Actions after indexing not performed", e);
+                        }
+
+                    }
+
+                    LOGGER.info("Requesting actions after indexing work " + workDir.getName());
+                    performActions(importerProperties.getActionsToRequestAsynchronously(), newWork, true);
 
                 } catch (Exception e) {
                     String message = "An error occured after import of work " + workDir.getName()
                             + ". The import itself was succuessfully performed not all the subsequent actions."
-                            + " The work has possibly not been indexed. Error: " + e;
+                            + " The work has probably not been indexed. Error: " + e;
                     LOGGER.error(message, e);
                     // TODO notify
                 }
             }
         }
         LOGGER.info("Nothing (more) to import.");
+    }
+
+    private void performActions(List<Map<String, Map<String, String>>> actionList, Work work, boolean request) throws Exception {
+        for (Map<String, Map<String, String>> actionMap : actionList) {
+            if (actionMap.keySet() == null || actionMap.keySet().size() != 1) {
+                LOGGER.error("The list of actions must be an unambiguous list with single action names as keys."
+                        + " Please check your configuration.");
+            } else {
+                for (String action : actionMap.keySet()) {
+                    String message = "action " + action + " with parameter map " + actionMap.get(action);
+
+                    if (request) {
+                        LOGGER.info("Requesting " + message);
+                        actionService.request(work, action, actionMap.get(action));
+                    } else {
+                        LOGGER.info("Performing " + message);
+                        actionService.performImmediately(work, action, actionMap.get(action));
+                    }
+                }
+            }
+        }
     }
 
 }

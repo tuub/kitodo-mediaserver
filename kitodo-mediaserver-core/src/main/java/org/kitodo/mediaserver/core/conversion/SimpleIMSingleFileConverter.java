@@ -19,6 +19,7 @@ import java.util.Map;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
 import org.im4java.core.ImageCommand;
+import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,9 +34,19 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleIMSingleFileConverter.class);
 
+    private IWatermarker watermarker;
+
     @Autowired
     private ConversionProperties conversionProperties;
-    
+
+    @Autowired
+    protected ConversionProperties.Watermark conversionPropertiesWatermark;
+
+    @Autowired
+    public void setWatermarker(IWatermarker watermarker) {
+        this.watermarker = watermarker;
+    }
+
     /**
      * Converts a given file. Returns an input stream with the result.
      *
@@ -51,6 +62,8 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
 
         int size = getConversionSize(parameter);
 
+        boolean addWatermark = conversionPropertiesWatermark.isEnabled();
+
         File convertedFile = new File(conversionTargetPath, parameter.get("derivativePath"));
 
         // if the cache file already exists, there is another thread already performing the conversion.
@@ -60,10 +73,21 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
             IMOperation operation = new IMOperation();
             operation.addImage(master.getAbsolutePath());
             operation.resize(size);
+
+            if (addWatermark) {
+                try {
+                    watermarker.perform(operation, master, size);
+                } catch (Exception e) {
+                    LOGGER.error("Unexpected watermarking error : " + e, e);
+                }
+            }
+
             operation.addImage(convertedFile.getAbsolutePath());
 
             ImageCommand convertCmd = new ConvertCmd(conversionProperties.isUseGraphicsMagick());
             convertCmd.run(operation);
+
+            LOGGER.info("Executed IM Operation: " + operation.toString());
         }
 
         InputStream convertedInputStream = new FileInputStream(convertedFile);

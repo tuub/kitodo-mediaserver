@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.kitodo.mediaserver.core.actions.CacheDeleteAction;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
@@ -58,6 +59,8 @@ public class WorkController {
 
     private UiProperties uiProperties;
 
+    private FileserverProperties fileserverProperties;
+
     private CacheDeleteAction cacheDeleteAction;
 
     public WorkService getWorkService() {
@@ -81,6 +84,11 @@ public class WorkController {
     @Autowired
     public void setUiProperties(UiProperties uiProperties) {
         this.uiProperties = uiProperties;
+    }
+
+    @Autowired
+    public void setFileserverProperties(FileserverProperties fileserverProperties) {
+        this.fileserverProperties = fileserverProperties;
     }
 
     public CacheDeleteAction getCacheDeleteAction() {
@@ -131,6 +139,7 @@ public class WorkController {
         model.addAttribute("sizes", uiProperties.getPagination().getElementsPerPage().getAvailableValues());
         model.addAttribute("availableFields", uiProperties.getWorks().getSearchableFields());
         model.addAttribute("reduceMets", uiProperties.getWorks().getReduceMets());
+        model.addAttribute("allowedNetworks", fileserverProperties.getAllowedNetworks());
         return "works/works";
     }
 
@@ -149,7 +158,7 @@ public class WorkController {
                          @RequestParam Map<String, String> params,
                          RedirectAttributes redirectAttributes) {
 
-        if (workIds == null) {
+        if (workIds == null || workIds.size() == 0) {
             redirectAttributes.addFlashAttribute("error", "works.error.no_work_selected");
             return "redirect:/works";
         }
@@ -180,17 +189,17 @@ public class WorkController {
                     }
                     break;
 
-                case "work-lock":
+                case "set-network":
                     try {
-                        workService.lockWork(
+                        workService.setAllowedNetwork(
                             work,
-                            parsedParams.getOrDefault("enabled", "").equalsIgnoreCase("on"),
+                            parsedParams.get("network"),
                             parsedParams.getOrDefault("comment", ""),
                             parsedParams.getOrDefault("reduce", "").equalsIgnoreCase("on")
                         );
                     } catch (Exception e) {
-                        LOGGER.error("Failed to lock/unlock work.", e);
-                        redirectAttributes.addFlashAttribute("error", "works.error.lock_failed");
+                        LOGGER.error("Failed to set allowedNetwork for work '" + work.getId() + "'", e);
+                        redirectAttributes.addFlashAttribute("error", "works.error.set_network_failed");
                     }
                     break;
 
@@ -205,8 +214,8 @@ public class WorkController {
                 case "cache-clear":
                     redirectAttributes.addFlashAttribute("success", "works.success.cache_delete");
                     break;
-                case "work-lock":
-                    redirectAttributes.addFlashAttribute("success", "works.success.work_locked");
+                case "set-network":
+                    redirectAttributes.addFlashAttribute("success", "works.success.network_set");
                     break;
                 default:
                     break;
@@ -226,7 +235,7 @@ public class WorkController {
     @ResponseBody
     public Map<String, String> getLockComment(@PathVariable String id) throws WorkNotFoundException {
         Work work = workService.getWork(id);
-        String comment = workService.getLockComment(work);
+        String comment = workService.getNetworkComment(work);
         return Collections.singletonMap("response", comment);
     }
 }
