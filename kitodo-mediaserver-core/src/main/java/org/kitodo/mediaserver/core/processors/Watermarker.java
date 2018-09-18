@@ -22,10 +22,12 @@ import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * An implementation of IWatermarker.
  */
+@Component
 public class Watermarker implements IWatermarker {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Watermarker.class);

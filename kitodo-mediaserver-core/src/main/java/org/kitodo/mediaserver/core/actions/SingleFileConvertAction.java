@@ -27,6 +27,7 @@ import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ConversionException;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
+import org.kitodo.mediaserver.core.util.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ import org.springframework.stereotype.Component;
 public class SingleFileConvertAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleFileConvertAction.class);
+
+    private Notifier notifier;
+    private StringBuffer notification = new StringBuffer();
 
     private FileserverProperties fileserverProperties;
     private MetsProperties metsProperties;
@@ -79,6 +83,12 @@ public class SingleFileConvertAction implements IAction {
         this.mediaServerUtils = mediaServerUtils;
     }
 
+    @Autowired
+    public void setNotifier(Notifier notifier) {
+        this.notifier = notifier;
+    }
+
+
     /**
      * Performes a conversion of the requested url a given work.
      *
@@ -88,6 +98,8 @@ public class SingleFileConvertAction implements IAction {
      * @throws Exception if anything goes wrong
      */
     public InputStream perform(Work work, Map<String, String> parameter) throws Exception {
+
+        notifier.add(notification, "Conversion started.");
 
         mediaServerUtils.checkForRequiredParameter(parameter, "requestUrl");
         String requestUrl = parameter.get("requestUrl");
@@ -104,9 +116,17 @@ public class SingleFileConvertAction implements IAction {
 
         String sourceUrl = metsResult.get("source_url");
         if (StringUtils.isEmpty(sourceUrl)) {
-            throw new ConversionException("No source url for requested url " + requestUrl
-                    + " found in mets file " + metsFile.getAbsolutePath());
+
+            String errorMsg = "No source url for requested url " + requestUrl
+                    + " found in mets file " + metsFile.getAbsolutePath();
+
+            notifier.add(notification, "ConversionException: " + errorMsg);
+            notifier.send(notification, "Conversion Error");
+
+            throw new ConversionException(errorMsg);
         }
+
+        notifier.add(notification, "Converting file from master " + sourceUrl);
 
         File sourceFile = mediaServerUtils.getWorkFileFromUrl(work, sourceUrl, fileserverProperties.getRootUrl());
 
@@ -114,6 +134,10 @@ public class SingleFileConvertAction implements IAction {
         parameter.put("size", size);
 
         LOGGER.info("Converting file from master " + sourceUrl);
+
+        notifier.add(notification, "Completed");
+
+        notifier.send(notification, "Conversion Success");
 
         return converter.convert(sourceFile, parameter);
     }
