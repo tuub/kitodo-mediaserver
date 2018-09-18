@@ -104,11 +104,6 @@ importer:
 ui:
   pagination:
     elementsPerPage:
-
-      # Number of elements shown on a page
-      #defaultValue: 20
-
-      # Number of elements that are available in the dropdown field
       availableValues:
       - 5
       - 10
@@ -116,16 +111,22 @@ ui:
       - 50
       - 100
       - 200
-
   works:
-
-    # Which data base fields are searchable by "field:pattern" in the UI's search field
     searchableFields:
       - id
       - title
       - allowedNetwork
       - hostId
       - collection
-
-    # When disabling a work wether to reduce the METS/MODS file. Default value
     reduceMets: true
+    actions:
+      cacheclear:
+        label: Clear derivatives cache
+        action: cacheDeleteAction
+        enabled: true
+        parameters:
+      reindex:
+        label: Reindex in Viewer
+        action: viewerIndexingAction
+        enabled: true
+        parameters:
