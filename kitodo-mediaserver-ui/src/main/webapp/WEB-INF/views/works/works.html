@@ -148,7 +148,7 @@
                                 </div>
                             </div>
 
-                            <div class="right floated">
+                            <div class="right floated work-item-right">
 
                                 <div class="allowedNetwork">
                                     <div class="ui label"
@@ -166,6 +166,10 @@
                                         <div class="header" th:text="#{works.network_comment}"></div>
                                         <div class="content"></div>
                                     </div>
+                                </div>
+                                <div class="ui basic label" th:title="#{works.index_time}" th:if="${work.indexTime}">
+                                    <i class="upload icon"></i>
+                                    <span th:text="${dateFormatter.format(work.indexTime)}"></span>
                                 </div>
 
                             </div>
