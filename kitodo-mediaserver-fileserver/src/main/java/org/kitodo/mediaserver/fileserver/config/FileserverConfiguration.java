@@ -19,8 +19,10 @@ import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
+import org.kitodo.mediaserver.core.config.CoreConfiguration;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.config.MetsProperties;
+import org.kitodo.mediaserver.core.config.NotifierProperties;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
@@ -41,7 +43,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * Spring configuration of the fileserver module.
  */
 @Configuration
-@Import({ConversionProperties.class, FileserverProperties.class, MetsProperties.class})
+@Import({CoreConfiguration.class, ConversionProperties.class, FileserverProperties.class, MetsProperties.class, NotifierProperties.class})
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
 public class FileserverConfiguration {
