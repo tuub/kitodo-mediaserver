@@ -30,6 +30,7 @@ import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
@@ -44,6 +45,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Import({ConversionProperties.class, FileserverProperties.class, MetsProperties.class})
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
+@ComponentScan({"org.kitodo.mediaserver.local"})
 public class FileserverConfiguration {
 
     @Autowired

@@ -35,7 +35,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Configuration
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
-@ComponentScan("org.kitodo.mediaserver.core")
+@ComponentScan({"org.kitodo.mediaserver.core", "org.kitodo.mediaserver.local"})
 public class ImporterConfiguration {
 
     @Autowired

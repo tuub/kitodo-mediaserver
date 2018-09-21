@@ -27,6 +27,7 @@
         <module>kitodo-mediaserver-importer</module>
         <module>kitodo-mediaserver-cli</module>
         <module>kitodo-mediaserver-ui</module>
+        <module>kitodo-mediaserver-local</module>
     </modules>
 
 
@@ -40,6 +41,11 @@
             <dependency>
                 <groupId>org.kitodo</groupId>
                 <artifactId>kitodo-mediaserver-importer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kitodo</groupId>
+                <artifactId>kitodo-mediaserver-local</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

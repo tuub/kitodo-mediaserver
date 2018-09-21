@@ -39,7 +39,7 @@ import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
  * App MVC Configuration.
  */
 @Configuration
-@ComponentScan(basePackages = {"org.kitodo.mediaserver.ui", "org.kitodo.mediaserver.core"})
+@ComponentScan(basePackages = {"org.kitodo.mediaserver.ui", "org.kitodo.mediaserver.core", "org.kitodo.mediaserver.local"})
 @EnableWebMvc
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
