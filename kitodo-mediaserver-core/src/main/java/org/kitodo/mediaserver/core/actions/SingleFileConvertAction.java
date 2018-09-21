@@ -22,11 +22,13 @@ import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
+import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ConversionException;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
+import org.kitodo.mediaserver.core.util.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +42,9 @@ public class SingleFileConvertAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleFileConvertAction.class);
 
+    private Notifier notifier;
     private FileserverProperties fileserverProperties;
+    private ConversionProperties conversionProperties;
     private MetsProperties metsProperties;
     private IMetsReader metsReader;
     private IReadResultParser readResultParser;
@@ -51,6 +55,11 @@ public class SingleFileConvertAction implements IAction {
     @Autowired
     public void setFileserverProperties(FileserverProperties fileserverProperties) {
         this.fileserverProperties = fileserverProperties;
+    }
+
+    @Autowired
+    public void setConversionProperties(ConversionProperties conversionProperties) {
+        this.conversionProperties = conversionProperties;
     }
 
     @Autowired
@@ -79,6 +88,11 @@ public class SingleFileConvertAction implements IAction {
         this.mediaServerUtils = mediaServerUtils;
     }
 
+    @Autowired
+    public void setNotifier(Notifier notifier) {
+        this.notifier = notifier;
+    }
+
     /**
      * Performes a conversion of the requested url a given work.
      *
@@ -88,6 +102,9 @@ public class SingleFileConvertAction implements IAction {
      * @throws Exception if anything goes wrong
      */
     public InputStream perform(Work work, Map<String, String> parameter) throws Exception {
+
+        StringBuffer notification = notifier.init();
+        notifier.add(notification, "Start Conversion");
 
         mediaServerUtils.checkForRequiredParameter(parameter, "requestUrl");
         String requestUrl = parameter.get("requestUrl");
@@ -104,16 +121,21 @@ public class SingleFileConvertAction implements IAction {
 
         String sourceUrl = metsResult.get("source_url");
         if (StringUtils.isEmpty(sourceUrl)) {
-            throw new ConversionException("No source url for requested url " + requestUrl
-                    + " found in mets file " + metsFile.getAbsolutePath());
+            String errorMsg = "No source url for requested url " + requestUrl
+                    + " found in mets file " + metsFile.getAbsolutePath();
+            notifier.add(notification, errorMsg);
+            notifier.send(notification, "Conversion Error", conversionProperties.getNotificationEmail());
+            throw new ConversionException(errorMsg);
         }
+
+        LOGGER.info("Converting file from master " + sourceUrl);
+        notifier.add(notification, "Converting file from master " + sourceUrl);
+        notifier.send(notification, "Conversion Success", conversionProperties.getNotificationEmail());
 
         File sourceFile = mediaServerUtils.getWorkFileFromUrl(work, sourceUrl, fileserverProperties.getRootUrl());
 
         String size = patternExtractor.extract(requestUrl);
         parameter.put("size", size);
-
-        LOGGER.info("Converting file from master " + sourceUrl);
 
         return converter.convert(sourceFile, parameter);
     }

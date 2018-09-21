@@ -22,11 +22,20 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "conversion")
 public class ConversionProperties {
 
+    private List<String> notificationEmail;
     private List<String> pathExtractionPatterns;
     private boolean useGraphicsMagick;
 
     public void setPathExtractionPatterns(List<String> pathExtractionPatterns) {
         this.pathExtractionPatterns = pathExtractionPatterns;
+    }
+
+    public List<String> getNotificationEmail() {
+        return notificationEmail;
+    }
+
+    public void setNotificationEmail(List<String> notificationEmail) {
+        this.notificationEmail = notificationEmail;
     }
 
     public List<String> getPathExtractionPatterns() {
