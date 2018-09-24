@@ -34,7 +34,20 @@ public interface INotifier {
     void addWithTimestamp(String message);
 
     /**
+     * Appends a message to a notification including timestamp and immediately sends it.
+     *
+     * @param message the message
+     * @param subject the subject
+     * @param recipients The list of recipients
+     */
+    void addAndSend(String message, String subject, List<String> recipients) throws MessagingException;
+
+
+    /**
      * Sends a notification.
+     *
+     * @param subject the subject
+     * @param recipients The list of recipients
      */
     void send(String subject, List<String> recipients) throws MessagingException;
 }

@@ -45,6 +45,31 @@ The database consists of just a few entities. The work table contains basic info
 The implementation of the database and all database communication uses Spring JPA, all classes are found [here](https://github.com/tuub/kitodo-mediaserver/tree/master/kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/db). 
 The initialization of the database is done using Hibernate, there is no `schema.sql` file. See [InitDbCommand](https://github.com/tuub/kitodo-mediaserver/blob/master/kitodo-mediaserver-cli/src/main/java/org/kitodo/mediaserver/cli/commands/InitDbCommand.java) and [database](https://github.com/tuub/kitodo-mediaserver/tree/master/kitodo-mediaserver-cli/src/main/java/org/kitodo/mediaserver/cli/database).
 
+## Notifications
+
+To add notifications to the code, you use the following:
+
+```java
+// Class scope
+@Autowired
+private ObjectFactory<Notifier> notifierFactory;
+
+// Method scope
+Notifier notifier = notifierFactory.getObject();
+```
+
+The implemented `send` method expects also a `List<String>` parameter, which 
+could be defined in the properties of a module:
+
+```yaml
+reportNotificationsEmail:
+  - reports@example.org
+errorNoticationsEmail:
+  - tickets@example.org
+  - errors@example.org
+  
+```
+
 ## Coding Guidelines
 The [Kitodo coding guidelines](http://www.kitodo.org/fileadmin/groups/kitodo/Dokumente/Kitodo_Developer_Guidelines_2017-06.pdf) are to be followed. The Kitodo [checkstyle.xml](https://github.com/tuub/kitodo-mediaserver/blob/master/checkstyle.xml) is activated at build using the maven-checkstyle-plugin.
 We also use the following additions.
