@@ -20,7 +20,6 @@ import org.kitodo.mediaserver.core.api.IReadResultParser;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
-import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
@@ -32,9 +31,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
@@ -42,14 +39,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  * Spring configuration of the fileserver module.
  */
 @Configuration
-@Import({ConversionProperties.class, FileserverProperties.class, MetsProperties.class})
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
-@ComponentScan({"org.kitodo.mediaserver.local"})
+@ComponentScan({"org.kitodo.mediaserver.core", "org.kitodo.mediaserver.local"})
 public class FileserverConfiguration {
-
-    @Autowired
-    private ResourceLoader resourceLoader;
 
     @Autowired
     private FileserverProperties fileserverProperties;
