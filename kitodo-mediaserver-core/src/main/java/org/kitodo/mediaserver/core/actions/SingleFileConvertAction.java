@@ -35,7 +35,6 @@ import org.springframework.stereotype.Component;
 /**
  * A class defining the convert action of a single file.
  */
-@Component("singleFileConvertAction")
 public class SingleFileConvertAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleFileConvertAction.class);
