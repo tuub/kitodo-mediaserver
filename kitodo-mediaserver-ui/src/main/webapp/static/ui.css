@@ -78,6 +78,10 @@ label {
     cursor: pointer!important;
 }
 
+.work-items > .item {
+    position: relative;
+}
+
 /* works: match icon widths */
 .work-items.items .extra i.icon {
     width: 22px;
@@ -86,6 +90,17 @@ label {
 /* works: action buttons should have 100% width */
 .work-actions button {
     width: 100%;
+}
+
+.work-items .work-item-right {
+    text-align: right;
+}
+
+.work-items .work-item-right > * {
+    /* line break elements */
+    margin: 0 auto;
+
+    margin-bottom: 4px;
 }
 
 /* pagination: page numbers */
