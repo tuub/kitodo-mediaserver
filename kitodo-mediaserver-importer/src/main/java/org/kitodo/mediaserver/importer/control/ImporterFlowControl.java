@@ -195,9 +195,9 @@ public class ImporterFlowControl {
                         new File(newWork.getPath())
                     );
                 } catch (FileExistsException ex) {
-                    LOGGER.error("Work directory '" + newWork.getPath() + "' already exists but there is no DB entry for workId='"
-                        + newWork.getId() + "'. Not importing work from '" + workDir + "'");
-                    throw ex;
+                    String message = "Work directory '" + newWork.getPath() + "' already exists but there is no DB entry for workId='"
+                        + newWork.getId() + "'. Not importing work from '" + workDir + "'";
+                    throw new ImporterException(message, ex);
                 }
                 workDir = new File(newWork.getPath());
 
@@ -211,8 +211,8 @@ public class ImporterFlowControl {
                 importSuccessful = false;
                 boolean rollbackSuccessful = true;
 
-                LOGGER.error("An error occured importing work " + workDir.getName()
-                        + ", Error: " + e, e);
+                LOGGER.error("An error occurred importing work " + workDir.getName()
+                        + ", performing rollback. Error: " + e, e);
 
                 if (newWork != null && newWork.getId() != null) {
                     try {
@@ -260,6 +260,7 @@ public class ImporterFlowControl {
                 }
 
                 if (!rollbackSuccessful) {
+                    // TODO notify. Collect all error messages above and send them here.
                     throw new ImporterException("The rollback during import of work " + workDir.getName() + " failed. "
                             + "Interrupting import process.");
                 }
@@ -289,6 +290,7 @@ public class ImporterFlowControl {
 
                         } catch (Exception e) {
                             LOGGER.error("Error indexing " + newWork.getId() + ": " + e + ". Actions after indexing not performed", e);
+                            // TODO notify?
                         }
 
                     }
@@ -306,6 +308,7 @@ public class ImporterFlowControl {
             }
         }
         LOGGER.info("Nothing (more) to import.");
+        // TODO notify report(?) - Collect meaningful information over the import and send report here
     }
 
     private void performActions(List<Map<String, Map<String, String>>> actionList, Work work, boolean request) throws Exception {
