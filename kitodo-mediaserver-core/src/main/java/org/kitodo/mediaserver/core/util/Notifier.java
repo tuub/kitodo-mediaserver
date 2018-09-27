@@ -38,7 +38,6 @@ public class Notifier implements INotifier {
     private static final Logger LOGGER = LoggerFactory.getLogger(Notifier.class);
 
     private StringBuffer notification = new StringBuffer();
-
     private JavaMailSender mailSender;
     private NotifierProperties notifierProperties;
 
@@ -64,7 +63,7 @@ public class Notifier implements INotifier {
     }
 
     /**
-     * Appends a message to a notification including timestamp.
+     * Appends a message to a notification, including timestamp.
      *
      * @param message the message
      */
@@ -76,9 +75,10 @@ public class Notifier implements INotifier {
     }
 
     /**
-     * Sends a notification.
+     * Sends a notification and deletes the notification buffer.
      *
      * @param subject The mail subject
+     * @param recipients The list of recipients
      */
     @Override
     public void send(String subject, List<String> recipients) throws MessagingException {
@@ -92,8 +92,21 @@ public class Notifier implements INotifier {
             mailHelper.setFrom(notifierProperties.getEmailFrom());
             mailHelper.setTo(emailTo);
             mailSender.send(message);
+            notification = new StringBuffer();
             LOGGER.info("Sent notification email to " + String.join(",", emailTo));
         }
+    }
+
+    /**
+     * Appends a message to a notification and immediately sends it.
+     *
+     * @param message the message
+     * @param subject the subject
+     * @param recipients The list of recipients
+     */
+    public void addAndSend(String message, String subject, List<String> recipients) throws MessagingException {
+        add(message);
+        send(subject, recipients);
     }
 
     /**
@@ -107,5 +120,10 @@ public class Notifier implements INotifier {
         return formatter.format(Instant.now());
     }
 
-
+    /**
+     * Returns string with current notification buffer.
+     */
+    protected String getCollectedNotification() {
+        return notification.toString();
+    }
 }
