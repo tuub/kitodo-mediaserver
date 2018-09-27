@@ -10,6 +10,10 @@ cache:
     # cache Maven dependencies
     - $HOME/.m2
 
+before_install:
+  # npm 5.7.1 for `npm ci` in UIs pom.xml
+  - npm install -g npm@5.7.1
+
 # run these commands for build/test
 script:
   - mvn test --batch-mode
