@@ -21,14 +21,14 @@ gulp.task('build ui', function () {
 });
 
 // build everything
-gulp.task('build', [
+gulp.task('build', gulp.parallel(
     'build jquery',
     'build ui'
-]);
+));
 
 // clean dist files
 gulp.task('clean', function () {
-    del([
+    return del([
         'src/main/webapp/static/jquery/',
         'src/main/webapp/static/semantic/'
     ]);
