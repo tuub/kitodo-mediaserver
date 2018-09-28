@@ -52,26 +52,20 @@ public class UpdateDbCommand implements Callable {
      */
     public void updateDb() {
 
-        try {
-            LOGGER.info("Initializing or updating database...");
-            LOGGER.debug("Database options: dataSource='" + flyway.getDataSource() + "'");
+        LOGGER.info("Initializing or updating database...");
+        LOGGER.debug("Database options: dataSource='" + flyway.getDataSource() + "'");
 
-            // drop tables
-            if (drop) {
-                LOGGER.info("Dropping existing tables...");
-                flyway.clean();
-            }
-
-            // create or update tables
-            LOGGER.info("Migrating DB tables...");
-            flyway.migrate();
-
-            LOGGER.info("Database updated.");
-
-        } catch (RuntimeException ex) {
-            LOGGER.error("Could not initialize database.", ex);
-            throw ex;
+        // drop tables
+        if (drop) {
+            LOGGER.info("Dropping existing tables...");
+            flyway.clean();
         }
+
+        // create or update tables
+        LOGGER.info("Migrating DB tables...");
+        flyway.migrate();
+
+        LOGGER.info("Database updated.");
 
     }
 

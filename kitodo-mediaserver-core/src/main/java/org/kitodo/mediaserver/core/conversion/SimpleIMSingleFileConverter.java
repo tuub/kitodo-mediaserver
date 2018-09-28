@@ -78,7 +78,9 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
                 try {
                     watermarker.perform(operation, master, size);
                 } catch (Exception e) {
-                    LOGGER.error("Unexpected watermarking error : " + e, e);
+                    String message = "Error creating watermark: " + e;
+                    // TODO notify?
+                    LOGGER.error(message, e);
                 }
             }
 

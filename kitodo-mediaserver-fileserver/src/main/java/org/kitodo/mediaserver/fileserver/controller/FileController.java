@@ -28,13 +28,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
+import org.kitodo.mediaserver.core.api.INotifier;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.HttpForbiddenException;
 import org.kitodo.mediaserver.core.exceptions.HttpNotFoundException;
+import org.kitodo.mediaserver.core.util.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,14 +56,26 @@ public class FileController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileController.class);
 
-    @Autowired
     private FileserverProperties fileserverProperties;
 
-    @Autowired
     private WorkRepository workRepository;
 
-    @Autowired
     private SingleFileConvertAction singleFileConvertAction;
+
+    @Autowired
+    public void setFileserverProperties(FileserverProperties fileserverProperties) {
+        this.fileserverProperties = fileserverProperties;
+    }
+
+    @Autowired
+    public void setWorkRepository(WorkRepository workRepository) {
+        this.workRepository = workRepository;
+    }
+
+    @Autowired
+    public void setSingleFileConvertAction(SingleFileConvertAction singleFileConvertAction) {
+        this.singleFileConvertAction = singleFileConvertAction;
+    }
 
     /**
      * Controller method mapped to a path with a workId.
@@ -110,8 +125,9 @@ public class FileController {
                 List<String> subnets = fileserverProperties.getAllowedNetworks().get(work.getAllowedNetwork());
                 if (subnets == null) {
                     String message = "Work with id '" + workId
-                        + "' does not have a valid allowedNetwork '" + work.getAllowedNetwork() + "'";
+                        + "' has an invalid allowedNetwork: '" + work.getAllowedNetwork() + "'";
                     LOGGER.error(message);
+                    //TODO notify
                     throw new HttpForbiddenException(message);
                 }
 
@@ -159,7 +175,8 @@ public class FileController {
                     inputStream = singleFileConvertAction.perform(work, parameterMap);
 
                 } catch (Exception e) {
-                    LOGGER.error("Unexpected error : " + e, e);
+                    LOGGER.error("Error trying to convert the file " + workId + derivativePath + ": " + e, e);
+                    // TODO nofity?
                 }
 
             }
@@ -172,7 +189,8 @@ public class FileController {
             inputStream.close();
             response.getOutputStream().close();
         } catch (IOException e) {
-            LOGGER.error(e.toString(), e);
+            LOGGER.error("Fileserver error: " + e, e);
+            // TODO nofity
             throw new HttpNotFoundException(e.toString());
         }
     }
