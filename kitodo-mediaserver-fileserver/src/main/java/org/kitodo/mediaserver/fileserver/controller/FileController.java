@@ -28,7 +28,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
-import org.kitodo.mediaserver.core.api.INotifier;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
@@ -77,6 +76,9 @@ public class FileController {
         this.singleFileConvertAction = singleFileConvertAction;
     }
 
+    @Autowired
+    private ObjectFactory<Notifier> notifierFactory;
+
     /**
      * Controller method mapped to a path with a workId.
      *
@@ -97,6 +99,9 @@ public class FileController {
             HttpServletResponse response)
             throws HttpForbiddenException, HttpNotFoundException {
 
+        Notifier notifier = notifierFactory.getObject();
+        String message;
+
         Work work;
         Optional<Work> optionalWork = workRepository.findById(workId);
 
@@ -104,7 +109,7 @@ public class FileController {
         String derivativePath = StringUtils.substringAfter(completePath, workId);
 
         if (!optionalWork.isPresent()) {
-            String message = "Work with id " + workId + " not found";
+            message = "Work with id " + workId + " not found";
             LOGGER.info(message);
             throw new HttpNotFoundException(message);
 
@@ -124,16 +129,16 @@ public class FileController {
                 // get allowed subnets for this work
                 List<String> subnets = fileserverProperties.getAllowedNetworks().get(work.getAllowedNetwork());
                 if (subnets == null) {
-                    String message = "Work with id '" + workId
+                    message = "Work with id '" + workId
                         + "' has an invalid allowedNetwork: '" + work.getAllowedNetwork() + "'";
                     LOGGER.error(message);
-                    //TODO notify
+                    notifier.addAndSend(message, "Fileserver Error", fileserverProperties.getErrorNotificationEmail());
                     throw new HttpForbiddenException(message);
                 }
 
                 // if work is disabled and request is not on METS/MODS, block the request
                 if (!isAllowedIpAddress(senderIp, subnets) && !StringUtils.endsWith(derivativePath, workId + ".xml")) {
-                    String message = "Work with id " + workId + " is disabled or the source IP address is not allowed";
+                    message = "Work with id " + workId + " is disabled or the source IP address is not allowed";
                     LOGGER.info(message);
                     throw new HttpForbiddenException(message);
                 }
@@ -156,13 +161,13 @@ public class FileController {
                 inputStream = new FileInputStream(derivative);
                 //response.setContentType(); TODO
 
-                String message = "Delivering already present file " + completePath + " from location "
+                message = "Delivering already present file " + completePath + " from location "
                         + derivative.getAbsolutePath();
                 LOGGER.info(message);
 
             } else {
 
-                String message = "The requested file " + completePath + " allegedly located at "
+                message = "The requested file " + completePath + " allegedly located at "
                         + derivative.getAbsolutePath() + " does not exist. Trying to convert the file.";
                 LOGGER.info(message);
 
@@ -175,10 +180,10 @@ public class FileController {
                     inputStream = singleFileConvertAction.perform(work, parameterMap);
 
                 } catch (Exception e) {
-                    LOGGER.error("Error trying to convert the file " + workId + derivativePath + ": " + e, e);
-                    // TODO nofity?
+                    message = "Error trying to convert the file " + workId + derivativePath + ": " + e;
+                    LOGGER.error(message, e);
+                    notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
                 }
-
             }
 
             if (inputStream == null) {
@@ -189,8 +194,9 @@ public class FileController {
             inputStream.close();
             response.getOutputStream().close();
         } catch (IOException e) {
-            LOGGER.error("Fileserver error: " + e, e);
-            // TODO nofity
+            message = "Fileserver IO error: " + e;
+            LOGGER.error(message, e);
+            notifier.addAndSend(message, "Fileserver Error", fileserverProperties.getErrorNotificationEmail());
             throw new HttpNotFoundException(e.toString());
         }
     }

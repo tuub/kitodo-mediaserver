@@ -81,19 +81,23 @@ public class Notifier implements INotifier {
      * @param recipients The list of recipients
      */
     @Override
-    public void send(String subject, List<String> recipients) throws MessagingException {
+    public void send(String subject, List<String> recipients) {
 
-        if (recipients.size() > 0) {
-            String [] emailTo = recipients.toArray(new String[0]);
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper mailHelper = new MimeMessageHelper(message, false, "utf-8");
-            mailHelper.setSubject(subject);
-            mailHelper.setText(notification.toString());
-            mailHelper.setFrom(notifierProperties.getEmailFrom());
-            mailHelper.setTo(emailTo);
-            mailSender.send(message);
-            notification = new StringBuffer();
-            LOGGER.info("Sent notification email to " + String.join(",", emailTo));
+        try {
+            if (recipients.size() > 0) {
+                String [] emailTo = recipients.toArray(new String[0]);
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper mailHelper = new MimeMessageHelper(message, false, "utf-8");
+                mailHelper.setSubject(subject);
+                mailHelper.setText(notification.toString());
+                mailHelper.setFrom(notifierProperties.getEmailFrom());
+                mailHelper.setTo(emailTo);
+                mailSender.send(message);
+                notification = new StringBuffer();
+                LOGGER.info("Sent notification email to " + String.join(",", emailTo));
+            }
+        } catch (MessagingException e) {
+            LOGGER.error("Error sending email: " + e, e);
         }
     }
 
@@ -104,7 +108,7 @@ public class Notifier implements INotifier {
      * @param subject the subject
      * @param recipients The list of recipients
      */
-    public void addAndSend(String message, String subject, List<String> recipients) throws MessagingException {
+    public void addAndSend(String message, String subject, List<String> recipients) {
         add(message);
         send(subject, recipients);
     }
