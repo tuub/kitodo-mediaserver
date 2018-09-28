@@ -11,7 +11,6 @@
 
 package org.kitodo.mediaserver.core.db.specifications;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,7 +19,6 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.kitodo.mediaserver.core.db.entities.Collection;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.data.jpa.domain.Specification;
