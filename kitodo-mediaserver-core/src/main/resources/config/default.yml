@@ -108,7 +108,11 @@ importer:
   cron: 0 5 2 * * *
   indexWorkAfterImport: true
   validationFileGrps:
-  - ORIGINAL
+    - ORIGINAL
+  errorNotificationEmail:
+    - fabian.fuerste@tu-berlin.de
+  reportNotificationEmail:
+    - fabian.fuerste@tu-berlin.de
 
   actionsBeforeIndexing:
   actionsAfterSuccessfulIndexing:

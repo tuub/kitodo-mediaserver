@@ -27,6 +27,7 @@ import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.core.util.FileDeleter;
+import org.kitodo.mediaserver.core.util.Notifier;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IWorkChecker;
 import org.kitodo.mediaserver.importer.config.ImporterProperties;
@@ -34,6 +35,7 @@ import org.kitodo.mediaserver.importer.exceptions.ImporterException;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,9 @@ import org.springframework.stereotype.Component;
 public class ImporterFlowControl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImporterFlowControl.class);
+
+    @Autowired
+    private ObjectFactory<Notifier> notifierFactory;
 
     private ImporterUtils importerUtils;
     private ImporterProperties importerProperties;
@@ -116,6 +121,8 @@ public class ImporterFlowControl {
 
         File workDir;
         File mets = null;
+        Notifier errorNotifier = notifierFactory.getObject();
+        Notifier reportNotifier = notifierFactory.getObject();
 
         LOGGER.info("Looking for works to import in folder " + importerProperties.getHotfolderPath());
 
@@ -133,6 +140,7 @@ public class ImporterFlowControl {
             try {
                 // Get the mets file
                 mets = new File(workDir, workDir.getName() + ".xml");
+                reportNotifier.add("Import: " + mets.getAbsolutePath());
                 if (!mets.exists()) {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
@@ -144,6 +152,7 @@ public class ImporterFlowControl {
                 if (!StringUtils.equals(newWork.getId(), workDir.getName())) {
                     LOGGER.info("Id of work to import: " + newWork.getId() + " is different from the mets file name "
                             + workDir.getName() + ", renaming.");
+                    reportNotifier.add("Renamed METS file from " + mets.toPath() + " to " + newWork.getId() + ".xml");
 
                     String newMetsName = newWork.getId() + ".xml";
                     Files.move(mets.toPath(), Paths.get(mets.getParent(), newMetsName));
@@ -166,6 +175,7 @@ public class ImporterFlowControl {
                 if (presentWork != null) {
 
                     LOGGER.info("Work " + newWork.getId() + " already present, replacing");
+                    reportNotifier.add("Replaced already present work.");
 
                     newWork.setAllowedNetwork(presentWork.getAllowedNetwork());
 
@@ -194,9 +204,11 @@ public class ImporterFlowControl {
                         workDir,
                         new File(newWork.getPath())
                     );
+                    reportNotifier.add("Moved work files to production on " + newWork.getPath());
                 } catch (FileExistsException ex) {
                     String message = "Work directory '" + newWork.getPath() + "' already exists but there is no DB entry for workId='"
                         + newWork.getId() + "'. Not importing work from '" + workDir + "'";
+                    errorNotifier.add(message);
                     throw new ImporterException(message, ex);
                 }
                 workDir = new File(newWork.getPath());
@@ -205,6 +217,7 @@ public class ImporterFlowControl {
                 workService.updateWork(newWork);
 
                 LOGGER.info("Finished import of work " + workDir.getName());
+                reportNotifier.add("Success.\n");
 
             } catch (Exception e) {
 
@@ -213,13 +226,16 @@ public class ImporterFlowControl {
 
                 LOGGER.error("An error occurred importing work " + workDir.getName()
                         + ", performing rollback. Error: " + e, e);
+                errorNotifier.add(workDir.getName() + "Error: " + e);
 
                 if (newWork != null && newWork.getId() != null) {
                     try {
                         LOGGER.info("Rollback: deleting database entry for work " + workDir.getName());
                         workService.deleteWork(newWork);
+                        errorNotifier.add("Deleted work from database.");
                     } catch (Exception rollbackExc) {
                         LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
+                        errorNotifier.add("Could not delete work from database.");
                         rollbackSuccessful = false;
                     }
                 }
@@ -238,9 +254,11 @@ public class ImporterFlowControl {
                                 tempOldWorkFiles.toFile(),
                                 new File(presentWork.getPath())
                             );
+                            errorNotifier.add("Restored old work data and files for " + presentWork.getId());
                         }
                     } catch (Exception rollbackExc) {
                         LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
+                        errorNotifier.add("Failed restore of old work data and files for " + presentWork.getId());
                         rollbackSuccessful = false;
                     }
                 }
@@ -260,7 +278,7 @@ public class ImporterFlowControl {
                 }
 
                 if (!rollbackSuccessful) {
-                    // TODO notify. Collect all error messages above and send them here.
+                    errorNotifier.send("Error: Import Action", importerProperties.getErrorNotificationEmail());
                     throw new ImporterException("The rollback during import of work " + workDir.getName() + " failed. "
                             + "Interrupting import process.");
                 }
@@ -290,9 +308,9 @@ public class ImporterFlowControl {
 
                         } catch (Exception e) {
                             LOGGER.error("Error indexing " + newWork.getId() + ": " + e + ". Actions after indexing not performed", e);
-                            // TODO notify?
+                            errorNotifier.add(newWork.getId());
+                            errorNotifier.send("Error: Indexing Action", importerProperties.getErrorNotificationEmail());
                         }
-
                     }
 
                     LOGGER.info("Requesting actions after indexing work " + workDir.getName());
@@ -300,15 +318,15 @@ public class ImporterFlowControl {
 
                 } catch (Exception e) {
                     String message = "An error occured after import of work " + workDir.getName()
-                            + ". The import itself was succuessfully performed not all the subsequent actions."
+                            + ". The import itself was successfully performed not all the subsequent actions."
                             + " The work has probably not been indexed. Error: " + e;
                     LOGGER.error(message, e);
-                    // TODO notify
+                    errorNotifier.addAndSend(message, "Error: Indexing Action", importerProperties.getErrorNotificationEmail());
                 }
             }
         }
         LOGGER.info("Nothing (more) to import.");
-        // TODO notify report(?) - Collect meaningful information over the import and send report here
+        reportNotifier.send("Report: Import Action", importerProperties.getReportNotificationEmail());
     }
 
     private void performActions(List<Map<String, Map<String, String>>> actionList, Work work, boolean request) throws Exception {
