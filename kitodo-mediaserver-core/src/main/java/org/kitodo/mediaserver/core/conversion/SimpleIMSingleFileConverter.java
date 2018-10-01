@@ -21,8 +21,11 @@ import org.im4java.core.IMOperation;
 import org.im4java.core.ImageCommand;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.util.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -37,6 +40,9 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
     private IWatermarker watermarker;
 
     @Autowired
+    private FileserverProperties fileserverProperties;
+
+    @Autowired
     private ConversionProperties conversionProperties;
 
     @Autowired
@@ -46,6 +52,9 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
     public void setWatermarker(IWatermarker watermarker) {
         this.watermarker = watermarker;
     }
+
+    @Autowired
+    private ObjectFactory<Notifier> notifierFactory;
 
     /**
      * Converts a given file. Returns an input stream with the result.
@@ -57,6 +66,9 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
      */
     @Override
     public InputStream convert(File master, Map<String, String> parameter) throws Exception {
+
+        Notifier notifier = notifierFactory.getObject();
+        String message;
 
         checkParams(master, parameter, "derivativePath");
 
@@ -78,9 +90,9 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
                 try {
                     watermarker.perform(operation, master, size);
                 } catch (Exception e) {
-                    String message = "Error creating watermark: " + e;
-                    // TODO notify?
+                    message = "Error creating watermark on file " + master.getAbsolutePath() + ": " + e;
                     LOGGER.error(message, e);
+                    notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
                 }
             }
 
