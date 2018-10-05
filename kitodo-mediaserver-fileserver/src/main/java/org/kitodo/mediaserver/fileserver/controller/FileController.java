@@ -145,10 +145,13 @@ public class FileController {
             }
         }
 
+        boolean usingCache = false;
+
         File derivative = new File(work.getPath(), derivativePath);
 
         if (!derivative.exists()) {
             derivative = new File(fileserverProperties.getCachePath(), workId + "/" + derivativePath);
+            usingCache = true;
         }
 
         InputStream inputStream = null;
@@ -156,7 +159,15 @@ public class FileController {
             if (derivative.exists() && derivative.isFile()) {
 
                 // Perform a touch on the file to set last accessed time
-                FileUtils.touch(derivative);
+                if (usingCache) {
+                    try {
+                        FileUtils.touch(derivative);
+                    } catch (IOException e) {
+                        message = "Error executing touch on cached file: " + e;
+                        LOGGER.error(message, e);
+                        notifier.addAndSend(message, "Touch error", fileserverProperties.getErrorNotificationEmail());
+                    }
+                }
 
                 inputStream = new FileInputStream(derivative);
                 //response.setContentType(); TODO
