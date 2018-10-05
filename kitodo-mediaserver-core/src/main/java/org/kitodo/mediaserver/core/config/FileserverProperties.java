@@ -31,6 +31,7 @@ public class FileserverProperties {
     private String rootUrl;
     private String masterFileReaderXsl;
     private Map<String, List<String>> allowedNetworks;
+    private List<String> errorNotificationEmail;
 
     public boolean isCaching() {
         return caching;
@@ -94,5 +95,13 @@ public class FileserverProperties {
 
     public void setAllowedNetworks(Map<String, List<String>> allowedNetworks) {
         this.allowedNetworks = allowedNetworks;
+    }
+
+    public List<String> getErrorNotificationEmail() {
+        return errorNotificationEmail;
+    }
+
+    public void setErrorNotificationEmail(List<String> errorNotificationEmail) {
+        this.errorNotificationEmail = errorNotificationEmail;
     }
 }
