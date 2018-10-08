@@ -22,9 +22,10 @@ import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
+import org.kitodo.mediaserver.core.processors.AppendingWatermarker;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
+import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
-import org.kitodo.mediaserver.core.processors.Watermarker;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,16 +78,31 @@ public class FileserverConfiguration {
 
     /**
      * A single file converter for on-demand-conversions. Uses caching according to the configurations.
-     * As implementation, the proof-of-concept simple imagemagick converter is used.
+     * This bean uses the scaling watermarker.
      *
      * @return the converter
      */
     @Bean
-    public IConverter singleFileOnDemandConverter() {
-
+    public IConverter singleFileOnDemandConverterScalingWatermarker() {
         SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
         simpleIMSingleFileConverter.setConversionTargetPath(fileserverProperties.getCachePath());
         simpleIMSingleFileConverter.setSaveConvertedFile(fileserverProperties.isCaching());
+        simpleIMSingleFileConverter.setWatermarker(scalingWatermarker());
+        return simpleIMSingleFileConverter;
+    }
+
+    /**
+     * A single file converter for on-demand-conversions. Uses caching according to the configurations.
+     * This bean uses the appending watermarker.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IConverter singleFileOnDemandConverterAppendingWatermarker() {
+        SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
+        simpleIMSingleFileConverter.setConversionTargetPath(fileserverProperties.getCachePath());
+        simpleIMSingleFileConverter.setSaveConvertedFile(fileserverProperties.isCaching());
+        simpleIMSingleFileConverter.setWatermarker(appendingWatermarker());
         return simpleIMSingleFileConverter;
     }
 
@@ -112,22 +128,45 @@ public class FileserverConfiguration {
     }
 
     /**
-     * Initializes a conversion action bean to be used by the fileserver if a file is not present.
+     * A conversion action bean to be used by the fileserver if a file is not present.
+     * Uses the scaling watermarker.
      *
      * @return a ConversionAction
      */
     @Bean(name = "scalingWatermarkingConvertAction")
-    public IAction conversionAction() throws Exception {
+    public IAction scalingConversionAction() throws Exception {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
         singleFileConvertAction.setMetsReader(masterFileMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.setConverter(singleFileOnDemandConverter());
+        singleFileConvertAction.setConverter(singleFileOnDemandConverterScalingWatermarker());
+        singleFileConvertAction.setPatternExtractor(patternExtractor());
+        return singleFileConvertAction;
+    }
+
+    /**
+     * A conversion action bean to be used by the fileserver if a file is not present.
+     * Uses the appendingwatermarker.
+     *
+     * @return a ConversionAction
+     */
+    @Bean(name = "appendingWatermarkingConvertAction")
+    public IAction appendingConversionAction() throws Exception {
+        SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
+        singleFileConvertAction.setMetsReader(masterFileMetsReader());
+        singleFileConvertAction.setReadResultParser(listToMapParser());
+        singleFileConvertAction.setConverter(singleFileOnDemandConverterAppendingWatermarker());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
     }
 
     @Bean
-    public IWatermarker watermarker() throws Exception {
-        return new Watermarker();
+    public IWatermarker scalingWatermarker() {
+        return new ScalingWatermarker();
     }
+
+    @Bean
+    public IWatermarker appendingWatermarker() {
+        return new AppendingWatermarker();
+    }
+
 }

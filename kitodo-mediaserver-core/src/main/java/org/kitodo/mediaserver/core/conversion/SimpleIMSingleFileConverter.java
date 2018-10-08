@@ -39,6 +39,10 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
 
     private IWatermarker watermarker;
 
+    public void setWatermarker(IWatermarker watermarker) {
+        this.watermarker = watermarker;
+    }
+
     @Autowired
     private FileserverProperties fileserverProperties;
 
@@ -48,10 +52,6 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
     @Autowired
     protected ConversionProperties.Watermark conversionPropertiesWatermark;
 
-    @Autowired
-    public void setWatermarker(IWatermarker watermarker) {
-        this.watermarker = watermarker;
-    }
 
     @Autowired
     private ObjectFactory<Notifier> notifierFactory;

@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import org.im4java.core.IMOperation;
-import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * An implementation of IWatermarker.
  */
-public class Watermarker implements IWatermarker {
+public class ScalingWatermarker extends AbstractWatermarker {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Watermarker.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScalingWatermarker.class);
 
     private ConversionProperties.Jpeg conversionPropertiesJpeg;
     private ConversionProperties.Watermark conversionPropertiesWatermark;
@@ -147,41 +146,4 @@ public class Watermarker implements IWatermarker {
         }
     }
 
-    /**
-     * Calculates a value, based on a given percentage value.
-     *
-     * @param value The integer value to scale
-     * @param scale The float percentage value
-     * @return The scaled value or 0
-     * @throws NumberFormatException If the given numbers have the wrong type
-     */
-    protected Integer getScaledValue(Integer value, Float scale) throws NumberFormatException {
-        try {
-            Float scaledValue = (float)value / 100 * scale;
-            return scaledValue.intValue();
-        } catch (NumberFormatException ex) {
-            LOGGER.info("Wrong number type : " + ex.toString(), ex);
-            return 0;
-        }
-    }
-
-    /**
-     * Returns Color object from RGB color value string.
-     *
-     * @param colorStr The string containing RGB values, e.g. "33,44,55"
-     * @return A Color object or NULL.
-     */
-    protected Color getRGBColor(String colorStr) throws IllegalArgumentException {
-        try {
-            String[] colorArr = colorStr.split(",");
-            return new Color(
-                    Integer.parseInt(colorArr[0].trim()),
-                    Integer.parseInt(colorArr[1].trim()),
-                    Integer.parseInt(colorArr[2].trim())
-            );
-        } catch (IllegalArgumentException ex) {
-            LOGGER.warn("Invalid rgb color value : " + ex.toString(), ex);
-            return null;
-        }
-    }
 }
