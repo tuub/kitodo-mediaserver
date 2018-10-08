@@ -27,12 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.HttpForbiddenException;
 import org.kitodo.mediaserver.core.exceptions.HttpNotFoundException;
+import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.util.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +59,7 @@ public class FileController {
 
     private WorkRepository workRepository;
 
-    private SingleFileConvertAction singleFileConvertAction;
+    private ActionService actionService;
 
     @Autowired
     public void setFileserverProperties(FileserverProperties fileserverProperties) {
@@ -72,8 +72,8 @@ public class FileController {
     }
 
     @Autowired
-    public void setSingleFileConvertAction(SingleFileConvertAction singleFileConvertAction) {
-        this.singleFileConvertAction = singleFileConvertAction;
+    public void setActionService(ActionService actionService) {
+        this.actionService = actionService;
     }
 
     @Autowired
@@ -188,7 +188,10 @@ public class FileController {
                     parameterMap.put("derivativePath", workId + derivativePath);
                     parameterMap.put("requestUrl", completePath);
 
-                    inputStream = singleFileConvertAction.perform(work, parameterMap);
+                    inputStream = (InputStream) actionService.performImmediately(
+                            work,
+                            fileserverProperties.getConvertAction(),
+                            parameterMap);
 
                 } catch (Exception e) {
                     message = "Error trying to convert the file " + workId + derivativePath + ": " + e;
