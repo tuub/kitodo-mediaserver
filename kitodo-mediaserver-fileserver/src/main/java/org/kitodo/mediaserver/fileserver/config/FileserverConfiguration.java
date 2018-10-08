@@ -13,6 +13,7 @@ package org.kitodo.mediaserver.fileserver.config;
 
 import java.io.IOException;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
+import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
@@ -115,8 +116,8 @@ public class FileserverConfiguration {
      *
      * @return a ConversionAction
      */
-    @Bean
-    public SingleFileConvertAction conversionAction() throws Exception {
+    @Bean(name = "scalingWatermarkingConvertAction")
+    public IAction conversionAction() throws Exception {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
         singleFileConvertAction.setMetsReader(masterFileMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());

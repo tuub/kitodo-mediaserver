@@ -30,6 +30,7 @@ public class FileserverProperties {
     private String filePathPattern;
     private String rootUrl;
     private String masterFileReaderXsl;
+    private String convertAction;
     private Map<String, List<String>> allowedNetworks;
     private List<String> errorNotificationEmail;
 
@@ -87,6 +88,14 @@ public class FileserverProperties {
 
     public void setMasterFileReaderXsl(String masterFileReaderXsl) {
         this.masterFileReaderXsl = masterFileReaderXsl;
+    }
+
+    public String getConvertAction() {
+        return convertAction;
+    }
+
+    public void setConvertAction(String convertAction) {
+        this.convertAction = convertAction;
     }
 
     public Map<String, List<String>> getAllowedNetworks() {
