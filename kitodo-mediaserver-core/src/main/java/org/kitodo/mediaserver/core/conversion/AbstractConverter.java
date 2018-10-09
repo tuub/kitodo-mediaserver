@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
@@ -38,6 +39,9 @@ public abstract class AbstractConverter implements IConverter {
 
     @Autowired
     protected ConversionProperties.Jpeg conversionPropertiesJpeg;
+
+    @Autowired
+    protected ConversionProperties.Pdf conversionPropertiesPdf;
 
     @Autowired
     protected MediaServerUtils mediaServerUtils;
@@ -100,6 +104,9 @@ public abstract class AbstractConverter implements IConverter {
             return Integer.parseInt(parameter.get("size"));
         } catch (NumberFormatException | NullPointerException e) {
             LOGGER.warn("The requested size " + parameter.get("size") + " is not a number. Using default size.");
+            if (StringUtils.equals(parameter.get("target_mime"), "application/pdf")) {
+                return conversionPropertiesPdf.getDefaultSize();
+            }
             return conversionPropertiesJpeg.getDefaultSize();
         }
     }

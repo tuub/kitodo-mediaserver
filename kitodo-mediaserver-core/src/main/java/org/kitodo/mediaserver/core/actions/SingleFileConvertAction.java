@@ -106,10 +106,10 @@ public class SingleFileConvertAction implements IAction {
                     + " found in mets file " + metsFile.getAbsolutePath());
         }
 
-        File sourceFile = mediaServerUtils.getWorkFileFromUrl(work, sourceUrl, fileserverProperties.getRootUrl());
+        parameter.put("size", patternExtractor.extract(requestUrl));
+        parameter.put("target_mime", metsResult.get("target_mime"));
 
-        String size = patternExtractor.extract(requestUrl);
-        parameter.put("size", size);
+        File sourceFile = mediaServerUtils.getWorkFileFromUrl(work, sourceUrl, fileserverProperties.getRootUrl());
 
         LOGGER.info("Converting file from master " + sourceUrl);
 
