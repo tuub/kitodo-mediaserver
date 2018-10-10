@@ -19,9 +19,9 @@ import static org.mockito.Mockito.when;
  * Unit tests for Watermarker.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-public class WatermarkerTest {
+public class ScalingWatermarkerTest {
 
-    private Watermarker watermarker = new Watermarker();
+    private ScalingWatermarker scalingWatermarker = new ScalingWatermarker();
 
     private IMOperation operation;
     private File masterFile;
@@ -43,11 +43,11 @@ public class WatermarkerTest {
         conversionPropertiesWatermarkExtendCanvas = mock(ConversionProperties.Watermark.CanvasExtension.class);
         conversionPropertiesJpeg = mock(ConversionProperties.Jpeg.class);
 
-        watermarker.setConversionPropertiesJpeg(conversionPropertiesJpeg);
-        watermarker.setConversionPropertiesWatermark(conversionPropertiesWatermark);
-        watermarker.setConversionPropertiesWatermarkImageMode(conversionPropertiesWatermarkImageMode);
-        watermarker.setConversionPropertiesWatermarkTextMode(conversionPropertiesWatermarkTextMode);
-        watermarker.setConversionPropertiesCanvasExtension(conversionPropertiesWatermarkExtendCanvas);
+        scalingWatermarker.setConversionPropertiesJpeg(conversionPropertiesJpeg);
+        scalingWatermarker.setConversionPropertiesWatermark(conversionPropertiesWatermark);
+        scalingWatermarker.setConversionPropertiesWatermarkImageMode(conversionPropertiesWatermarkImageMode);
+        scalingWatermarker.setConversionPropertiesWatermarkTextMode(conversionPropertiesWatermarkTextMode);
+        scalingWatermarker.setConversionPropertiesCanvasExtension(conversionPropertiesWatermarkExtendCanvas);
 
         masterFile = ResourceUtils.getFile("classpath:watermark/master.tif");
         watermarkFile = ResourceUtils.getFile("classpath:watermark/watermark.png");
@@ -72,7 +72,7 @@ public class WatermarkerTest {
         when(conversionPropertiesWatermarkTextMode.getSize()).thenReturn(16);
 
         // when
-        watermarker.perform(operation, masterFile, size);
+        scalingWatermarker.perform(operation, masterFile, size);
 
         // then
         String expected = "-colorspace RGB -quality 100.0 -font Arial -gravity southeast -pointsize 16"
@@ -89,7 +89,7 @@ public class WatermarkerTest {
         when(conversionPropertiesWatermarkImageMode.getOpacity()).thenReturn(75);
 
         // when
-        watermarker.perform(operation, masterFile, size);
+        scalingWatermarker.perform(operation, masterFile, size);
 
         // then
         String expected = "-colorspace RGB -quality 100.0 "
@@ -114,7 +114,7 @@ public class WatermarkerTest {
         when(conversionPropertiesWatermarkExtendCanvas.getAddY()).thenReturn(50);
 
         // when
-        watermarker.perform(operation, masterFile, size);
+        scalingWatermarker.perform(operation, masterFile, size);
 
         // then
         String expected = "-colorspace RGB -quality 100.0 -background rgb(11,22,33) -extent 1000x1409"
@@ -131,7 +131,7 @@ public class WatermarkerTest {
         Float scale = 75.0f;
 
         // when
-        Integer result = watermarker.getScaledValue(value, scale);
+        Integer result = scalingWatermarker.getScaledValue(value, scale);
 
         // then
         assertThat(result).isEqualTo(750);
@@ -143,7 +143,7 @@ public class WatermarkerTest {
         String rgbColorStr = "33,44,55";
 
         // when
-        Color color = watermarker.getRGBColor(rgbColorStr);
+        Color color = scalingWatermarker.getRGBColor(rgbColorStr);
 
         // then
         assertThat(color).isInstanceOf(Color.class);
