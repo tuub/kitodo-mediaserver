@@ -95,7 +95,7 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
                     notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
                 }
             }
-
+            operation.colorspace("RGB"); // Needed for firefox
             operation.addImage(convertedFile.getAbsolutePath());
 
             ImageCommand convertCmd = new ConvertCmd(conversionProperties.isUseGraphicsMagick());

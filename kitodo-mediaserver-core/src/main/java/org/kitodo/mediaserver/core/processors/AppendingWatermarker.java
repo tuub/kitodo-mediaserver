@@ -77,7 +77,6 @@ public class AppendingWatermarker extends AbstractWatermarker {
         operation.gravity(conversionPropertiesWatermark.getGravity());
         operation.append();
         operation.flatten();
-        operation.colorspace("RGB"); // Needed for firefox
 
     }
 }
