@@ -74,7 +74,8 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
 
         int size = getConversionSize(parameter);
 
-        boolean addWatermark = conversionPropertiesWatermark.isEnabled();
+        boolean addWatermark = conversionPropertiesWatermark.isEnabled()
+                                && size >= conversionPropertiesWatermark.getMinSize();
 
         File convertedFile = new File(conversionTargetPath, parameter.get("derivativePath"));
 
