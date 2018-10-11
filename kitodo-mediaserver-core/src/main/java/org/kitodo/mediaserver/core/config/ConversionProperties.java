@@ -42,6 +42,20 @@ public class ConversionProperties {
     }
 
     @Configuration
+    @ConfigurationProperties(prefix = "conversion.pdf")
+    public static class Pdf {
+        private int defaultSize;
+
+        public int getDefaultSize() {
+            return defaultSize;
+        }
+
+        public void setDefaultSize(int defaultSize) {
+            this.defaultSize = defaultSize;
+        }
+    }
+
+    @Configuration
     @ConfigurationProperties(prefix = "conversion.jpeg")
     public static class Jpeg {
         private int defaultSize;

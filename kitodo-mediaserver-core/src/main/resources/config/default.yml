@@ -61,6 +61,8 @@ fileserver:
   errorNotificationEmail:
 
 conversion:
+  pdf:
+    defaultSize: 2500
   jpeg:
     defaultSize: 1000
   useGraphicsMagick: false

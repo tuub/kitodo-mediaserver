@@ -70,7 +70,7 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
         Notifier notifier = notifierFactory.getObject();
         String message;
 
-        checkParams(master, parameter, "derivativePath");
+        checkParams(master, parameter, "derivativePath", "target_mime");
 
         int size = getConversionSize(parameter);
 
