@@ -120,7 +120,7 @@ public class ImporterFlowControl {
     public void importWorks() throws Exception {
 
         File workDir;
-        File mets;
+        File mets = null;
         Notifier errorNotifier = notifierFactory.getObject();
         Notifier reportNotifier = notifierFactory.getObject();
 
@@ -140,6 +140,7 @@ public class ImporterFlowControl {
             try {
                 // Get the mets file
                 mets = new File(workDir, workDir.getName() + ".xml");
+                reportNotifier.add("Import: " + mets.getAbsolutePath());
                 if (!mets.exists()) {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
@@ -151,6 +152,7 @@ public class ImporterFlowControl {
                 if (!StringUtils.equals(newWork.getId(), workDir.getName())) {
                     LOGGER.info("Id of work to import: " + newWork.getId() + " is different from the mets file name "
                             + workDir.getName() + ", renaming.");
+                    reportNotifier.add("Renamed METS file from " + mets.toPath() + " to " + newWork.getId() + ".xml");
 
                     String newMetsName = newWork.getId() + ".xml";
                     Files.move(mets.toPath(), Paths.get(mets.getParent(), newMetsName));
@@ -173,6 +175,7 @@ public class ImporterFlowControl {
                 if (presentWork != null) {
 
                     LOGGER.info("Work " + newWork.getId() + " already present, replacing");
+                    reportNotifier.add("Replaced already present work.");
 
                     newWork.setAllowedNetwork(presentWork.getAllowedNetwork());
 
@@ -201,6 +204,7 @@ public class ImporterFlowControl {
                         workDir,
                         new File(newWork.getPath())
                     );
+                    reportNotifier.add("Moved work files to production on " + newWork.getPath());
                 } catch (FileExistsException ex) {
                     String message = "Work directory '" + newWork.getPath() + "' already exists but there is no DB entry for workId='"
                         + newWork.getId() + "'. Not importing work from '" + workDir + "'";
@@ -228,8 +232,10 @@ public class ImporterFlowControl {
                     try {
                         LOGGER.info("Rollback: deleting database entry for work " + workDir.getName());
                         workService.deleteWork(newWork);
+                        errorNotifier.add("Deleted work from database.");
                     } catch (Exception rollbackExc) {
                         LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
+                        errorNotifier.add("Could not delete work from database.");
                         rollbackSuccessful = false;
                     }
                 }
@@ -248,6 +254,7 @@ public class ImporterFlowControl {
                                 tempOldWorkFiles.toFile(),
                                 new File(presentWork.getPath())
                             );
+                            errorNotifier.add("Restored old work data and files for " + presentWork.getId());
                         }
                     } catch (Exception rollbackExc) {
                         LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
@@ -321,6 +328,7 @@ public class ImporterFlowControl {
         if (errorNotifier.getCollectedNotification().length() > 0) {
             errorNotifier.send("Error: Indexing Action", importerProperties.getErrorNotificationEmail());
         }
+
         reportNotifier.send("Report: Import Action", importerProperties.getReportNotificationEmail());
     }
 
