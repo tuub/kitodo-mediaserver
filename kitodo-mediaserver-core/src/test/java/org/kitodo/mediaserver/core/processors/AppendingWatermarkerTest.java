@@ -79,7 +79,6 @@ public class AppendingWatermarkerTest {
         watermarker.perform(operation, null, null);
 
         // then
-        assertThat(operation.toString()).contains("-colorspace RGB"); // Needed for firefox
         assertThat(operation.toString()).contains("-background rgb(55,66,77)");
         assertThat(operation.toString()).contains("-flatten");
         assertThat(operation.toString()).contains("-append");
