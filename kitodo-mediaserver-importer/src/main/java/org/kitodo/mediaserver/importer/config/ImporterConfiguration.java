@@ -11,20 +11,11 @@
 
 package org.kitodo.mediaserver.importer.config;
 
-import java.io.IOException;
-import org.kitodo.mediaserver.core.actions.PreproduceDerivativesAction;
-import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
-import org.kitodo.mediaserver.core.api.IAction;
-import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IDataReader;
-import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
-import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
-import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
-import org.kitodo.mediaserver.core.processors.PatternExtractor;
-import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
+import org.kitodo.mediaserver.core.config.ImporterProperties;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
@@ -48,8 +39,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
 @ComponentScan({"org.kitodo.mediaserver.core", "org.kitodo.mediaserver.local"})
 public class ImporterConfiguration {
-
-    private static final String METS_READER_CONCAT_SEPARATOR = " ; ";
 
     @Autowired
     private ImporterProperties importerProperties;
@@ -98,75 +87,6 @@ public class ImporterConfiguration {
         SimpleList2MapParser workDataResultParser = new SimpleList2MapParser();
         workDataResultParser.setMapSeparator(":");
         return workDataResultParser;
-    }
-
-
-    /*
-     * The section below defines the beans you need for preproducing files at import.
-     * TODO Some of the beans are duplicates from the fileserver configuration; these should in a later step be moved
-     * to a core configuration
-     */
-    @Bean
-    public IMetsReader masterFileMetsReader() throws IOException {
-        XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        xsltMetsReader.setXslt(new ClassPathResource("xslt/masterFileFromMets.xsl"));
-        return xsltMetsReader;
-    }
-
-    @Bean
-    public IMetsReader requestUrlsMetsReader() throws IOException {
-        XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        xsltMetsReader.setXslt(new ClassPathResource("xslt/fileGrpRequestUrlsFromMets.xsl"));
-        return xsltMetsReader;
-    }
-
-    @Bean
-    public IReadResultParser listToMapParser() {
-        SimpleList2MapParser parser = new SimpleList2MapParser();
-        parser.setMapSeparator(":");
-        parser.setValueConcatSeparator(METS_READER_CONCAT_SEPARATOR);
-        return parser;
-    }
-
-    @Bean
-    public IExtractor patternExtractor() {
-        PatternExtractor patternExtractor = new PatternExtractor();
-        patternExtractor.setRegexList(conversionProperties.getPathExtractionPatterns());
-        return patternExtractor;
-    }
-
-    @Bean
-    public IWatermarker scalingWatermarker() {
-        return new ScalingWatermarker();
-    }
-
-    @Bean
-    public IConverter preproduceFileConverter() {
-        SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
-        simpleIMSingleFileConverter.setConversionTargetPath(importerProperties.getWorkFilesPath());
-        simpleIMSingleFileConverter.setSaveConvertedFile(true);
-        simpleIMSingleFileConverter.setWatermarker(scalingWatermarker());
-        return simpleIMSingleFileConverter;
-    }
-
-    @Bean
-    public IAction preproduceSingleFileAction() throws IOException {
-        SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
-        singleFileConvertAction.setMetsReader(masterFileMetsReader());
-        singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.setConverter(preproduceFileConverter());
-        singleFileConvertAction.setPatternExtractor(patternExtractor());
-        return singleFileConvertAction;
-    }
-
-    @Bean(name = "preproduceDerivativesAction")
-    public IAction preproduceDerivativesAction() throws IOException {
-        PreproduceDerivativesAction preproduceDerivativesAction = new PreproduceDerivativesAction();
-        preproduceDerivativesAction.setConvertAction(preproduceSingleFileAction());
-        preproduceDerivativesAction.setReadResultParser(listToMapParser());
-        preproduceDerivativesAction.setValueConcatSeparator(METS_READER_CONCAT_SEPARATOR);
-        preproduceDerivativesAction.setMetsReader(requestUrlsMetsReader());
-        return preproduceDerivativesAction;
     }
 
 }

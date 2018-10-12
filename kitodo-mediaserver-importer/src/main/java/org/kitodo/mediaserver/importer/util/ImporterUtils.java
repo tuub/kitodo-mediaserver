@@ -21,7 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
-import org.kitodo.mediaserver.importer.config.ImporterProperties;
+import org.kitodo.mediaserver.core.config.ImporterProperties;
 import org.kitodo.mediaserver.importer.exceptions.ImporterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -12,7 +12,7 @@
 package org.kitodo.mediaserver.cli.commands;
 
 import java.util.concurrent.Callable;
-import org.kitodo.mediaserver.importer.config.ImporterProperties;
+import org.kitodo.mediaserver.core.config.ImporterProperties;
 import org.kitodo.mediaserver.importer.control.ImporterFlowControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
