@@ -12,7 +12,7 @@ import org.junit.runner.RunWith;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ValidationException;
 import org.kitodo.mediaserver.importer.api.IMetsValidation;
-import org.kitodo.mediaserver.importer.config.ImporterProperties;
+import org.kitodo.mediaserver.core.config.ImporterProperties;
 import org.mockito.Mockito;
 import org.springframework.test.context.junit4.SpringRunner;
 

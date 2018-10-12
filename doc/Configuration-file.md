@@ -28,7 +28,6 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
   * `filePathPattern` (string: URL path): The URL path to use for the file server. `/files/{workId}/**` will work for an URL like *http://<span>d</span>omain.de/files/ABC123/...*.
   * `caching` (bool): `true` or `false` - Enable or disable caching of produced derivatives. 
   * `cachePath` (string: filesystem path): Path to the cache files. The folder needs write permissions from the fileserver process.
-  * `masterFileReaderXsl` (string: filesystem path): Path to a XSL file for reading work meta data.
   * `cacheClearCron` (string: UNIX Cron format): If scheduling is used this is the schedule in [UNIX cron](https://en.wikipedia.org/wiki/Cron) format like `0 5 2 * * *`.
   * `cacheClearSince` (int: seconds): File that are touched since this value should be deleted by a cache clear run.
   * `allowedNetworks` (map: IP subnets): Contains multiple IP subnet definitions defining the access level for a work. Every work can have one network. There are two default networks: `global: 0.0.0.0/0,::/0` allows access from everywhere. `disabled: 0.0.0.0/32,::/128` disables access for everyone. `disabled` also allows to set a comment and to create a reduced METS/MODS file with less informations about the work.

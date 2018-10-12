@@ -9,7 +9,7 @@
  * LICENSE file that was distributed with this source code.
  */
 
-package org.kitodo.mediaserver.importer.config;
+package org.kitodo.mediaserver.core.config;
 
 import java.util.List;
 import java.util.Map;
