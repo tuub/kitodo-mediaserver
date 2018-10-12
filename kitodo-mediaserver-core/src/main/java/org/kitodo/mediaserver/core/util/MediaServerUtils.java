@@ -16,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -23,6 +24,12 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.kitodo.mediaserver.core.db.entities.Work;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.AbstractEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertySource;
 import org.springframework.stereotype.Component;
 
 /**
@@ -30,6 +37,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MediaServerUtils {
+
+    private Environment environment;
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
 
     /**
      * Gets the METS file for a work.
@@ -190,4 +204,16 @@ public class MediaServerUtils {
         return status;
     }
 
+    /**
+     * Checks if the local.yml was loaded.
+     *
+     * @return true if the local.yml was laoded
+     */
+    public boolean isLocalAppConfigLoaded() {
+        MutablePropertySources propertySources = ((AbstractEnvironment)environment).getPropertySources();
+        return StreamSupport.stream(propertySources.spliterator(), false)
+            .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
+            .map(PropertySource::getName)
+            .anyMatch(sourceName -> sourceName.matches("^applicationConfig: \\[.*?local.yml]$"));
+    }
 }

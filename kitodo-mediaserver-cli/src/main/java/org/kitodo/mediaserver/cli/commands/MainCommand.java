@@ -18,7 +18,9 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import java.util.concurrent.Callable;
+import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -33,6 +35,8 @@ import picocli.CommandLine.Option;
 @Component
 public class MainCommand implements Callable {
 
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MainCommand.class);
+
     @Option(names = {"-h", "--help"}, usageHelp = true, description = "Display usage help.")
     private Boolean help = false;
 
@@ -41,6 +45,13 @@ public class MainCommand implements Callable {
 
     @Option(names = {"-q", "--quiet"}, description = "Don't print anything to standard output.")
     private Boolean quiet = false;
+
+    private MediaServerUtils mediaServerUtils;
+
+    @Autowired
+    public void setMediaServerUtils(MediaServerUtils mediaServerUtils) {
+        this.mediaServerUtils = mediaServerUtils;
+    }
 
     /**
      * Set console log format and verbosity by modifying existing Logger.
@@ -105,6 +116,10 @@ public class MainCommand implements Callable {
     public Object call() {
 
         setLogger();
+
+        if (!mediaServerUtils.isLocalAppConfigLoaded()) {
+            LOGGER.warn("No local configuration file loaded (local.yml) or the file is empty. This might cause unexpected problems.");
+        }
 
         return null;
     }
