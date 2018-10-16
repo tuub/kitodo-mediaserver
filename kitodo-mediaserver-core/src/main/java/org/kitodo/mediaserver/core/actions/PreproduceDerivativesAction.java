@@ -102,7 +102,7 @@ public class PreproduceDerivativesAction implements IAction {
                 try {
                     convertAction.perform(work, convertParams);
                 } catch (Exception e) {
-                    LOGGER.error("Error converting file " + requestUrl + ": " + e, e);
+                    throw new Exception("Error converting file " + requestUrl + ": " + e, e);
                 }
             }
         }
