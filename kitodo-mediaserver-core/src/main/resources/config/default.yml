@@ -117,6 +117,10 @@ importer:
   actionsAfterSuccessfulIndexing:
   actionsToRequestAsynchronously:
 
+cli:
+  performActions:
+    continueOnError: false
+    cron: "0 5 * * * *"
 
 ui:
   pagination:

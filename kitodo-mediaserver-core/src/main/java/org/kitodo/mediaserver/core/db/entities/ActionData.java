@@ -22,11 +22,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
 
 /**
  * ActionData entity for managing actions.
  */
 @Entity
+@NamedEntityGraph(name = "ActionData.parameter", attributeNodes = @NamedAttributeNode("parameter"))
 public class ActionData {
 
     @Id
