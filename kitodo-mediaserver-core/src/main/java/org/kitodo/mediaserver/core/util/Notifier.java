@@ -127,7 +127,7 @@ public class Notifier implements INotifier {
     /**
      * Returns string with current notification buffer.
      */
-    protected String getCollectedNotification() {
+    public String getCollectedNotification() {
         return notification.toString();
     }
 }
