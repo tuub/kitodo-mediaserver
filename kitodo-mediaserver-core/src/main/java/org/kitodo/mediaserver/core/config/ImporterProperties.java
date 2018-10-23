@@ -34,6 +34,8 @@ public class ImporterProperties {
     private String cron;
     private boolean indexWorkAfterImport;
     private List<String> validationFileGrps;
+    private List<String> errorNotificationEmail;
+    private List<String> reportNotificationEmail;
     private List<Map<String, Map<String, String>>> actionsBeforeIndexing;
     private List<Map<String, Map<String, String>>> actionsAfterSuccessfulIndexing;
     private List<Map<String, Map<String, String>>> actionsToRequestAsynchronously;
@@ -108,6 +110,22 @@ public class ImporterProperties {
 
     public void setValidationFileGrps(List<String> validationFileGrps) {
         this.validationFileGrps = validationFileGrps;
+    }
+
+    public List<String> getErrorNotificationEmail() {
+        return errorNotificationEmail;
+    }
+
+    public void setErrorNotificationEmail(List<String> errorNotificationEmail) {
+        this.errorNotificationEmail = errorNotificationEmail;
+    }
+
+    public List<String> getReportNotificationEmail() {
+        return reportNotificationEmail;
+    }
+
+    public void setReportNotificationEmail(List<String> reportNotificationEmail) {
+        this.reportNotificationEmail = reportNotificationEmail;
     }
 
     public String getCron() {

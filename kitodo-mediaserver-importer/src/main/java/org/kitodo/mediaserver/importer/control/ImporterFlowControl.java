@@ -28,12 +28,14 @@ import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.core.util.FileDeleter;
+import org.kitodo.mediaserver.core.util.Notifier;
 import org.kitodo.mediaserver.importer.api.IImportValidation;
 import org.kitodo.mediaserver.importer.api.IWorkChecker;
 import org.kitodo.mediaserver.importer.exceptions.ImporterException;
 import org.kitodo.mediaserver.importer.util.ImporterUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +46,9 @@ import org.springframework.stereotype.Component;
 public class ImporterFlowControl {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImporterFlowControl.class);
+
+    @Autowired
+    private ObjectFactory<Notifier> notifierFactory;
 
     private ImporterUtils importerUtils;
     private ImporterProperties importerProperties;
@@ -116,6 +121,8 @@ public class ImporterFlowControl {
 
         File workDir;
         File mets = null;
+        Notifier errorNotifier = notifierFactory.getObject();
+        Notifier reportNotifier = notifierFactory.getObject();
 
         LOGGER.info("Looking for works to import in folder " + importerProperties.getHotfolderPath());
 
@@ -205,21 +212,26 @@ public class ImporterFlowControl {
                 workService.updateWork(newWork);
 
                 LOGGER.info("Finished import of work " + workDir.getName());
+                reportNotifier.add("Imported: " + mets.getAbsolutePath());
 
             } catch (Exception e) {
 
                 importSuccessful = false;
                 boolean rollbackSuccessful = true;
 
-                LOGGER.error("An error occurred importing work " + workDir.getName()
-                        + ", performing rollback. Error: " + e, e);
+                String message = "An error occurred importing work " + workDir.getName()
+                        + ", performing rollback. Error: " + e;
+                LOGGER.error(message, e);
+                errorNotifier.add(message);
 
                 if (newWork != null && newWork.getId() != null) {
                     try {
                         LOGGER.info("Rollback: deleting database entry for work " + workDir.getName());
                         workService.deleteWork(newWork);
                     } catch (Exception rollbackExc) {
-                        LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
+                        message = "An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc;
+                        LOGGER.error(message, rollbackExc);
+                        errorNotifier.add(message);
                         rollbackSuccessful = false;
                     }
                 }
@@ -240,7 +252,9 @@ public class ImporterFlowControl {
                             );
                         }
                     } catch (Exception rollbackExc) {
-                        LOGGER.error("An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc, rollbackExc);
+                        message = "An error occurred during rollback of work " + workDir.getName() + ": " + rollbackExc;
+                        LOGGER.error(message, rollbackExc);
+                        errorNotifier.add(message);
                         rollbackSuccessful = false;
                     }
                 }
@@ -260,9 +274,10 @@ public class ImporterFlowControl {
                 }
 
                 if (!rollbackSuccessful) {
-                    // TODO notify. Collect all error messages above and send them here.
-                    throw new ImporterException("The rollback during import of work " + workDir.getName() + " failed. "
-                            + "Interrupting import process.");
+                    message = "The rollback during import of work " + workDir.getName() + " failed. "
+                            + "Interrupting import process.";
+                    errorNotifier.addAndSend(message,"Import Rollback Error", importerProperties.getErrorNotificationEmail());
+                    throw new ImporterException(message);
                 }
             }
 
@@ -289,10 +304,10 @@ public class ImporterFlowControl {
                             performActions(importerProperties.getActionsAfterSuccessfulIndexing(), newWork, false);
 
                         } catch (Exception e) {
-                            LOGGER.error("Error indexing " + newWork.getId() + ": " + e + ". Actions after indexing not performed", e);
-                            // TODO notify?
+                            String message = "Error indexing " + newWork.getId() + ": " + e + ". Actions after indexing not performed";
+                            LOGGER.error(message, e);
+                            errorNotifier.add(message);
                         }
-
                     }
 
                     LOGGER.info("Requesting actions after indexing work " + workDir.getName());
@@ -300,15 +315,20 @@ public class ImporterFlowControl {
 
                 } catch (Exception e) {
                     String message = "An error occured after import of work " + workDir.getName()
-                            + ". The import itself was succuessfully performed not all the subsequent actions."
+                            + ". The import itself was successfully performed not all the subsequent actions."
                             + " The work has probably not been indexed. Error: " + e;
                     LOGGER.error(message, e);
-                    // TODO notify
+                    errorNotifier.add(message);
                 }
             }
         }
         LOGGER.info("Nothing (more) to import.");
-        // TODO notify report(?) - Collect meaningful information over the import and send report here
+
+        if (!StringUtils.isEmpty(errorNotifier.getCollectedNotification())) {
+            errorNotifier.send("Error: Import Action", importerProperties.getErrorNotificationEmail());
+        }
+
+        reportNotifier.send("Report: Import Action", importerProperties.getReportNotificationEmail());
     }
 
     private void performActions(List<Map<String, Map<String, String>>> actionList, Work work, boolean request) throws Exception {

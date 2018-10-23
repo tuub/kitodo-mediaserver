@@ -111,7 +111,9 @@ importer:
   cron: 0 5 2 * * *
   indexWorkAfterImport: true
   validationFileGrps:
-  - ORIGINAL
+    - ORIGINAL
+  errorNotificationEmail:
+  reportNotificationEmail:
 
   actionsBeforeIndexing:
   actionsAfterSuccessfulIndexing:
