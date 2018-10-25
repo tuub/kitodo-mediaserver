@@ -19,6 +19,7 @@ import java.util.Map;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
 import org.im4java.core.ImageCommand;
+import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
@@ -33,7 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * A simple single file converter using imagemagick.
  * Implemented as proof of concept.
  */
-public class SimpleIMSingleFileConverter extends AbstractConverter {
+public class SimpleIMSingleFileConverter extends AbstractConverter implements IConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleIMSingleFileConverter.class);
 

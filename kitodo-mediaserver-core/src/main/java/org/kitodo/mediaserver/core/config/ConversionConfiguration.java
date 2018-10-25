@@ -12,14 +12,18 @@
 package org.kitodo.mediaserver.core.config;
 
 import java.io.IOException;
+import org.kitodo.mediaserver.core.actions.FullPDFConvertAction;
 import org.kitodo.mediaserver.core.actions.PreproduceDerivativesAction;
+import org.kitodo.mediaserver.core.actions.PreproduceFullPDFAction;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
+import org.kitodo.mediaserver.core.api.IFullConverter;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
 import org.kitodo.mediaserver.core.api.IWatermarker;
+import org.kitodo.mediaserver.core.conversion.SimpleIMFullPDFConverter;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
 import org.kitodo.mediaserver.core.processors.AppendingWatermarker;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
@@ -59,6 +63,20 @@ public class ConversionConfiguration {
     public IMetsReader requestUrlsMetsReader() throws IOException {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
         xsltMetsReader.setXslt(new ClassPathResource("xslt/fileGrpRequestUrlsFromMets.xsl"));
+        return xsltMetsReader;
+    }
+
+    @Bean
+    public IMetsReader allMasterFilesMetsReader() throws IOException {
+        XsltMetsReader xsltMetsReader = new XsltMetsReader();
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/allMasterFilesFromMets.xsl"));
+        return xsltMetsReader;
+    }
+
+    @Bean
+    public IMetsReader fullPdfUrlMetsreader() throws IOException {
+        XsltMetsReader xsltMetsReader = new XsltMetsReader();
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/fullPdfUrlFromMets.xsl"));
         return xsltMetsReader;
     }
 
@@ -104,6 +122,36 @@ public class ConversionConfiguration {
         singleFileConvertAction.setConverter(preproduceFileConverter());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
+    }
+
+    /**
+     * An action bean for converting a work to a full PDF (for preproduction).
+     *
+     * @return the bean
+     * @throws Exception by severe errors
+     */
+    @Bean
+    public IAction preproduceFullPDFConvertAction() throws Exception {
+        FullPDFConvertAction fullPDFConvertAction = new FullPDFConvertAction();
+        fullPDFConvertAction.setMetsReader(allMasterFilesMetsReader());
+        fullPDFConvertAction.setReadResultParser(listToMapParser());
+        fullPDFConvertAction.setConverter(preprduceFullPDFConverter());
+        return fullPDFConvertAction;
+    }
+
+    /**
+     * An action bean for preproducing full PDF.
+     *
+     * @return the bean
+     * @throws Exception by severe errors
+     */
+    @Bean
+    public IAction preproduceFullPDFAction() throws Exception {
+        PreproduceFullPDFAction preproduceFullPDFAction = new PreproduceFullPDFAction();
+        preproduceFullPDFAction.setConvertAction(preproduceFullPDFConvertAction());
+        preproduceFullPDFAction.setMetsReader(fullPdfUrlMetsreader());
+        preproduceFullPDFAction.setReadResultParser(listToMapParser());
+        return preproduceFullPDFAction;
     }
 
     /**
@@ -154,6 +202,20 @@ public class ConversionConfiguration {
         return singleFileConvertAction;
     }
 
+    /**
+     * An action bean for converting a work to a full PDF on demand.
+     *
+     * @return the bean
+     * @throws Exception by severe errors
+     */
+    @Bean
+    public IAction fullPDFConvertAction() throws Exception {
+        FullPDFConvertAction fullPDFConvertAction = new FullPDFConvertAction();
+        fullPDFConvertAction.setConverter(fullPDFConverter());
+        fullPDFConvertAction.setMetsReader(allMasterFilesMetsReader());
+        fullPDFConvertAction.setReadResultParser(listToMapParser());
+        return fullPDFConvertAction;
+    }
 
     /**
      * A single file converter for on-demand-conversions. Uses caching according to the configurations.
@@ -183,6 +245,34 @@ public class ConversionConfiguration {
         simpleIMSingleFileConverter.setSaveConvertedFile(fileserverProperties.isCaching());
         simpleIMSingleFileConverter.setWatermarker(appendingWatermarker());
         return simpleIMSingleFileConverter;
+    }
+
+    /**
+     * A converter bean for converting a work to a full PDF on demand.
+     *
+     * @return the bean
+     * @throws Exception by severe errors
+     */
+    @Bean
+    public IFullConverter fullPDFConverter() {
+        SimpleIMFullPDFConverter simpleIMFullPDFConverter = new SimpleIMFullPDFConverter();
+        simpleIMFullPDFConverter.setConversionTargetPath(fileserverProperties.getCachePath());
+        simpleIMFullPDFConverter.setSaveConvertedFile(fileserverProperties.isCaching());
+        return simpleIMFullPDFConverter;
+    }
+
+    /**
+     * A converter bean for converting a work to a full PDF (for preproduction).
+     *
+     * @return the bean
+     * @throws Exception by severe errors
+     */
+    @Bean
+    public IFullConverter preprduceFullPDFConverter() {
+        SimpleIMFullPDFConverter simpleIMFullPDFConverter = new SimpleIMFullPDFConverter();
+        simpleIMFullPDFConverter.setConversionTargetPath(importerProperties.getWorkFilesPath());
+        simpleIMFullPDFConverter.setSaveConvertedFile(true);
+        return simpleIMFullPDFConverter;
     }
 
 

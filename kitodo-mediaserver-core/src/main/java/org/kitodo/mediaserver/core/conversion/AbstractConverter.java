@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.slf4j.Logger;
@@ -26,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 /**
  * Abstract converter offering a synchronized method for creating cache file.
  */
-public abstract class AbstractConverter implements IConverter {
+public abstract class AbstractConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractConverter.class);
 
