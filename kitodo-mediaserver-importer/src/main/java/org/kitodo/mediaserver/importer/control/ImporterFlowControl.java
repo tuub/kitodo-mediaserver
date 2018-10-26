@@ -24,6 +24,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.config.ImporterProperties;
+import org.kitodo.mediaserver.core.db.entities.ActionData;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
@@ -174,8 +175,6 @@ public class ImporterFlowControl {
 
                     LOGGER.info("Work " + newWork.getId() + " already present, replacing");
 
-                    newWork.setAllowedNetwork(presentWork.getAllowedNetwork());
-
                     // Files created and cached by the fileserver must be deleted.
                     cacheDeleteAction.perform(presentWork, null);
 
@@ -210,6 +209,22 @@ public class ImporterFlowControl {
 
                 // Insert the work data into the database, updating if old data present.
                 workService.updateWork(newWork);
+
+                if (presentWork != null) {
+                    // Set allowedNetwork according to presentWork and keep comment
+                    ActionData networkActionData = actionService.getLastPerformedAction(presentWork, "setAllowedNetworkAction");
+                    if (networkActionData == null) {
+                        newWork.setAllowedNetwork(presentWork.getAllowedNetwork());
+                        workService.updateWork(newWork);
+                    } else {
+                        workService.setAllowedNetwork(
+                            newWork,
+                            presentWork.getAllowedNetwork(),
+                            networkActionData.getParameter().getOrDefault("comment", ""),
+                            Boolean.parseBoolean(networkActionData.getParameter().getOrDefault("reduceMets", ""))
+                        );
+                    }
+                }
 
                 LOGGER.info("Finished import of work " + workDir.getName());
                 reportNotifier.add("Imported: " + mets.getAbsolutePath());
