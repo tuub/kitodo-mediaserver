@@ -83,26 +83,33 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
         boolean fileAlreadyExists = createCacheFile(convertedFile);
 
         if (!fileAlreadyExists) {
-            IMOperation operation = new IMOperation();
-            operation.addImage(master.getAbsolutePath());
-            operation.resize(size);
+            try {
+                IMOperation operation = new IMOperation();
+                operation.addImage(master.getAbsolutePath());
+                operation.resize(size);
 
-            if (addWatermark) {
-                try {
-                    watermarker.perform(operation, master, size);
-                } catch (Exception e) {
-                    message = "Error creating watermark on file " + master.getAbsolutePath() + ": " + e;
-                    LOGGER.error(message, e);
-                    notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
+                if (addWatermark) {
+                    try {
+                        watermarker.perform(operation, master, size);
+                    } catch (Exception e) {
+                        message = "Error creating watermark on file " + master.getAbsolutePath() + ": " + e;
+                        LOGGER.error(message, e);
+                        notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
+                    }
                 }
+                operation.colorspace("RGB"); // Needed for firefox
+                operation.addImage(convertedFile.getAbsolutePath());
+
+                ImageCommand convertCmd = new ConvertCmd(conversionProperties.isUseGraphicsMagick());
+
+                convertCmd.run(operation);
+
+                LOGGER.info("Executed IM Operation: " + operation.toString());
+
+            } catch (Exception e) {
+                convertedFile.delete();
+                throw e;
             }
-            operation.colorspace("RGB"); // Needed for firefox
-            operation.addImage(convertedFile.getAbsolutePath());
-
-            ImageCommand convertCmd = new ConvertCmd(conversionProperties.isUseGraphicsMagick());
-            convertCmd.run(operation);
-
-            LOGGER.info("Executed IM Operation: " + operation.toString());
         }
 
         InputStream convertedInputStream = new FileInputStream(convertedFile);
