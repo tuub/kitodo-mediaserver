@@ -14,6 +14,7 @@ package org.kitodo.mediaserver.core.services;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.After;
@@ -31,6 +32,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Test for the User repository.
@@ -146,6 +149,26 @@ public class ActionServiceTest {
     }
 
     @Test
+    public void getAllRequestedActions() throws ActionServiceException {
+
+        // given
+        init();
+        actionData1.setRequestTime(Instant.now());
+        actionData2.setRequestTime(Instant.now());
+        actionData2.setStartTime(Instant.now());
+        actionData3.setRequestTime(Instant.now());
+        actionData3.setEndTime(Instant.now());
+        persist();
+
+        // when
+        List<ActionData> actions = actionService.getUnperformedActions();
+
+        // then
+        assertThat(actions.size()).isEqualTo(1);
+        assertThat(actions).containsExactly(actionData1);
+    }
+
+    @Test
     public void performRequestedAction() throws Exception {
 
         // given
@@ -154,7 +177,6 @@ public class ActionServiceTest {
         // for mockAction have a look at TestConfiguration
         actionData1 = new ActionData(work1, "mockAction", parameter1);
         actionData1.setRequestTime(Instant.now());
-
         entityManager.persist(work1);
         entityManager.persist(actionData1);
 

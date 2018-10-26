@@ -14,6 +14,7 @@ package org.kitodo.mediaserver.core.db.repositories;
 import java.util.List;
 import org.kitodo.mediaserver.core.db.entities.ActionData;
 import org.kitodo.mediaserver.core.db.entities.Work;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -44,4 +45,12 @@ public interface ActionRepository extends CrudRepository<ActionData, Integer> {
      * @return the ActionDatas
      */
     List<ActionData> findByWorkAndActionNameAndStartTimeIsNotNullAndEndTimeIsNull(Work work, String actionName);
+
+    /**
+     * Finds all requested actions not started and not finished yet.
+     *
+     * @return list of requested actions
+     */
+    @EntityGraph(value = "ActionData.parameter", type = EntityGraph.EntityGraphType.LOAD)
+    List<ActionData> findByStartTimeIsNullAndEndTimeIsNullOrderByRequestTime();
 }

@@ -14,6 +14,7 @@ package org.kitodo.mediaserver.cli.config;
 import org.kitodo.mediaserver.cli.commands.CacheClearCommand;
 import org.kitodo.mediaserver.cli.commands.ImportCommand;
 import org.kitodo.mediaserver.cli.commands.MainCommand;
+import org.kitodo.mediaserver.cli.commands.PerformCommand;
 import org.kitodo.mediaserver.cli.commands.UpdateDbCommand;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
@@ -40,12 +41,14 @@ public class CliConfiguration {
     public CommandLine commandLine(MainCommand mainCommand,
                                    CacheClearCommand cacheClearCommand,
                                    ImportCommand importCommand,
-                                   UpdateDbCommand updateDbCommand) {
+                                   UpdateDbCommand updateDbCommand,
+                                   PerformCommand performCommand) {
 
         CommandLine commandLine = new CommandLine(mainCommand);
         commandLine.addSubcommand("cacheclear", cacheClearCommand);
         commandLine.addSubcommand("import", importCommand);
         commandLine.addSubcommand("updatedb", updateDbCommand);
+        commandLine.addSubcommand("perform", performCommand);
         return commandLine;
     }
 

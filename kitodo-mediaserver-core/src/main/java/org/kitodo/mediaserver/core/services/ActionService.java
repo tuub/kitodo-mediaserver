@@ -23,6 +23,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -44,8 +45,6 @@ public class ActionService {
     public void setActionRepository(ActionRepository actionRepository) {
         this.actionRepository = actionRepository;
     }
-
-    private ActionService() {}
 
     /**
      * Request a action and make it persistent.
@@ -101,6 +100,7 @@ public class ActionService {
      * @return the result of the Action
      * @throws Exception on Action errors
      */
+    @Transactional(rollbackFor = Exception.class)
     public Object performRequested(ActionData actionData) throws Exception {
 
         if (actionData == null) {
@@ -122,19 +122,10 @@ public class ActionService {
 
         Object result;
 
-        try {
-            result = actionInstance.perform(actionData.getWork(), actionData.getParameter());
+        result = actionInstance.perform(actionData.getWork(), actionData.getParameter());
 
-            actionData.setEndTime(Instant.now());
-            actionRepository.save(actionData);
-
-        } catch (Exception ex) {
-
-            actionData.setStartTime(null);
-            actionRepository.save(actionData);
-
-            throw ex;
-        }
+        actionData.setEndTime(Instant.now());
+        actionRepository.save(actionData);
 
         return result;
     }
@@ -206,6 +197,10 @@ public class ActionService {
     public ActionData getUnperformedAction(Work work, String actionName, Map<String, String> parameter) {
         List<ActionData> actionDatas = actionRepository.findByWorkAndActionNameAndEndTimeIsNull(work, actionName);
         return getMatchingAction(actionDatas, parameter);
+    }
+
+    public List<ActionData> getUnperformedActions() {
+        return actionRepository.findByStartTimeIsNullAndEndTimeIsNullOrderByRequestTime();
     }
 
     /**

@@ -80,6 +80,11 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
   * `actionsAfterSuccessfulIndexing` (list): A list of action beans to be run after indexing.
   * `actionsToRequestAsynchronously` (list): A list of action beans to be run after indexing. These actions will be requested only and will run asynchronously later.
 
+* **`cli`**:
+  * `performActions`:
+    * `continueOnError` (bool): `true` or `false` - Stop after an error or run further actions. Default: false
+    * `cron` (string: UNIX Cron format): If scheduling is used this is the schedule in [UNIX cron](https://en.wikipedia.org/wiki/Cron) format like `0 5 2 * * *`.
+
 * **`ui`**: Settings for UI - the web interface
   * `pagination`:
     * `elementsPerPage`:
