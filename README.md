@@ -1,4 +1,10 @@
 # Kitodo Mediaserver
-This project implements a media server for the digitization suite Kitodo.
+**Kitodo.Mediaserver** is a tool for management of digitization files. Features: 
 
-The project is very much work in progress and not yet intended for use in production.
+* Management of files concerning a digitized work
+* Creation of derivatives for viewers on demand or by import
+* Configurable caching of created files
+* Files may be put in quarantine in case of copyright issues
+* An open software architecture making it possible for developers to add new conversion features or other actions to be performed on works
+
+For further Information, please see the [Documentation](https://github.com/tuub/kitodo-mediaserver/tree/master/doc).
