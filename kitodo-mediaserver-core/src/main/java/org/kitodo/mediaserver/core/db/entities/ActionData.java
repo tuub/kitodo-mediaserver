@@ -17,26 +17,24 @@ import java.util.Map;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
 
 /**
  * ActionData entity for managing actions.
  */
 @Entity
-@NamedEntityGraph(name = "ActionData.parameter", attributeNodes = @NamedAttributeNode("parameter"))
 public class ActionData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "action_parameter")
     // @CollectionTable(name = "parameter") defines the table name and the column name in the table
     // -> "parameter_key"=key, "parameter"=value
