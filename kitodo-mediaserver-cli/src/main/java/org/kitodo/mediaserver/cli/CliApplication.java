@@ -35,6 +35,7 @@ public class CliApplication {
                 "spring.config.name:"
                     + "default,"
                     + "local,"
+                    + "secrets,"
                     + "application,"
                     + "dev",
                 "spring.config.additional-location:" + appDir + "/," + appDir + "/config/")

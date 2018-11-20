@@ -61,6 +61,7 @@ public class FileserverApplication extends SpringBootServletInitializer {
             .properties("spring.config.name:"
                 + "default,"
                 + "local,"
+                + "secrets,"
                 + "application,"
                 + "dev");
     }

@@ -1,6 +1,6 @@
-The Mediaserver provides two configuration files - *default.yml* and *local.yml*. *default.yml* provides default values and should not be modified. In the *local.yml* you can set your configuration.
+The Mediaserver uses multiple configuration files. Only *defaul.yml* is provided by the Mediaserver itself. It contains default values and should not be modified. In the optional *local.yml* you can set your configuration. And in the optional *secrets.yml* you can save usernames, passwords and other secret tokens that should not be stored in Git.
 
-The configuration file is in [YAML](https://en.wikipedia.org/wiki/YAML) format. 
+The configuration files are in [YAML](https://en.wikipedia.org/wiki/YAML) format.
 
 ## Database configuration
 
