@@ -15,13 +15,17 @@ import java.io.IOException;
 import org.kitodo.mediaserver.core.actions.AddFullPdfToMetsAction;
 import org.kitodo.mediaserver.core.actions.PreproduceDerivativesAction;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
+import org.kitodo.mediaserver.core.actions.StandaloneFullPdfFileConvertAction;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IMetsTransformer;
+import org.kitodo.mediaserver.core.api.IOcrReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
 import org.kitodo.mediaserver.core.api.IWatermarker;
+import org.kitodo.mediaserver.core.conversion.AwtImageFileConverter;
+import org.kitodo.mediaserver.core.conversion.PdfboxFileConverter;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
 import org.kitodo.mediaserver.core.processors.AppendingWatermarker;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
@@ -29,6 +33,7 @@ import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.core.processors.XsltMetsTransformer;
+import org.kitodo.mediaserver.core.processors.ocr.XsltOcrReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,9 +57,9 @@ public class ConversionConfiguration {
     private FileserverProperties fileserverProperties;
 
     @Bean
-    public IMetsReader masterFileMetsReader() throws IOException {
+    public IMetsReader masterFilesMetsReader() throws IOException {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        xsltMetsReader.setXslt(new ClassPathResource("xslt/masterFileFromMets.xsl"));
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/filesFromMets.xsl"));
         return xsltMetsReader;
     }
 
@@ -107,9 +112,9 @@ public class ConversionConfiguration {
     @Bean
     public IAction preproduceSingleFileAction() throws IOException {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
-        singleFileConvertAction.setMetsReader(masterFileMetsReader());
+        singleFileConvertAction.setMetsReader(masterFilesMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.setConverter(preproduceFileConverter());
+        singleFileConvertAction.getConverters().put("application/pdf", preproduceFileConverter());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
     }
@@ -121,9 +126,9 @@ public class ConversionConfiguration {
      * @throws IOException by severe errors
      */
     @Bean(name = "preproduceDerivativesAction")
-    public IAction preproduceDerivativesAction() throws IOException {
+    public IAction preproduceDerivativesAction() throws Exception {
         PreproduceDerivativesAction preproduceDerivativesAction = new PreproduceDerivativesAction();
-        preproduceDerivativesAction.setConvertAction(preproduceSingleFileAction());
+        preproduceDerivativesAction.setConvertAction(awtPdfboxSingleFileConvertAction());
         preproduceDerivativesAction.setReadResultParser(listToMapParser());
         preproduceDerivativesAction.setValueConcatSeparator(METS_READER_CONCAT_SEPARATOR);
         preproduceDerivativesAction.setMetsReader(requestUrlsMetsReader());
@@ -139,9 +144,10 @@ public class ConversionConfiguration {
     @Bean(name = "scalingWatermarkingConvertAction")
     public IAction scalingConversionAction() throws Exception {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
-        singleFileConvertAction.setMetsReader(masterFileMetsReader());
+        singleFileConvertAction.setMetsReader(masterFilesMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.setConverter(singleFileOnDemandConverterScalingWatermarker());
+        singleFileConvertAction.getConverters().put("application/pdf", singleFileOnDemandConverterScalingWatermarker());
+        singleFileConvertAction.getConverters().put("image/jpeg", singleFileOnDemandConverterScalingWatermarker());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
     }
@@ -155,9 +161,10 @@ public class ConversionConfiguration {
     @Bean(name = "appendingWatermarkingConvertAction")
     public IAction appendingConversionAction() throws Exception {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
-        singleFileConvertAction.setMetsReader(masterFileMetsReader());
+        singleFileConvertAction.setMetsReader(masterFilesMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.setConverter(singleFileOnDemandConverterAppendingWatermarker());
+        singleFileConvertAction.getConverters().put("application/pdf", singleFileOnDemandConverterAppendingWatermarker());
+        singleFileConvertAction.getConverters().put("image/jpeg", singleFileOnDemandConverterAppendingWatermarker());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
     }
@@ -201,6 +208,87 @@ public class ConversionConfiguration {
         simpleIMSingleFileConverter.setWatermarker(appendingWatermarker());
         return simpleIMSingleFileConverter;
     }
+
+    /**
+     * A converter to convert master images to target image files.
+     */
+    @Bean
+    public IConverter awtFileConverter() {
+        AwtImageFileConverter converter = new AwtImageFileConverter();
+        converter.setConversionTargetPath(fileserverProperties.getCachePath());
+        converter.setSaveConvertedFile(fileserverProperties.isCaching());
+        return converter;
+    }
+
+    /**
+     * A converter to convert master images to PDF files.
+     */
+    @Bean
+    public IConverter pdfboxFileConverter() {
+        PdfboxFileConverter converter = new PdfboxFileConverter();
+        converter.setConversionTargetPath(fileserverProperties.getCachePath());
+        converter.setSaveConvertedFile(fileserverProperties.isCaching());
+        return converter;
+    }
+
+    /**
+     * A converter to preproduce PDF files.
+     */
+    @Bean
+    public IConverter preproducePdfboxFileConverter() {
+        PdfboxFileConverter converter = new PdfboxFileConverter();
+        converter.setConversionTargetPath(importerProperties.getWorkFilesPath());
+        converter.setSaveConvertedFile(true);
+        return converter;
+    }
+
+    /**
+     * A convert action to convert a single master file to a target file type using PDFBox for PDF and AWT for images.
+     */
+    @Bean(name = "awtPdfboxSingleFileConvertAction")
+    public IAction awtPdfboxSingleFileConvertAction() throws Exception {
+        SingleFileConvertAction convertAction = new SingleFileConvertAction();
+        convertAction.setMetsReader(masterFilesMetsReader());
+        convertAction.setReadResultParser(listToMapParser());
+        convertAction.getConverters().put("image/jpeg", awtFileConverter());
+        convertAction.getConverters().put("application/pdf", pdfboxFileConverter());
+        convertAction.setPatternExtractor(patternExtractor());
+        return convertAction;
+    }
+
+    /**
+     * Preproduce a PDF file with all pages.
+     */
+    @Bean(name = "preproduceFullPdfFileConvertAction")
+    public IAction preproduceFullPdfFileConvertAction() throws Exception {
+        StandaloneFullPdfFileConvertAction convertAction = new StandaloneFullPdfFileConvertAction();
+        convertAction.setMetsReader(masterFilesMetsReader());
+        convertAction.setFullPdfReader(fullPdfUrlMetsreader());
+        convertAction.setReadResultParser(listToMapParser());
+        convertAction.getConverters().put("application/pdf", preproducePdfboxFileConverter());
+        return convertAction;
+    }
+
+    /**
+     * A reader using XSLT to read the fulltext OCR file.
+     */
+    @Bean(name = "ocrReader")
+    public IOcrReader xsltOcrReader() {
+        XsltOcrReader ocrReader = new XsltOcrReader();
+        ocrReader.getFormats().put("<alto ", new ClassPathResource("xslt/ocr/alto.xsl"));
+        return ocrReader;
+    }
+
+    /**
+     * A reader using XSLT to get the fulltext URL from METS file.
+     */
+    @Bean
+    public IMetsReader fullPdfUrlMetsreader() throws IOException {
+        XsltMetsReader xsltMetsReader = new XsltMetsReader();
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/fullPdfUrlFromMets.xsl"));
+        return xsltMetsReader;
+    }
+
 
 
 }

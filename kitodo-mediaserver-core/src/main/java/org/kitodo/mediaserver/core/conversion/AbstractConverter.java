@@ -14,6 +14,7 @@ package org.kitodo.mediaserver.core.conversion;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.TreeMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IConverter;
@@ -44,6 +45,9 @@ public abstract class AbstractConverter implements IConverter {
     protected ConversionProperties.Pdf conversionPropertiesPdf;
 
     @Autowired
+    protected ConversionProperties.Watermark conversionPropertiesWatermark;
+
+    @Autowired
     protected MediaServerUtils mediaServerUtils;
 
     public void setSaveConvertedFile(boolean saveConvertedFile) {
@@ -61,16 +65,29 @@ public abstract class AbstractConverter implements IConverter {
     /**
      * Checks that all required parameter are present.
      *
-     * @param master the master file
+     * @param pages a map (key=sorting order of files) of maps (key={master,fulltext,...}) with work files
      * @param parameter the parameter map
      * @param requiredParams required parameter
      * @throws Exception by fatal errors
      */
-    protected void checkParams(File master, Map<String, String> parameter, String ... requiredParams) {
+    protected void checkParams(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter, String ... requiredParams) {
 
-        if (master == null || !master.canRead() || !master.isFile()) {
-            throw new IllegalArgumentException("The master file " + master + " does not exist or cannot be read.");
+        if (pages == null) {
+            throw new IllegalArgumentException("'pages' must not be null.");
         }
+        if (pages.size() == 0) {
+            throw new IllegalArgumentException("'pages' must not be empty.");
+        }
+
+        pages.values().forEach(page -> {
+            if (page == null || page.get("master") == null) {
+                throw new IllegalArgumentException("There is no master file defined.");
+            }
+            File file = page.get("master").getFile();
+            if (file == null || !file.canRead() || !file.isFile()) {
+                throw new IllegalArgumentException("The master file " + file + " does not exist or cannot be read.");
+            }
+        });
 
         mediaServerUtils.checkForRequiredParameter(parameter, requiredParams);
     }

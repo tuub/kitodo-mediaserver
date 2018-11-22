@@ -5,11 +5,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import org.junit.Before;
 import org.junit.Test;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.conversion.FileEntry;
 import org.kitodo.mediaserver.core.db.entities.Work;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for the utilities.
@@ -131,6 +140,91 @@ public class MediaServerUtilsTest {
         mediaServerUtils.getWorkFileFromUrl(work, "bullshit", "rootUrl");
     }
 
+    @Test
+    public void parseMetsFilesResult() {
+        // given
+        FileserverProperties fileserverProperties = new FileserverProperties();
+        fileserverProperties.setRootUrl("http://a/");
+        mediaServerUtils.setFileserverProperties(fileserverProperties);
+
+        Map<String, String> metsResult = new HashMap<>();
+        metsResult.put("1", "http://a/UA123/image1.tif|image/tiff|image/jpeg|http://a/UA123/fulltext1.xml");
+        metsResult.put("2", "http://a/UA123/image2.tif|image/tiff|image/jpeg|http://a/UA123/fulltext2.xml");
+        metsResult.put("3", "http://a/UA123/image3.tif|image/tiff||http://a/UA123/fulltext3.xml");
+        metsResult.put("4", "http://a/UA123/image4.tif|image/tiff||");
+
+        Work work = new Work("UA123", "Flugblatt");
+        work.setPath("/srv/path/UA123");
+
+        // when
+        TreeMap<Integer, Map<String, FileEntry>> pages = mediaServerUtils.parseMetsFilesResult(metsResult, work);
+
+        //then
+        assertThat(pages).isNotNull().hasSize(4);
+
+        org.hamcrest.MatcherAssert.assertThat(pages, allOf(
+            hasEntry(
+                is(1),
+                allOf(
+                    hasEntry(is("master"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/image1.tif"))),
+                        hasProperty("mimeType", is("image/tiff"))
+                    )),
+                    hasEntry(is("fulltext"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/fulltext1.xml"))),
+                        hasProperty("mimeType", is(nullValue()))
+                    )),
+                    hasEntry(is("target"), allOf(
+                        hasProperty("file", is(nullValue())),
+                        hasProperty("mimeType", is("image/jpeg"))
+                    ))
+                )
+            ),
+            hasEntry(
+                is(2),
+                allOf(
+                    hasEntry(is("master"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/image2.tif"))),
+                        hasProperty("mimeType", is("image/tiff"))
+                    )),
+                    hasEntry(is("fulltext"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/fulltext2.xml"))),
+                        hasProperty("mimeType", is(nullValue()))
+                    )),
+                    hasEntry(is("target"), allOf(
+                        hasProperty("file", is(nullValue())),
+                        hasProperty("mimeType", is("image/jpeg"))
+                    ))
+                )
+            ),
+            hasEntry(
+                is(3),
+                allOf(
+                    hasEntry(is("master"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/image3.tif"))),
+                        hasProperty("mimeType", is("image/tiff"))
+                    )),
+                    hasEntry(is("fulltext"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/fulltext3.xml"))),
+                        hasProperty("mimeType", is(nullValue()))
+                    )),
+                    not(hasEntry(is("target"), anything()))
+                )
+            ),
+            hasEntry(
+                is(4),
+                allOf(
+                    hasEntry(is("master"), allOf(
+                        hasProperty("file", hasProperty("path", is("/srv/path/UA123/image4.tif"))),
+                        hasProperty("mimeType", is("image/tiff"))
+                    )),
+                    not(hasEntry(is("fulltext"), anything())),
+                    not(hasEntry(is("target"), anything()))
+                )
+            )
+        ));
+
+    }
 
 
 }

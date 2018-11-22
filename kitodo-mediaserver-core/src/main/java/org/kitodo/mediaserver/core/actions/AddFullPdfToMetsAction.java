@@ -17,6 +17,7 @@ import java.util.Map;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IMetsTransformer;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,7 @@ public class AddFullPdfToMetsAction implements IAction {
     private IMetsTransformer metsTransformer;
     private MediaServerUtils mediaServerUtils;
     private FileserverProperties fileserverProperties;
-
-    public void setMetsTransformer(IMetsTransformer metsTransformer) {
-        this.metsTransformer = metsTransformer;
-    }
+    private MetsProperties metsProperties;
 
     @Autowired
     public void setMediaServerUtils(MediaServerUtils mediaServerUtils) {
@@ -44,6 +42,11 @@ public class AddFullPdfToMetsAction implements IAction {
     @Autowired
     public void setFileserverProperties(FileserverProperties fileserverProperties) {
         this.fileserverProperties = fileserverProperties;
+    }
+
+    @Autowired
+    public void setMetsProperties(MetsProperties metsProperties) {
+        this.metsProperties = metsProperties;
     }
 
     public AddFullPdfToMetsAction(IMetsTransformer metsTransformer) {
@@ -60,7 +63,8 @@ public class AddFullPdfToMetsAction implements IAction {
         try {
             metsTransformer.transform(sourceMets, destMets,
                 new AbstractMap.SimpleEntry<>("rootUrl", fileserverProperties.getRootUrl()),
-                new AbstractMap.SimpleEntry<>("workId", work.getId())
+                new AbstractMap.SimpleEntry<>("workId", work.getId()),
+                new AbstractMap.SimpleEntry<>("downloadGrpId", metsProperties.getDownloadFileGrp())
             );
         } catch (Exception e) {
             throw new Exception("AddFullPdfToMetsAction failed.", e);

@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Map;
-
+import java.util.TreeMap;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IMOperation;
 import org.im4java.core.ImageCommand;
@@ -59,18 +59,18 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
     /**
      * Converts a given file. Returns an input stream with the result.
      *
-     * @param master    the master file
+     * @param pages Map of pages containing files
      * @param parameter a map of parameter
      * @return an output stream of the converted file
      * @throws Exception by fatal errors
      */
     @Override
-    public InputStream convert(File master, Map<String, String> parameter) throws Exception {
+    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter) throws Exception {
 
         Notifier notifier = notifierFactory.getObject();
         String message;
 
-        checkParams(master, parameter, "derivativePath", "target_mime");
+        checkParams(pages, parameter, "derivativePath", "target_mime");
 
         int size = getConversionSize(parameter);
 
@@ -85,14 +85,14 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
         if (!fileAlreadyExists) {
             try {
                 IMOperation operation = new IMOperation();
-                operation.addImage(master.getAbsolutePath());
+                operation.addImage(pages.get(0).get("master").getFile().getAbsolutePath());
                 operation.resize(size);
 
                 if (addWatermark) {
                     try {
-                        watermarker.perform(operation, master, size);
+                        watermarker.perform(operation, pages.get(0).get("master").getFile(), size);
                     } catch (Exception e) {
-                        message = "Error creating watermark on file " + master.getAbsolutePath() + ": " + e;
+                        message = "Error creating watermark on file " + pages.get(0).get("master").getFile().getAbsolutePath() + ": " + e;
                         LOGGER.error(message, e);
                         notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
                     }

@@ -15,7 +15,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -23,6 +26,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.conversion.FileEntry;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.AbstractEnvironment;
@@ -40,9 +45,16 @@ public class MediaServerUtils {
 
     private Environment environment;
 
+    private FileserverProperties fileserverProperties;
+
     @Autowired
     public void setEnvironment(Environment environment) {
         this.environment = environment;
+    }
+
+    @Autowired
+    public void setFileserverProperties(FileserverProperties fileserverProperties) {
+        this.fileserverProperties = fileserverProperties;
     }
 
     /**
@@ -155,6 +167,44 @@ public class MediaServerUtils {
      */
     public String getUrlStringForMetsFile(String rootUrl, String workId) {
         return rootUrl + "/" + workId + "/" + workId + ".xml";
+    }
+
+    /**
+     * Create a page map from METS results that may be used for conversion.
+     *
+     * @param metsResult the result map from the MetsResultParser
+     * @return a TreeMap with all files of the work
+     */
+    public TreeMap<Integer, Map<String, FileEntry>> parseMetsFilesResult(Map<String, String> metsResult, Work work) {
+        return metsResult.entrySet().stream()
+            .collect(Collectors.toMap(
+                // key of Map
+                entry -> Integer.parseInt(entry.getKey()),
+                // value of Map
+                entry -> {
+                    String[] parts = entry.getValue().split("\\|", -1);
+                    Map<String, FileEntry> files = new HashMap<>();
+                    if (StringUtils.isNotBlank(parts[0])) {
+                        FileEntry fileEntry = new FileEntry();
+                        fileEntry.setFile(getWorkFileFromUrl(work, parts[0], fileserverProperties.getRootUrl()));
+                        fileEntry.setMimeType(parts[1]);
+                        files.put("master", fileEntry);
+                    }
+                    if (StringUtils.isNotBlank(parts[3])) {
+                        FileEntry fileEntry = new FileEntry();
+                        fileEntry.setFile(getWorkFileFromUrl(work, parts[3], fileserverProperties.getRootUrl()));
+                        files.put("fulltext", fileEntry);
+                    }
+                    if (StringUtils.isNotBlank(parts[2])) {
+                        FileEntry fileEntry = new FileEntry();
+                        fileEntry.setMimeType(parts[2]);
+                        files.put("target", fileEntry);
+                    }
+                    return files;
+                },
+                (oldValue, newValue) -> newValue,
+                TreeMap::new
+            ));
     }
 
     /**
