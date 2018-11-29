@@ -98,6 +98,12 @@ indexing:
   indexScriptUrl: https://example.com/indexWork.php
   indexScriptMetsUrlArgName: doc
 
+doi:
+  dataCiteURL: https://mds.test.datacite.org/doi/
+  dataCiteUser: nobody
+  dataCitePassword: secret
+  doiLandingPagePattern: https://digital.example.com/works/{workId}
+  doiDataReaderXsl: xslt/getDoiFromMets.xsl
 
 importer:
   hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/
