@@ -94,10 +94,15 @@ public class SetAllowedNetworkAction implements IAction {
                 Files.move(mets.toPath(), originalMets.toPath());
 
                 // create reduced METS file
-                TransformerFactory factory = TransformerFactory.newInstance();
-                ClassPathResource resource = new ClassPathResource(metsProperties.getWorkLockReduceMetsXsl());
-                Transformer transformer = factory.newTransformer(new StreamSource(resource.getInputStream()));
-                transformer.transform(new StreamSource(originalMets), new StreamResult(mets));
+                try {
+                    TransformerFactory factory = TransformerFactory.newInstance();
+                    ClassPathResource resource = new ClassPathResource(metsProperties.getWorkLockReduceMetsXsl());
+                    Transformer transformer = factory.newTransformer(new StreamSource(resource.getInputStream()));
+                    transformer.transform(new StreamSource(originalMets), new StreamResult(mets));
+                } catch (Exception ex) {
+                    Files.move(originalMets.toPath(), mets.toPath());
+                    throw ex;
+                }
             }
         }
 
