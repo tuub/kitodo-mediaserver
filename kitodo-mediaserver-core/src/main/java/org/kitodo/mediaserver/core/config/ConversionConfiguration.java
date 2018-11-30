@@ -12,12 +12,14 @@
 package org.kitodo.mediaserver.core.config;
 
 import java.io.IOException;
+import org.kitodo.mediaserver.core.actions.AddFullPdfToMetsAction;
 import org.kitodo.mediaserver.core.actions.PreproduceDerivativesAction;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
+import org.kitodo.mediaserver.core.api.IMetsTransformer;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
@@ -26,6 +28,7 @@ import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
+import org.kitodo.mediaserver.core.processors.XsltMetsTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -75,6 +78,11 @@ public class ConversionConfiguration {
         PatternExtractor patternExtractor = new PatternExtractor();
         patternExtractor.setRegexList(conversionProperties.getPathExtractionPatterns());
         return patternExtractor;
+    }
+
+    @Bean
+    public IMetsTransformer fullPdfMetsTransformer() {
+        return new XsltMetsTransformer(new ClassPathResource("xslt/fullPdfToMets.xsl"));
     }
 
     @Bean
@@ -154,6 +162,15 @@ public class ConversionConfiguration {
         return singleFileConvertAction;
     }
 
+    /**
+     * An action bean to add an METS entry for full PDF download to be used after import.
+     *
+     * @return the action
+     */
+    @Bean
+    public IAction addFullPdfToMetsAction() {
+        return new AddFullPdfToMetsAction(fullPdfMetsTransformer());
+    }
 
     /**
      * A single file converter for on-demand-conversions. Uses caching according to the configurations.
