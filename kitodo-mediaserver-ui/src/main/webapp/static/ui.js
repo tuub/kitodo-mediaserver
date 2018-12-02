@@ -75,13 +75,13 @@ $(document).ready(function(){
     });
 
     // works search field: tooltip
-    $('form[action="/works"] input[type="text"][name="search"]').popup({
+    $('.work-search-input').popup({
         inline: true,
         hoverable: true
     });
 
     // works search field: clear button
-    $('form[action="/works"] i.times.link.icon').click(function(e){
+    $('.work-search-clear').click(function(e){
         $(this).siblings('input').val('');
         $(this).closest('form').submit();
     });
