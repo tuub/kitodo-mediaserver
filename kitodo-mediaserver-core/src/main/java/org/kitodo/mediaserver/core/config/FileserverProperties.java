@@ -32,6 +32,7 @@ public class FileserverProperties {
     private String convertAction;
     private Map<String, List<String>> allowedNetworks;
     private List<String> errorNotificationEmail;
+    private String disabledWorkImagePath;
 
     public boolean isCaching() {
         return caching;
@@ -103,5 +104,13 @@ public class FileserverProperties {
 
     public void setErrorNotificationEmail(List<String> errorNotificationEmail) {
         this.errorNotificationEmail = errorNotificationEmail;
+    }
+
+    public String getDisabledWorkImagePath() {
+        return disabledWorkImagePath;
+    }
+
+    public void setDisabledWorkImagePath(String disabledWorkImagePath) {
+        this.disabledWorkImagePath = disabledWorkImagePath;
     }
 }

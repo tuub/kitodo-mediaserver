@@ -107,6 +107,7 @@ public class FileController {
 
         String completePath = request.getRequestURL().toString();
         String derivativePath = StringUtils.substringAfter(completePath, workId);
+        boolean workDisallowed = false;
 
         if (!optionalWork.isPresent()) {
             message = "Work with id " + workId + " not found";
@@ -138,25 +139,34 @@ public class FileController {
 
                 // if work is disabled and request is not on METS/MODS, block the request
                 if (!isAllowedIpAddress(senderIp, subnets) && !StringUtils.endsWith(derivativePath, workId + ".xml")) {
-                    message = "Work with id " + workId + " is disabled or the source IP address is not allowed";
-                    LOGGER.info(message);
-                    throw new HttpForbiddenException(message);
+                    if ((new File(fileserverProperties.getDisabledWorkImagePath()).isFile())) {
+                        workDisallowed = true;
+                    } else {
+                        message = "Work with id " + workId + " is disabled or the source IP address is not allowed";
+                        LOGGER.info(message);
+                        throw new HttpForbiddenException(message);
+                    }
                 }
             }
         }
 
         boolean usingCache = false;
 
-        File derivative = new File(work.getPath(), derivativePath);
-
-        if (!derivative.exists()) {
-            derivative = new File(fileserverProperties.getCachePath(), workId + "/" + derivativePath);
-            usingCache = true;
+        File derivative;
+        if (workDisallowed) {
+            derivative = new File(fileserverProperties.getDisabledWorkImagePath());
+        } else {
+            derivative = new File(work.getPath(), derivativePath);
+            if (!derivative.exists()) {
+                derivative = new File(fileserverProperties.getCachePath(), workId + "/" + derivativePath);
+                usingCache = true;
+            }
         }
+
 
         InputStream inputStream = null;
         try {
-            if (derivative.exists() && derivative.isFile()) {
+            if (derivative.isFile()) {
 
                 // Perform a touch on the file to set last accessed time
                 if (usingCache) {

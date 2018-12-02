@@ -50,9 +50,9 @@
         <xsl:if test="@ID=$dmdsec_id">
             <mets:dmdSec>
                 <xsl:attribute name="ID"><xsl:value-of select="$dmdsec_id"/></xsl:attribute>
-                <mets:mdWrap>
+                <mets:mdWrap MDTYPE="MODS">
                     <mets:xmlData>
-                        <mods:mods>
+                        <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
                             <xsl:for-each select="mets:mdWrap/mets:xmlData/mods:mods">
                                 <xsl:for-each select="mods:titleInfo">
                                     <xsl:copy-of select="self::node()"/>
@@ -68,11 +68,12 @@
         </xsl:if>
     </xsl:template>
 
-    <!-- Remove certain mets sections -->
+    <!-- Remove certain mets sections
     <xsl:template match="//mets:structMap[@TYPE='PHYSICAL']"/>
 
     <xsl:template match="//mets:structLink"/>
 
     <xsl:template match="//mets:fileSec"/>
+    -->
 
 </xsl:stylesheet>
