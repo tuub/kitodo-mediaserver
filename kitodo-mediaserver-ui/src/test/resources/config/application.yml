@@ -28,3 +28,7 @@ ui:
     # When disabling a work wether to reduce the METS/MODS file. Default value
     reduceMets: true
     actions:
+
+# This is just to make sure that the build doesn't break
+doi:
+  doiDataReaderXsl: xslt/getDoiFromMets.xsl
