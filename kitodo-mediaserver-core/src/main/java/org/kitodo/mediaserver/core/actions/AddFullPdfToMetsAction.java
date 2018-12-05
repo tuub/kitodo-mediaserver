@@ -24,7 +24,6 @@ import org.springframework.util.StringUtils;
 
 /**
  * Adds a Full PDF DOWNLOAD entry to a METS file.
- * If destFile parameter is unset, sourceFile gets overwritten.
  */
 public class AddFullPdfToMetsAction implements IAction {
 
@@ -50,10 +49,22 @@ public class AddFullPdfToMetsAction implements IAction {
         this.metsTransformer = metsTransformer;
     }
 
+    /**
+     * Adds the pdf entry to the mets file.
+     * If destFile parameter is unset, sourceFile gets overwritten.
+     *
+     * @param work a work entity
+     * @param parameter a map of parameter, may be null
+     * @return null
+     * @throws Exception by severe errors
+     */
     @Override
     public Object perform(Work work, Map<String, String> parameter) throws Exception {
 
-        String destFilename = parameter.get("destFile");
+        String destFilename = null;
+        if (parameter != null) {
+            destFilename = parameter.get("destFile");
+        }
         File sourceMets = mediaServerUtils.getMetsFileForWork(work);
         File destMets = StringUtils.hasText(destFilename) ? new File(destFilename) : sourceMets;
 
