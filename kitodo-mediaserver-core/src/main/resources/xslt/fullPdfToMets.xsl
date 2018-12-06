@@ -22,6 +22,11 @@
     <!-- The file ID used inside the METS file -->
     <xsl:variable name="fileid" select="'FILE_FULLPDF_DOWNLOAD'"/>
 
+    <!-- If there already is a FullPDF entry, find it -->
+    <xsl:variable name="presentFileId">
+        <xsl:value-of select="/mets:mets/mets:structMap[@TYPE='PHYSICAL']/mets:div/mets:fptr[last()]/@FILEID"/>
+    </xsl:variable>
+
     <!-- Replace string function -->
     <xsl:template name="replace">
         <xsl:param name="text" />
@@ -61,9 +66,14 @@
 
     <!-- Add entry to fileGroup -->
     <xsl:template match="//mets:mets/mets:fileSec/mets:fileGrp[@USE=$downloadGrpId]/*[1]">
-        <mets:file ID="{$fileid}" MIMETYPE="application/pdf">
-            <mets:FLocat LOCTYPE="URL" xlink:href="{$url}"/>
-        </mets:file>
+
+        <!-- Add FullPDF entry, if there is non yet -->
+        <xsl:if test="$presentFileId = ''">
+            <mets:file ID="{$fileid}" MIMETYPE="application/pdf">
+                <mets:FLocat LOCTYPE="URL" xlink:href="{$url}"/>
+            </mets:file>
+        </xsl:if>
+
         <xsl:copy>
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
@@ -71,7 +81,12 @@
 
     <!-- Add entry to structMap -->
     <xsl:template match="//mets:mets/mets:structMap[@TYPE='PHYSICAL']/mets:div[1]/*[1]">
-        <mets:fptr FILEID="{$fileid}"/>
+
+        <!-- Add FullPDF entry, if there is non yet -->
+        <xsl:if test="$presentFileId = ''">
+            <mets:fptr FILEID="{$fileid}"/>
+        </xsl:if>
+
         <xsl:copy>
             <xsl:apply-templates select="@* | node()"/>
         </xsl:copy>
