@@ -18,40 +18,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
-import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
-import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.conversion.FileEntry;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ConversionException;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 
 /**
- * A class defining the convert action of a single file.
+ * An action to convert all master images to one PDF file.
  */
-public class SingleFileConvertAction implements IAction {
+public class StandaloneFullPdfFileConvertAction implements IAction {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SingleFileConvertAction.class);
-
-    private FileserverProperties fileserverProperties;
     private MetsProperties metsProperties;
     private IMetsReader metsReader;
+    private IMetsReader fullPdfMetsReader;
     private IReadResultParser readResultParser;
     private Map<String, IConverter> converters = new HashMap<>();
-    private IExtractor patternExtractor;
     private MediaServerUtils mediaServerUtils;
-
-    @Autowired
-    public void setFileserverProperties(FileserverProperties fileserverProperties) {
-        this.fileserverProperties = fileserverProperties;
-    }
 
     @Autowired
     public void setMetsProperties(MetsProperties metsProperties) {
@@ -66,12 +56,12 @@ public class SingleFileConvertAction implements IAction {
         this.readResultParser = readResultParser;
     }
 
-    public Map<String, IConverter> getConverters() {
-        return converters;
+    public void setFullPdfReader(IMetsReader fullPdfMetsReader) {
+        this.fullPdfMetsReader = fullPdfMetsReader;
     }
 
-    public void setPatternExtractor(IExtractor patternExtractor) {
-        this.patternExtractor = patternExtractor;
+    public Map<String, IConverter> getConverters() {
+        return converters;
     }
 
     @Autowired
@@ -80,7 +70,7 @@ public class SingleFileConvertAction implements IAction {
     }
 
     /**
-     * Performes a conversion of the requested url a given work.
+     * Performes a conversion of a given work.
      *
      * @param work the work entity
      * @param parameter conversion parameter
@@ -89,35 +79,33 @@ public class SingleFileConvertAction implements IAction {
      */
     public InputStream perform(Work work, Map<String, String> parameter) throws Exception {
 
-        mediaServerUtils.checkForRequiredParameter(parameter, "requestUrl");
-        String requestUrl = parameter.get("requestUrl");
+        mediaServerUtils.checkForRequiredParameter(parameter);
 
         File metsFile = mediaServerUtils.getMetsFileForWork(work);
+        String workIdRegex = ".*?(" + Pattern.quote(work.getId()) + "/.*)";
+
+        List<String> lines = fullPdfMetsReader.read(metsFile,
+            new AbstractMap.SimpleEntry<>("downloadGrpId", metsProperties.getDownloadFileGrp()));
+        Map<String, String> fullPdfResult = (Map<String, String>) readResultParser.parse(lines);
+        String fullPdfUrl = fullPdfResult.get("fullPdfUrl");
+
+        if (!StringUtils.hasText(fullPdfUrl)) {
+            throw new Exception("No full PDF file URL found in METS file.");
+        }
+
+        parameter.put("derivativePath", fullPdfUrl.replaceFirst(workIdRegex, "$1"));
 
         /* Gets the path of the original file for the requested file from the mets file */
-        List<String> lines = metsReader.read(
-                metsFile,
-                new AbstractMap.SimpleEntry<>("requestUrl", requestUrl),
-                new AbstractMap.SimpleEntry<>("sourceGrpId", metsProperties.getOriginalFileGrp()),
-                new AbstractMap.SimpleEntry<>("fulltextGrpId", metsProperties.getFulltextFileGrp())
+        lines = metsReader.read(
+            metsFile,
+            new AbstractMap.SimpleEntry<>("sourceGrpId", metsProperties.getOriginalFileGrp()),
+            new AbstractMap.SimpleEntry<>("fulltextGrpId", metsProperties.getFulltextFileGrp())
         );
         Map<String, String> metsResult = (Map<String, String>) readResultParser.parse(lines);
 
         TreeMap<Integer, Map<String, FileEntry>> pages = mediaServerUtils.parseMetsFilesResult(metsResult, work);
 
-        FileEntry sourceFile = null;
-        if (!pages.isEmpty()) {
-            sourceFile = pages.firstEntry().getValue().get("master");
-        }
-        if (sourceFile == null) {
-            throw new ConversionException("No source url for requested url " + requestUrl
-                + " found in mets file " + metsFile.getAbsolutePath());
-        }
-
-        parameter.put("size", patternExtractor.extract(requestUrl));
-        parameter.put("target_mime", pages.firstEntry().getValue().get("target").getMimeType());
-
-        LOGGER.info("Converting file from master " + sourceFile);
+        parameter.put("target_mime", "application/pdf");
 
         IConverter converter = converters.get(parameter.get("target_mime"));
         if (converter == null) {

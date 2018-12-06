@@ -17,6 +17,7 @@
 
     <xsl:param name="rootUrl"/>
     <xsl:param name="workId"/>
+    <xsl:param name="downloadGrpId"/>
 
     <!-- The file ID used inside the METS file -->
     <xsl:variable name="fileid" select="'FILE_FULLPDF_DOWNLOAD'"/>
@@ -59,7 +60,7 @@
     </xsl:template>
 
     <!-- Add entry to fileGroup -->
-    <xsl:template match="//mets:mets/mets:fileSec/mets:fileGrp[@USE='DOWNLOAD']/*[1]">
+    <xsl:template match="//mets:mets/mets:fileSec/mets:fileGrp[@USE=$downloadGrpId]/*[1]">
         <mets:file ID="{$fileid}" MIMETYPE="application/pdf">
             <mets:FLocat LOCTYPE="URL" xlink:href="{$url}"/>
         </mets:file>

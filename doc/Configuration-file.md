@@ -28,13 +28,18 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
   * `filePathPattern` (string: URL path): The URL path to use for the file server. `/files/{workId}/**` will work for an URL like *http://<span>d</span>omain.de/files/ABC123/...*.
   * `caching` (bool): `true` or `false` - Enable or disable caching of produced derivatives. 
   * `cachePath` (string: filesystem path): Path to the cache files. The folder needs write permissions from the fileserver process.
+  * `convertAction` (string: Spring bean): A Spring Action Bean defining the convert action. By default there are three convert actions available.. `scalingWatermarkingConvertAction` and `appendingWatermarkingConvertAction` are using ImageMagick or GraphicsMagic shell command. `awtPdfboxSingleFileConvertAction` uses our own conversion implementation. Therefor the widely tested ImageMagick variant might be more stable. But with the `awtPdfboxSingleFileConvertAction` you can create searchable PDF files using your OCR texts.
   * `cacheClearCron` (string: UNIX Cron format): If scheduling is used this is the schedule in [UNIX cron](https://en.wikipedia.org/wiki/Cron) format like `0 5 2 * * *`.
   * `cacheClearSince` (int: seconds): File that are touched since this value should be deleted by a cache clear run.
   * `allowedNetworks` (map: IP subnets): Contains multiple IP subnet definitions defining the access level for a work. Every work can have one network. There are two default networks: `global: 0.0.0.0/0,::/0` allows access from everywhere. `disabled: 0.0.0.0/32,::/128` disables access for everyone. `disabled` also allows to set a comment and to create a reduced METS/MODS file with less informations about the work.
+  * `disabledWorkImagePath` (String: filesystem path): A path to a image file which is used as placeholder for disabled works. 
 
 * **`conversion`**:
+  * `pdf`:
+    * `defaultSize` (int): The default maximum size in pixels the images are resized to when converting to PDF format including extension for watermarks.
+    * `addOcrText` (bool): `true` or `false` - Whether to add OCR text layer to PDF or not. See also: `mets.fulltextFileGrp`
   * `jpeg`:
-    * `defaultSize` (int): The default size in pixels the images are resized to.
+    * `defaultSize` (int): The default maximum size in pixels the images are resized to when converting to image format including extension for watermarks.
   * `useGraphicsMagick` (bool): `true` or `false` - Whether to use [GraphicsMagick](http://www.graphicsmagick.org/) for image conversion.
   * `pathExtractionPatterns` (list of regex strings): TODO
   * `watermark`:
@@ -59,12 +64,20 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
       * `addY` (int: pixels): Defines how many pixels should be added to the canvas. Check watermark image dimensions (image mode), font size (text mode) and offsets to achieve good results.
 
 * **`mets`**:
-  * `originalFileGrpSuffix` (string): `ORIGINAL`, `PRESENTATION` or `FULLTEXT` - Which file group from the METS file should be used.
+  * `originalFileGrp` (string): e.g. `ORIGINAL` or `PRESENTATION` - Which file group from the METS file should be used as master source.
+  * `fulltextFileGrp` (string): e.g. `FULLTEXT` - METS file group containing OCR text files for inclusion into PDF files.
   * `workLockReduceMetsXsl` (string: path): The path to the XSLT transformation file. This file is used to create a reduced METS/MODS file when disbaling a work.
 
 * **`indexing`**:
   * `indexScriptUrl` (string: URL): The URL to Kitodo.Presentation forcing an reindexing of the work.
   * `indexScriptMetsUrlArgName` (string): The URL parameter name containing the URL to the METS/MODS XML file when triggering the reindexing process in Kitodo.Presentation.
+
+* **`doi`**:
+  * `dataCiteURL` (string: URL): The DOI registration API URL
+  * `dataCiteUser` (string): DOI API username
+  * `dataCitePassword` (string): DOI API password
+  * `doiLandingPagePattern` (string): The URL to use as destination for DOIs. You may use "{workId}" as palceholder for your workIds. Example: "https://digital.example.com/works/{workId}"
+  * `doiDataReaderXsl` (string: class resources path): Path to a XSLT file to read DOIs from METS files
 
 * **`importer`**:
   * `hotfolderPath` (string: filesystem path): The directory where the mediaserver should check for new works to import.

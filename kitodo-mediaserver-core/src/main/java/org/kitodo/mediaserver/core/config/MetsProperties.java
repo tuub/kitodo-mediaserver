@@ -21,15 +21,33 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "mets")
 public class MetsProperties {
 
-    private String originalFileGrpSuffix;
+    private String originalFileGrp;
+    private String fulltextFileGrp;
+    private String downloadFileGrp;
     private String workLockReduceMetsXsl;
 
-    public String getOriginalFileGrpSuffix() {
-        return originalFileGrpSuffix;
+    public String getOriginalFileGrp() {
+        return originalFileGrp;
     }
 
-    public void setOriginalFileGrpSuffix(String originalFileGrpSuffix) {
-        this.originalFileGrpSuffix = originalFileGrpSuffix;
+    public void setOriginalFileGrp(String originalFileGrp) {
+        this.originalFileGrp = originalFileGrp;
+    }
+
+    public String getFulltextFileGrp() {
+        return fulltextFileGrp;
+    }
+
+    public void setFulltextFileGrp(String fulltextFileGrp) {
+        this.fulltextFileGrp = fulltextFileGrp;
+    }
+
+    public String getDownloadFileGrp() {
+        return downloadFileGrp;
+    }
+
+    public void setDownloadFileGrp(String downloadFileGrp) {
+        this.downloadFileGrp = downloadFileGrp;
     }
 
     public String getWorkLockReduceMetsXsl() {

@@ -45,6 +45,8 @@ public class ConversionProperties {
     @ConfigurationProperties(prefix = "conversion.pdf")
     public static class Pdf {
         private int defaultSize;
+        private boolean addOcrText;
+        private List<String> ocrDirs;
 
         public int getDefaultSize() {
             return defaultSize;
@@ -52,6 +54,22 @@ public class ConversionProperties {
 
         public void setDefaultSize(int defaultSize) {
             this.defaultSize = defaultSize;
+        }
+
+        public boolean isAddOcrText() {
+            return addOcrText;
+        }
+
+        public void setAddOcrText(boolean addOcrText) {
+            this.addOcrText = addOcrText;
+        }
+
+        public List<String> getOcrDirs() {
+            return ocrDirs;
+        }
+
+        public void setOcrDirs(List<String> ocrDirs) {
+            this.ocrDirs = ocrDirs;
         }
     }
 

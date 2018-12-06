@@ -51,7 +51,7 @@ fileserver:
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
-  convertAction: scalingWatermarkingConvertAction
+  convertAction: awtPdfboxSingleFileConvertAction
   cacheClearCron: "0 3 * * * *"
   cacheClearSince: 2592000 # 30 days
   allowedNetworks:
@@ -63,6 +63,7 @@ fileserver:
 conversion:
   pdf:
     defaultSize: 2500
+    addOcrText: true
   jpeg:
     defaultSize: 1000
   useGraphicsMagick: false
@@ -86,13 +87,15 @@ conversion:
       path: /srv/kitodo/assets/watermark.png
       opacity: 75
     extendCanvas:
-      enabled: true
+      enabled: false
       backgroundColorRGB: "0,0,0"
       addX: 0
       addY: 25
 
 mets:
-  originalFileGrpSuffix: ORIGINAL
+  originalFileGrp: ORIGINAL
+  fulltextFileGrp: FULLTEXT
+  downloadFileGrp: DOWNLOAD
   workLockReduceMetsXsl: xslt/reduceMets.xsl
 
 indexing:
