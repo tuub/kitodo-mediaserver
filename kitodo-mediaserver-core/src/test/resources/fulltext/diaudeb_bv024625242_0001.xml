@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<document xmlns="http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml" version="1.0" producer="ABBYY FineReader Engine 11" languages="" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml http://www.abbyy.com/FineReader_xml/FineReader10-schema-v1.xml">
+<page width="1886" height="2666" resolution="300" originalCoords="1">
+<block blockType="Text" blockName="" l="340" t="455" r="1569" b="1029"><region><rect l="340" t="455" r="1569" b="1029"/></region>
+<text>
+<par align="Center" leftIndent="100" lineSpacing="2976">
+<line baseline="525" l="346" t="463" r="1556" b="556"><formatting lang="GermanStandard" ff="Times New Roman" fs="19.">
+<charParams l="346" t="465" r="412" b="520" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="89" wordPenalty="3" meanStrokeWidth="78">D</charParams>
+<charParams l="420" t="482" r="440" b="520" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="100" wordPenalty="3" meanStrokeWidth="78">i</charParams>
+<charParams l="447" t="483" r="483" b="521" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="26" serifProbability="83" wordPenalty="3" meanStrokeWidth="78">e</charParams>
+<charParams l="484" t="463" r="497" b="521"> </charParams>
+<charParams l="498" t="463" r="563" b="520" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="21" serifProbability="98" wordPenalty="10" meanStrokeWidth="78">A</charParams>
+<charParams l="567" t="484" r="609" b="521" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="100" wordPenalty="10" meanStrokeWidth="78">u</charParams>
+<charParams l="617" t="464" r="648" b="521" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="33" serifProbability="100" wordPenalty="10" meanStrokeWidth="78">f</charParams>
+<charParams l="640" t="485" r="687" b="553" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="54" serifProbability="255" wordPenalty="10" meanStrokeWidth="78">g</charParams>
+<charParams l="691" t="484" r="734" b="521" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="49" serifProbability="92" wordPenalty="10" meanStrokeWidth="78">a</charParams>
+<charParams l="736" t="465" r="780" b="523" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="44" serifProbability="100" wordPenalty="10" meanStrokeWidth="78">b</charParams>
+<charParams l="787" t="485" r="824" b="522" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="77" wordPenalty="10" meanStrokeWidth="78">e</charParams>
+<charParams l="828" t="486" r="869" b="523" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="67" serifProbability="100" wordPenalty="10" meanStrokeWidth="78">n</charParams>
+<charParams l="870" t="471" r="897" b="523"> </charParams>
+<charParams l="898" t="471" r="945" b="523" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="30" serifProbability="71" wordPenalty="0" meanStrokeWidth="75">d</charParams>
+<charParams l="951" t="488" r="984" b="525" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="19" serifProbability="77" wordPenalty="0" meanStrokeWidth="75">e</charParams>
+<charParams l="989" t="485" r="1022" b="524" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="35" serifProbability="100" wordPenalty="0" meanStrokeWidth="75">r</charParams>
+<charParams l="1023" t="473" r="1042" b="526"> </charParams>
+<charParams l="1043" t="473" r="1087" b="526" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="53" serifProbability="98" wordPenalty="0" meanStrokeWidth="71">B</charParams>
+<charParams l="1093" t="487" r="1134" b="524" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="26" serifProbability="100" wordPenalty="0" meanStrokeWidth="71">a</charParams>
+<charParams l="1139" t="486" r="1181" b="524" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="100" wordPenalty="0" meanStrokeWidth="71">u</charParams>
+<charParams l="1185" t="471" r="1210" b="524" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="0" wordPenalty="0" meanStrokeWidth="71">f</charParams>
+<charParams l="1213" t="489" r="1252" b="527" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="255" wordPenalty="0" meanStrokeWidth="71">o</charParams>
+<charParams l="1260" t="487" r="1289" b="524" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="31" serifProbability="100" wordPenalty="0" meanStrokeWidth="71">r</charParams>
+<charParams l="1292" t="488" r="1320" b="524" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="24" serifProbability="0" wordPenalty="0" meanStrokeWidth="71">s</charParams>
+<charParams l="1326" t="487" r="1364" b="526" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="18" serifProbability="77" wordPenalty="0" meanStrokeWidth="71">c</charParams>
+<charParams l="1368" t="467" r="1406" b="525" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="29" serifProbability="98" wordPenalty="0" meanStrokeWidth="71">h</charParams>
+<charParams l="1416" t="488" r="1461" b="525" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="46" serifProbability="75" wordPenalty="0" meanStrokeWidth="71">u</charParams>
+<charParams l="1469" t="487" r="1513" b="527" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="23" serifProbability="100" wordPenalty="0" meanStrokeWidth="71">n</charParams>
+<charParams l="1505" t="489" r="1556" b="556" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="74" serifProbability="255" wordPenalty="0" meanStrokeWidth="71">g</charParams></formatting></line>
+<line baseline="651" l="603" t="591" r="1309" b="670"><formatting lang="GermanStandard" ff="Times New Roman" fs="19.">
+<charParams l="603" t="595" r="625" b="647" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="27" serifProbability="255" wordPenalty="0" meanStrokeWidth="111">i</charParams>
+<charParams l="630" t="608" r="700" b="648" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="70" serifProbability="100" wordPenalty="0" meanStrokeWidth="111">m</charParams>
+<charParams l="701" t="593" r="734" b="648"> </charParams>
+<charParams l="735" t="593" r="776" b="648" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="35" serifProbability="73" wordPenalty="3" meanStrokeWidth="76">S</charParams>
+<charParams l="785" t="598" r="804" b="647" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="26" serifProbability="255" wordPenalty="3" meanStrokeWidth="76">i</charParams>
+<charParams l="811" t="611" r="849" b="647" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="15" serifProbability="77" wordPenalty="3" meanStrokeWidth="76">e</charParams>
+<charParams l="851" t="592" r="894" b="647" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="72" serifProbability="100" wordPenalty="3" meanStrokeWidth="76">b</charParams>
+<charParams l="903" t="612" r="940" b="649" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="17" serifProbability="83" wordPenalty="3" meanStrokeWidth="76">e</charParams>
+<charParams l="943" t="612" r="987" b="648" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="32" serifProbability="100" wordPenalty="3" meanStrokeWidth="76">n</charParams>
+<charParams l="983" t="596" r="1009" b="670" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="66" serifProbability="55" wordPenalty="3" meanStrokeWidth="76">j</charParams>
+<charParams l="1017" t="612" r="1056" b="649" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="33" serifProbability="74" wordPenalty="3" meanStrokeWidth="76">a</charParams>
+<charParams l="1061" t="593" r="1104" b="649" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="28" serifProbability="98" wordPenalty="3" meanStrokeWidth="76">h</charParams>
+<charParams l="1113" t="613" r="1144" b="649" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="100" wordPenalty="3" meanStrokeWidth="76">r</charParams>
+<charParams l="1145" t="612" r="1147" b="667" suspicious="1"> </charParams>
+<charParams l="1148" t="612" r="1192" b="667" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="27" serifProbability="96" wordPenalty="0" meanStrokeWidth="76">p</charParams>
+<charParams l="1196" t="591" r="1213" b="649" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="16" serifProbability="26" wordPenalty="0" meanStrokeWidth="76">l</charParams>
+<charParams l="1221" t="613" r="1264" b="650" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="27" serifProbability="100" wordPenalty="0" meanStrokeWidth="76">a</charParams>
+<charParams l="1267" t="612" r="1309" b="651" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="14" serifProbability="0" wordPenalty="0" meanStrokeWidth="76">n</charParams></formatting></line>
+<line baseline="773" l="508" t="712" r="1385" b="783"><formatting lang="GermanStandard" ff="Times New Roman" fs="19.">
+<charParams l="508" t="730" r="551" b="770" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="69" serifProbability="75" wordPenalty="0" meanStrokeWidth="76">u</charParams>
+<charParams l="563" t="732" r="607" b="769" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="50" wordPenalty="0" meanStrokeWidth="76">n</charParams>
+<charParams l="617" t="712" r="663" b="771" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="34" serifProbability="71" wordPenalty="0" meanStrokeWidth="76">d</charParams>
+<charParams l="664" t="712" r="702" b="771"> </charParams>
+<charParams l="703" t="712" r="750" b="770" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="45" serifProbability="71" wordPenalty="3" meanStrokeWidth="79">d</charParams>
+<charParams l="760" t="717" r="773" b="770" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="39" serifProbability="255" wordPenalty="3" meanStrokeWidth="79">i</charParams>
+<charParams l="786" t="734" r="821" b="771" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="26" serifProbability="83" wordPenalty="3" meanStrokeWidth="79">e</charParams>
+<charParams l="822" t="715" r="846" b="771"> </charParams>
+<charParams l="847" t="715" r="916" b="770" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="51" serifProbability="50" wordPenalty="3" meanStrokeWidth="87">V</charParams>
+<charParams l="916" t="735" r="956" b="772" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="24" serifProbability="49" wordPenalty="3" meanStrokeWidth="87">e</charParams>
+<charParams l="955" t="735" r="991" b="773" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="54" serifProbability="100" wordPenalty="3" meanStrokeWidth="87">r</charParams>
+<charParams l="988" t="721" r="1028" b="774" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="81" wordPenalty="3" meanStrokeWidth="87">ä</charParams>
+<charParams l="1032" t="736" r="1080" b="775" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="100" wordPenalty="3" meanStrokeWidth="87">n</charParams>
+<charParams l="1084" t="717" r="1134" b="773" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="50" serifProbability="71" wordPenalty="3" meanStrokeWidth="87">d</charParams>
+<charParams l="1140" t="738" r="1179" b="773" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="28" serifProbability="80" wordPenalty="3" meanStrokeWidth="87">e</charParams>
+<charParams l="1186" t="736" r="1219" b="774" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="27" serifProbability="100" wordPenalty="3" meanStrokeWidth="87">r</charParams>
+<charParams l="1225" t="736" r="1267" b="773" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="64" serifProbability="87" wordPenalty="3" meanStrokeWidth="87">u</charParams>
+<charParams l="1275" t="737" r="1321" b="775" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="21" serifProbability="50" wordPenalty="3" meanStrokeWidth="87">n</charParams>
+<charParams l="1327" t="726" r="1385" b="783" suspicious="1" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="-1" serifProbability="255" wordPenalty="3" meanStrokeWidth="87">g</charParams></formatting></line>
+<line baseline="899" l="602" t="835" r="1288" b="899"><formatting lang="GermanStandard" ff="Times New Roman" fs="19.">
+<charParams l="602" t="841" r="652" b="895" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="52" serifProbability="100" wordPenalty="0" meanStrokeWidth="68">d</charParams>
+<charParams l="658" t="859" r="694" b="897" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="27" serifProbability="66" wordPenalty="0" meanStrokeWidth="68">e</charParams>
+<charParams l="703" t="859" r="734" b="895" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="100" wordPenalty="0" meanStrokeWidth="68">r</charParams>
+<charParams l="735" t="835" r="750" b="897"> </charParams>
+<charParams l="751" t="835" r="826" b="897" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="16" serifProbability="98" wordPenalty="0" meanStrokeWidth="76">A</charParams>
+<charParams l="834" t="857" r="867" b="897" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="100" wordPenalty="0" meanStrokeWidth="76">r</charParams>
+<charParams l="872" t="841" r="914" b="897" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="16" serifProbability="100" wordPenalty="0" meanStrokeWidth="76">b</charParams>
+<charParams l="922" t="861" r="959" b="896" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="30" serifProbability="83" wordPenalty="0" meanStrokeWidth="76">e</charParams>
+<charParams l="964" t="847" r="984" b="898" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="21" serifProbability="50" wordPenalty="0" meanStrokeWidth="76">i</charParams>
+<charParams l="989" t="855" r="1013" b="899" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="30" serifProbability="61" wordPenalty="0" meanStrokeWidth="76">t</charParams>
+<charParams l="1020" t="861" r="1050" b="899" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="15" serifProbability="73" wordPenalty="0" meanStrokeWidth="76">s</charParams>
+<charParams l="1054" t="859" r="1132" b="898" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="17" serifProbability="255" wordPenalty="0" meanStrokeWidth="76">w</charParams>
+<charParams l="1134" t="861" r="1169" b="899" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="24" serifProbability="80" wordPenalty="0" meanStrokeWidth="76">e</charParams>
+<charParams l="1180" t="847" r="1197" b="899" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="28" serifProbability="255" wordPenalty="0" meanStrokeWidth="76">i</charParams>
+<charParams l="1206" t="860" r="1238" b="898" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="15" serifProbability="13" wordPenalty="0" meanStrokeWidth="76">s</charParams>
+<charParams l="1248" t="861" r="1288" b="899" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="37" serifProbability="83" wordPenalty="0" meanStrokeWidth="76">e</charParams></formatting></line>
+<line baseline="1021" l="419" t="962" r="1507" b="1023"><formatting lang="GermanStandard" ff="Times New Roman" fs="19.">
+<charParams l="419" t="962" r="465" b="1016" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="89" serifProbability="85" wordPenalty="0" meanStrokeWidth="77">d</charParams>
+<charParams l="474" t="979" r="510" b="1016" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="66" wordPenalty="0" meanStrokeWidth="77">e</charParams>
+<charParams l="516" t="981" r="546" b="1016" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="67" serifProbability="100" wordPenalty="0" meanStrokeWidth="77">r</charParams>
+<charParams l="547" t="967" r="564" b="1019"> </charParams>
+<charParams l="565" t="967" r="620" b="1019" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="38" serifProbability="89" wordPenalty="0" meanStrokeWidth="77">D</charParams>
+<charParams l="626" t="980" r="662" b="1017" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="30" serifProbability="83" wordPenalty="0" meanStrokeWidth="77">e</charParams>
+<charParams l="670" t="981" r="716" b="1018" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="27" serifProbability="87" wordPenalty="0" meanStrokeWidth="77">u</charParams>
+<charParams l="717" t="972" r="748" b="1018" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="39" serifProbability="61" wordPenalty="0" meanStrokeWidth="77">t</charParams>
+<charParams l="753" t="981" r="781" b="1019" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="0" serifProbability="43" wordPenalty="0" meanStrokeWidth="77">s</charParams>
+<charParams l="788" t="981" r="824" b="1018" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="41" serifProbability="49" wordPenalty="0" meanStrokeWidth="77">c</charParams>
+<charParams l="825" t="963" r="869" b="1020" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="31" serifProbability="98" wordPenalty="0" meanStrokeWidth="77">h</charParams>
+<charParams l="878" t="983" r="915" b="1020" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="66" wordPenalty="0" meanStrokeWidth="77">e</charParams>
+<charParams l="919" t="984" r="963" b="1020" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="41" serifProbability="100" wordPenalty="0" meanStrokeWidth="77">n</charParams>
+<charParams l="964" t="966" r="991" b="1020"> </charParams>
+<charParams l="992" t="966" r="1037" b="1020" wordStart="1" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="31" serifProbability="98" wordPenalty="3" meanStrokeWidth="77">B</charParams>
+<charParams l="1041" t="982" r="1080" b="1021" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="0" serifProbability="0" wordPenalty="3" meanStrokeWidth="77">a</charParams>
+<charParams l="1088" t="983" r="1131" b="1020" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="33" serifProbability="87" wordPenalty="3" meanStrokeWidth="77">u</charParams>
+<charParams l="1137" t="983" r="1177" b="1021" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="83" wordPenalty="3" meanStrokeWidth="77">a</charParams>
+<charParams l="1179" t="966" r="1227" b="1021" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="0" serifProbability="255" wordPenalty="3" meanStrokeWidth="77">k</charParams>
+<charParams l="1233" t="984" r="1269" b="1023" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="0" serifProbability="100" wordPenalty="3" meanStrokeWidth="77">a</charParams>
+<charParams l="1276" t="963" r="1326" b="1023" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="71" wordPenalty="3" meanStrokeWidth="77">d</charParams>
+<charParams l="1329" t="984" r="1366" b="1022" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="39" serifProbability="83" wordPenalty="3" meanStrokeWidth="77">e</charParams>
+<charParams l="1370" t="985" r="1434" b="1023" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="65" serifProbability="100" wordPenalty="3" meanStrokeWidth="77">m</charParams>
+<charParams l="1445" t="969" r="1467" b="1021" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="28" serifProbability="255" wordPenalty="3" meanStrokeWidth="77">i</charParams>
+<charParams l="1470" t="985" r="1507" b="1022" wordStart="0" wordFromDictionary="1" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="25" serifProbability="80" wordPenalty="3" meanStrokeWidth="77">e</charParams></formatting></line></par>
+</text>
+</block>
+<block blockType="Picture" blockName="" l="115" t="1132" r="195" b="1478"><region><rect l="115" t="1132" r="195" b="1478"/></region>
+</block>
+<block blockType="Picture" blockName="" l="88" t="1560" r="1786" b="2494"><region><rect l="112" t="1560" r="1786" b="1797"/><rect l="88" t="1797" r="1786" b="1884"/><rect l="111" t="1884" r="1786" b="1938"/><rect l="104" t="1938" r="1786" b="1954"/><rect l="105" t="1954" r="1786" b="1955"/><rect l="106" t="1955" r="1786" b="1957"/><rect l="104" t="1957" r="1786" b="1961"/><rect l="109" t="1961" r="1786" b="1980"/><rect l="103" t="1980" r="1786" b="2006"/><rect l="104" t="2006" r="1786" b="2030"/><rect l="105" t="2030" r="1786" b="2033"/><rect l="104" t="2033" r="1786" b="2040"/><rect l="89" t="2040" r="1786" b="2327"/><rect l="89" t="2327" r="898" b="2460"/><rect l="104" t="2460" r="898" b="2470"/><rect l="112" t="2470" r="898" b="2494"/></region>
+</block>
+<block blockType="Text" blockName="" l="894" t="2323" r="1194" b="2416"><region><rect l="894" t="2323" r="1194" b="2416"/></region>
+<text>
+<par lineSpacing="3400">
+<line baseline="2407" l="901" t="2329" r="1189" b="2411"><formatting lang="GermanStandard" ff="Courier New" fs="28." bold="1" color="5137529" scaling="330">
+<charParams l="901" t="2339" r="913" b="2371" suspicious="1" wordStart="1" wordFromDictionary="0" wordNormal="0" wordNumeric="0" wordIdentifier="1" charConfidence="-1" serifProbability="255" wordPenalty="0" meanStrokeWidth="44">&apos;</charParams>
+<charParams l="914" t="2339" r="930" b="2409" suspicious="1"> </charParams></formatting><formatting lang="GermanStandard" ff="Courier New" fs="28." bold="1" scaling="330">
+<charParams l="931" t="2353" r="957" b="2409" wordStart="1" wordFromDictionary="0" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="31" serifProbability="0" wordPenalty="0" meanStrokeWidth="90">n</charParams>
+<charParams l="958" t="2353" r="986" b="2411"> </charParams>
+<charParams l="987" t="2357" r="1011" b="2411" wordStart="1" wordFromDictionary="0" wordNormal="1" wordNumeric="0" wordIdentifier="0" charConfidence="100" serifProbability="52" wordPenalty="0" meanStrokeWidth="55">v</charParams>
+<charParams l="1012" t="2329" r="1098" b="2411"> </charParams></formatting><formatting lang="GermanStandard" ff="Courier New" fs="30." italic="1">
+<charParams l="1099" t="2329" r="1127" b="2409" suspicious="1" wordStart="1" wordFromDictionary="0" wordNormal="0" wordNumeric="1" wordIdentifier="0" charConfidence="46" serifProbability="0" wordPenalty="0" meanStrokeWidth="76">1</charParams></formatting><formatting lang="GermanStandard" ff="Courier New" fs="28." bold="1" scaling="330">
+<charParams l="1157" t="2329" r="1189" b="2409" suspicious="1" wordStart="1" wordFromDictionary="0" wordNormal="0" wordNumeric="1" wordIdentifier="0" charConfidence="17" serifProbability="27" wordPenalty="0" meanStrokeWidth="89">8</charParams></formatting></line></par>
+</text>
+</block>
+<block blockType="SeparatorsBox" blockName="" l="235" t="1770" r="594" b="2359"><region><rect l="252" t="1770" r="572" b="1776"/><rect l="240" t="1776" r="572" b="1777"/><rect l="240" t="1777" r="252" b="1783"/><rect l="235" t="1783" r="252" b="1784"/><rect l="235" t="1784" r="240" b="1790"/><rect l="235" t="1790" r="593" b="1938"/><rect l="583" t="1938" r="593" b="1948"/><rect l="238" t="1948" r="593" b="2224"/><rect l="238" t="2224" r="594" b="2342"/><rect l="238" t="2342" r="247" b="2349"/><rect l="238" t="2349" r="564" b="2350"/><rect l="256" t="2350" r="564" b="2359"/></region>
+<separatorsBox>
+<separator type="Black" thickness="3"><start x="252" y="1773"/><end x="572" y="1773"/>
+</separator>
+<separator type="Black" thickness="4"><start x="256" y="2354"/><end x="564" y="2354"/>
+</separator>
+<separator type="Black" thickness="3"><start x="237" y="1784"/><end x="237" y="1938"/>
+</separator>
+<separator type="Black" thickness="3"><start x="242" y="1948"/><end x="242" y="2350"/>
+</separator>
+<separator type="Black" thickness="2"><start x="588" y="1790"/><end x="588" y="2224"/>
+</separator>
+<separator type="Black" thickness="2"><start x="592" y="2224"/><end x="592" y="2342"/>
+</separator>
+</separatorsBox>
+</block>
+<block blockType="Separator" blockName="" l="887" t="1709" r="995" b="1714"><region><rect l="887" t="1709" r="927" b="1710"/><rect l="887" t="1710" r="995" b="1711"/><rect l="887" t="1711" r="995" b="1714"/></region>
+<separator type="Black" thickness="4"><start x="887" y="1711"/><end x="995" y="1711"/>
+</separator>
+</block>
+<block blockType="Separator" blockName="" l="888" t="1730" r="994" b="1734"><region><rect l="888" t="1730" r="923" b="1731"/><rect l="888" t="1731" r="994" b="1733"/><rect l="923" t="1733" r="994" b="1734"/></region>
+<separator type="Black" thickness="3"><start x="888" y="1732"/><end x="994" y="1732"/>
+</separator>
+</block>
+<block blockType="Separator" blockName="" l="98" t="1375" r="105" b="1788"><region><rect l="99" t="1375" r="103" b="1399"/><rect l="99" t="1399" r="104" b="1420"/><rect l="99" t="1420" r="105" b="1432"/><rect l="98" t="1432" r="105" b="1441"/><rect l="98" t="1441" r="104" b="1448"/><rect l="98" t="1448" r="105" b="1450"/><rect l="99" t="1450" r="105" b="1454"/><rect l="98" t="1454" r="105" b="1458"/><rect l="98" t="1458" r="103" b="1461"/><rect l="98" t="1461" r="105" b="1475"/><rect l="98" t="1475" r="104" b="1486"/><rect l="98" t="1486" r="105" b="1503"/><rect l="98" t="1503" r="102" b="1510"/><rect l="98" t="1510" r="102" b="1514"/><rect l="98" t="1514" r="103" b="1569"/><rect l="98" t="1569" r="101" b="1575"/><rect l="98" t="1575" r="102" b="1582"/><rect l="98" t="1582" r="103" b="1610"/><rect l="98" t="1610" r="104" b="1656"/><rect l="99" t="1656" r="101" b="1662"/><rect l="99" t="1662" r="103" b="1664"/><rect l="99" t="1664" r="104" b="1682"/><rect l="102" t="1682" r="104" b="1696"/><rect l="102" t="1696" r="104" b="1698"/><rect l="102" t="1698" r="104" b="1739"/><rect l="102" t="1739" r="104" b="1744"/><rect l="101" t="1744" r="104" b="1788"/></region>
+<separator type="Black" thickness="5"><start x="101" y="1375"/><end x="101" y="1788"/>
+</separator>
+</block>
+<block blockType="Separator" blockName="" l="98" t="811" r="101" b="857"><region><rect l="98" t="811" r="101" b="857"/></region>
+<separator type="Dotted" thickness="2"><start x="99" y="811"/><end x="99" y="857"/>
+</separator>
+</block>
+<block blockType="Picture" blockName="" l="235" t="1770" r="594" b="2359"><region><rect l="235" t="1770" r="594" b="2359"/></region>
+</block>
+<block blockType="Picture" blockName="" l="70" t="117" r="1800" b="2501"><region><rect l="70" t="117" r="1800" b="2501"/></region>
+</block>
+</page>
+</document>

@@ -76,6 +76,11 @@
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
         </dependency>
+        <dependency>
+            <!-- Use GitHub project as package -->
+            <groupId>com.github.tuub</groupId>
+            <artifactId>abbyy-to-alto</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

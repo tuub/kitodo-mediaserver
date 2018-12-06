@@ -12,6 +12,7 @@
 package org.kitodo.mediaserver.core.config;
 
 import java.io.IOException;
+import org.kitodo.mediaserver.core.actions.AbbyyToAltoOcrConvertAction;
 import org.kitodo.mediaserver.core.actions.AddFullPdfToMetsAction;
 import org.kitodo.mediaserver.core.actions.PreproduceDerivativesAction;
 import org.kitodo.mediaserver.core.actions.SingleFileConvertAction;
@@ -21,12 +22,14 @@ import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IMetsTransformer;
+import org.kitodo.mediaserver.core.api.IOcrConverter;
 import org.kitodo.mediaserver.core.api.IOcrReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.conversion.AwtImageFileConverter;
 import org.kitodo.mediaserver.core.conversion.PdfboxFileConverter;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
+import org.kitodo.mediaserver.core.conversion.ocr.AbbyyToAltoOcrConverter;
 import org.kitodo.mediaserver.core.processors.AppendingWatermarker;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
@@ -289,6 +292,24 @@ public class ConversionConfiguration {
         return xsltMetsReader;
     }
 
+    /**
+     * A convert action to transform every OCR file of a work from ABBYY Finereader format to ALTO format.
+     */
+    @Bean
+    public IAction abbyyToAltoOcrConvertAction() throws IOException {
+        AbbyyToAltoOcrConvertAction action = new AbbyyToAltoOcrConvertAction();
+        action.setMetsReader(masterFilesMetsReader());
+        action.setReadResultParser(listToMapParser());
+        action.setOcrConverter(abbyyToAltoOcrConverter());
+        return action;
+    }
 
+    /**
+     * A converter to convert an OCR file from ABBYY Finereader format to ALTO format.
+     */
+    @Bean
+    public IOcrConverter abbyyToAltoOcrConverter() {
+        return new AbbyyToAltoOcrConverter();
+    }
 
 }
