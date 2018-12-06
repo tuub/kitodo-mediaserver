@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mets:mets
+        xsi:schemaLocation="info:lc/xmlns/premis-v2 http://www.loc.gov/standards/premis/v2/premis-v2-0.xsd http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/mods.xsd http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/mets.xsd http://www.loc.gov/mix/v10 http://www.loc.gov/standards/mix/mix10/mix10.xsd"
+        xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mets:metsHdr CREATEDATE="2018-11-16T13:19:49">
+        <mets:agent OTHERTYPE="SOFTWARE" ROLE="CREATOR" TYPE="OTHER">
+            <mets:name>Kitodo - kitodo-ugh-2.1.0-kitodo-ugh-2.1.0 - 22−May−2017</mets:name>
+            <mets:note>Kitodo</mets:note>
+        </mets:agent>
+    </mets:metsHdr>
+    <mets:dmdSec ID="DMDLOG_0000">
+        <mets:mdWrap MDTYPE="MODS">
+            <mets:xmlData>
+                <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Berlin</mods:placeTerm>
+                        </mods:place>
+                        <mods:dateIssued encoding="w3cdtf" keyDate="yes">1960</mods:dateIssued>
+                    </mods:originInfo>
+                    <mods:titleInfo>
+                        <mods:title>&lt;&lt;Die&gt;&gt; Aufgaben der Bauforschung im Siebenjahrplan und die Veränderung der Arbeitsweise der
+                            Deutschen Bauakademie
+                        </mods:title>
+                        <mods:subTitle>Beschluß des Präsidiums des Ministerrates der Deutschen Demokratischen Republik vom 24. März 1960
+                        </mods:subTitle>
+                    </mods:titleInfo>
+                    <mods:titleInfo type="uniform">
+                        <mods:title>&lt;&lt;Die&gt;&gt; Aufgaben der Bauforschung im Siebenjahrplan und die Veränderung der Arbeitsweise der
+                            Deutschen Bauakademie
+                        </mods:title>
+                    </mods:titleInfo>
+                    <mods:recordInfo>
+                        <mods:recordIdentifier source="kobv">BV024625242</mods:recordIdentifier>
+                    </mods:recordInfo>
+                    <mods:classification authority="ivdcc">Zentralbibliothek</mods:classification>
+                    <mods:classification authority="ivdcc">Zentralbibliothek#Monographien</mods:classification>
+                    <mods:classification authority="ivdcc">Zentralbibliothek#Monographien#Geschichte</mods:classification>
+                    <mods:language>
+                        <mods:languageTerm authority="iso639-2b" type="code">ger</mods:languageTerm>
+                    </mods:language>
+                    <mods:accessCondition href="https://creativecommons.org/publicdomain/mark/1.0/" type="use and reproduction">Public
+                        Domain Mark 1.0
+                    </mods:accessCondition>
+                    <mods:physicalDescription>
+                        <mods:extent>28 S.</mods:extent>
+                        <mods:digitalOrigin>reformatted digital</mods:digitalOrigin>
+                    </mods:physicalDescription>
+                    <mods:originInfo>
+                        <mods:place>
+                            <mods:placeTerm type="text">Berlin</mods:placeTerm>
+                        </mods:place>
+                        <mods:dateCaptured encoding="w3cdtf">2016</mods:dateCaptured>
+                        <mods:publisher>Universitätsbibliothek der Technischen Universität Berlin</mods:publisher>
+                        <mods:edition>[Electronic ed.]</mods:edition>
+                    </mods:originInfo>
+                </mods:mods>
+            </mets:xmlData>
+        </mets:mdWrap>
+    </mets:dmdSec>
+    <mets:structMap TYPE="LOGICAL">
+        <mets:div ADMID="AMD" CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604378" DMDID="DMDLOG_0000" ID="LOG_0000"
+                  LABEL="&lt;&lt;Die>> Aufgaben der Bauforschung im Siebenjahrplan und die Veränderung der Arbeitsweise der Deutschen Bauakademie"
+                  ORDERLABEL="&lt;&lt;Die>> Aufgaben der Bauforschung im Siebenjahrplan und die Veränderung der Arbeitsweise der Deutschen Bauakademie"
+                  TYPE="monograph">
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604388" DMDID="DMDLOG_0001" ID="LOG_0001" TYPE="Cover"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604395" ID="LOG_0002" TYPE="TitlePage"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604401" DMDID="DMDLOG_0003" ID="LOG_0003" LABEL="Inhalt."
+                      TYPE="TableOfContents"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604417" DMDID="DMDLOG_0004" ID="LOG_0004"
+                      LABEL="Kommuniqué des Präsidiums des Ministerrates." TYPE="Preface"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604426" DMDID="DMDLOG_0005" ID="LOG_0005"
+                      LABEL="Die AUfgaben der Bauforschung im Siebenjahrplan und die Veränderung der Arbeitsweise der Deutschen Bauakademie."
+                      TYPE="Chapter"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604435" DMDID="DMDLOG_0006" ID="LOG_0006"
+                      LABEL="Die Aufgaben der Bauforschung entsprechend den Entwicklungsetappen der Baupraxis bis 1965." TYPE="Chapter"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604447" DMDID="DMDLOG_0007" ID="LOG_0007"
+                      LABEL="Die Veränderung der Arbeitsweise und der Organisation der Deutschen Bauakademie." TYPE="Chapter"/>
+            <mets:div CONTENTIDS="urn:nbn:de:kobv:83-goobi-2604455" ID="LOG_0008" TYPE="Cover"/>
+        </mets:div>
+    </mets:structMap>
+
+</mets:mets>

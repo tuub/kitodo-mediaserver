@@ -12,10 +12,13 @@
 package org.kitodo.mediaserver.core.config;
 
 import java.io.IOException;
+import org.kitodo.mediaserver.core.actions.CleanMetsTitleEntriesAction;
 import org.kitodo.mediaserver.core.actions.DoiRegisterAction;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IMetsReader;
+import org.kitodo.mediaserver.core.api.IMetsTransformer;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
+import org.kitodo.mediaserver.core.processors.XsltMetsTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,4 +47,15 @@ public class CommonConfiguration {
         return doiRegisterAction;
     }
 
+    @Bean
+    public IMetsTransformer cleanMetsTitleEntries() {
+        return new XsltMetsTransformer(new ClassPathResource("xslt/cleanMetsTitleEntries.xsl"));
+    }
+
+    @Bean
+    public IAction cleanMetsTitleEntriesAction() {
+        CleanMetsTitleEntriesAction cleanMetsTitleEntriesAction = new CleanMetsTitleEntriesAction();
+        cleanMetsTitleEntriesAction.setMetsTransformer(cleanMetsTitleEntries());
+        return cleanMetsTitleEntriesAction;
+    }
 }
