@@ -31,6 +31,15 @@
     </modules>
 
 
+    <repositories>
+        <repository>
+            <!-- This repo adds GitHub support -->
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -102,6 +111,12 @@
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>Saxon-HE</artifactId>
                 <version>9.9.0-2</version>
+            </dependency>
+            <dependency>
+                <!-- Use GitHub project as package -->
+                <groupId>com.github.tuub</groupId>
+                <artifactId>abbyy-to-alto</artifactId>
+                <version>8c784b5b6f03d94e5e9771940a8bec9015a9c210</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

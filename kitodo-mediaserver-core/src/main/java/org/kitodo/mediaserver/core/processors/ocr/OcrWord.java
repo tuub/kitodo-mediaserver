@@ -20,16 +20,16 @@ public class OcrWord {
     public String word = "";
 
     @XmlAttribute
-    public int x = 0;
+    public float x = 0;
 
     @XmlAttribute
-    public int y = 0;
+    public float y = 0;
 
     @XmlAttribute
-    public int width = 0;
+    public float width = 0;
 
     @XmlAttribute
-    public int height = 0;
+    public float height = 0;
 
     public OcrWord() {}
 
