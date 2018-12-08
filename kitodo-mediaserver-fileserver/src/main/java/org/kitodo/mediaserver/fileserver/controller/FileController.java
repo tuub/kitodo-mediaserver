@@ -109,6 +109,9 @@ public class FileController {
         String derivativePath = StringUtils.substringAfter(completePath, workId);
         boolean workDisallowed = false;
 
+        // Allow Cross-Origin Resource Sharing
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
         if (!optionalWork.isPresent()) {
             message = "Work with id " + workId + " not found";
             LOGGER.info(message);
