@@ -172,6 +172,8 @@ public abstract class AbstractPage implements IPage {
         }
         pageSize.width = width + widthOffset;
         pageSize.height = height + heightOffset;
+        imageRect.width = width;
+        imageRect.height = height;
         int maxWidth = size;
         int maxHeight = size;
         if (pageSize.width > maxWidth) {
