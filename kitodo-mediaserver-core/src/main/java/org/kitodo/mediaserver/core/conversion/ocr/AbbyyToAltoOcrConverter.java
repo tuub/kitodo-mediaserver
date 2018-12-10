@@ -51,8 +51,14 @@ public class AbbyyToAltoOcrConverter implements IOcrConverter {
         }
 
         // Convert to ALTO
-        AbbyyToAltoConverter converter = new AbbyyToAltoConverter();
-        Alto alto = converter.convert(abbyyDocument);
+        Alto alto;
+        try {
+            AbbyyToAltoConverter converter = new AbbyyToAltoConverter();
+            converter.setEnableConfidence(false);
+            alto = converter.convert(abbyyDocument);
+        } catch (Exception ex) {
+            throw new Exception("Could not convert OCR file '" + sourceFile + "'", ex);
+        }
 
         // Write ALTO file
         if (!Files.exists(destFile.getParent())) {
