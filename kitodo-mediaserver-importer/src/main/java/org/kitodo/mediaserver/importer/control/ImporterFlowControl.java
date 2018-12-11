@@ -18,6 +18,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -61,6 +62,7 @@ public class ImporterFlowControl {
     private FileDeleter fileDeleter;
     private IAction cacheDeleteAction;
     private IAction viewerIndexingAction;
+    private EntityManager entityManager;
 
     @Autowired
     public void setImporterUtils(ImporterUtils importerUtils) {
@@ -110,6 +112,11 @@ public class ImporterFlowControl {
     @Autowired
     public void setViewerIndexingAction(IAction viewerIndexingAction) {
         this.viewerIndexingAction = viewerIndexingAction;
+    }
+
+    @Autowired
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
 
@@ -246,7 +253,9 @@ public class ImporterFlowControl {
                 LOGGER.error(message, e);
                 errorNotifier.add(message);
 
-                if (newWork != null && newWork.getId() != null) {
+                // Delete work from DB if it is already saved
+                // Attention: em.contains() will not find detached entites
+                if (newWork != null && newWork.getId() != null && entityManager.contains(newWork)) {
                     try {
                         LOGGER.info("Rollback: deleting database entry for work " + workDir.getName());
                         workService.deleteWork(newWork);
