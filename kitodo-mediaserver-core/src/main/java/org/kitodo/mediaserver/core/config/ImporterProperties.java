@@ -32,6 +32,7 @@ public class ImporterProperties {
     private String workDataReaderXsl;
     private String fileUrlReaderXsl;
     private String cron;
+    private String anchorSuffix;
     private boolean indexWorkAfterImport;
     private List<String> validationFileGrps;
     private List<String> errorNotificationEmail;
@@ -102,6 +103,14 @@ public class ImporterProperties {
 
     public void setFileUrlReaderXsl(String fileUrlReaderXsl) {
         this.fileUrlReaderXsl = fileUrlReaderXsl;
+    }
+
+    public String getAnchorSuffix() {
+        return anchorSuffix;
+    }
+
+    public void setAnchorSuffix(String anchorSuffix) {
+        this.anchorSuffix = anchorSuffix;
     }
 
     public List<String> getValidationFileGrps() {

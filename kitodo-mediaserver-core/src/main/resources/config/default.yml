@@ -119,6 +119,7 @@ importer:
   fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
+  anchorSuffix: _anchor
   indexWorkAfterImport: true
   validationFileGrps:
     - ORIGINAL

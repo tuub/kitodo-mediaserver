@@ -145,6 +145,9 @@ public class ImporterFlowControl {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
 
+                String metsAnchorSuffix = importerProperties.getAnchorSuffix() + ".xml";
+                File anchorMets = new File(workDir, workDir.getName() + metsAnchorSuffix);
+
                 // Read the work data from the mets/mods file.
                 newWork = workDataReader.read(mets);
 
@@ -155,6 +158,10 @@ public class ImporterFlowControl {
 
                     String newMetsName = newWork.getId() + ".xml";
                     Files.move(mets.toPath(), Paths.get(mets.getParent(), newMetsName));
+                    // Rename anchor file if it exists
+                    if (anchorMets.exists()) {
+                        Files.move(anchorMets.toPath(), Paths.get(mets.getParent(), newWork.getId() + metsAnchorSuffix));
+                    }
                     Path newPath = Paths.get(workDir.getParent(), newWork.getId());
                     Files.move(workDir.toPath(), newPath);
                     workDir = newPath.toFile();
