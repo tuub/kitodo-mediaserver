@@ -17,13 +17,17 @@
         <xsl:value-of select="replace(., $pattern, '$1')"/>
     </xsl:template>
 
-    <xsl:template match="//mets:structMap/mets:div/@LABEL">
+    <xsl:template match="//mods:titleInfo/mods:subTitle/text()">
+        <xsl:value-of select="replace(., $pattern, '$1')"/>
+    </xsl:template>
+
+    <xsl:template match="//mets:div/@LABEL">
         <xsl:attribute name="LABEL">
             <xsl:value-of select="replace(., $pattern, '$1')"/>
         </xsl:attribute>
     </xsl:template>
 
-    <xsl:template match="//mets:structMap/mets:div/@ORDERLABEL">
+    <xsl:template match="//mets:div/@ORDERLABEL">
         <xsl:attribute name="ORDERLABEL">
             <xsl:value-of select="replace(., $pattern, '$1')"/>
         </xsl:attribute>
