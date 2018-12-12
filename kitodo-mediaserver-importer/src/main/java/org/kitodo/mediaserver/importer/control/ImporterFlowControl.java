@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.config.ImporterProperties;
+import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.db.entities.ActionData;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.services.ActionService;
@@ -54,6 +55,7 @@ public class ImporterFlowControl {
 
     private ImporterUtils importerUtils;
     private ImporterProperties importerProperties;
+    private MetsProperties metsProperties;
     private IImportValidation importValidation;
     private IDataReader workDataReader;
     private IWorkChecker workChecker;
@@ -72,6 +74,11 @@ public class ImporterFlowControl {
     @Autowired
     public void setImporterProperties(ImporterProperties importerProperties) {
         this.importerProperties = importerProperties;
+    }
+
+    @Autowired
+    public void setMetsProperties(MetsProperties metsProperties) {
+        this.metsProperties = metsProperties;
     }
 
     @Autowired
@@ -152,7 +159,7 @@ public class ImporterFlowControl {
                     throw new ImporterException("Mets file not found, expected at " + mets.getAbsolutePath());
                 }
 
-                String metsAnchorSuffix = importerProperties.getAnchorSuffix() + ".xml";
+                String metsAnchorSuffix = metsProperties.getAnchorSuffix() + ".xml";
                 File anchorMets = new File(workDir, workDir.getName() + metsAnchorSuffix);
 
                 // Read the work data from the mets/mods file.

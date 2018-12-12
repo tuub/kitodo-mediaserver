@@ -27,6 +27,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
+import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.conversion.FileEntry;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +45,8 @@ import org.springframework.stereotype.Component;
 public class MediaServerUtils {
 
     private Environment environment;
-
     private FileserverProperties fileserverProperties;
+    private MetsProperties metsProperties;
 
     @Autowired
     public void setEnvironment(Environment environment) {
@@ -55,6 +56,11 @@ public class MediaServerUtils {
     @Autowired
     public void setFileserverProperties(FileserverProperties fileserverProperties) {
         this.fileserverProperties = fileserverProperties;
+    }
+
+    @Autowired
+    public void setMetsProperties(MetsProperties metsProperties) {
+        this.metsProperties = metsProperties;
     }
 
     /**
@@ -113,6 +119,19 @@ public class MediaServerUtils {
         }
 
         return new File(work.getPath(), work.getId() + (original ? "_original" : "") + ".xml");
+    }
+
+    /**
+     * Gets the anchor METS file for a work.
+     *
+     * @param work the work
+     * @return the anchor mets file
+     */
+    public File getAnchorMetsFileForWork(Work work) {
+        if (work == null) {
+            throw new IllegalArgumentException("The work may not be null.");
+        }
+        return new File(work.getPath(), work.getId() + metsProperties.getAnchorSuffix() + ".xml");
     }
 
     /**

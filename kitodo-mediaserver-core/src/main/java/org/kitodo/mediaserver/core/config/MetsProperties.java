@@ -25,6 +25,7 @@ public class MetsProperties {
     private String fulltextFileGrp;
     private String downloadFileGrp;
     private String workLockReduceMetsXsl;
+    private String anchorSuffix;
 
     public String getOriginalFileGrp() {
         return originalFileGrp;
@@ -56,5 +57,13 @@ public class MetsProperties {
 
     public void setWorkLockReduceMetsXsl(String workLockReduceMetsXsl) {
         this.workLockReduceMetsXsl = workLockReduceMetsXsl;
+    }
+
+    public String getAnchorSuffix() {
+        return anchorSuffix;
+    }
+
+    public void setAnchorSuffix(String anchorSuffix) {
+        this.anchorSuffix = anchorSuffix;
     }
 }
