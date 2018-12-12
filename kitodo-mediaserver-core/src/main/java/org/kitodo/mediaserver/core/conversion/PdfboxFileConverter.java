@@ -17,12 +17,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.validation.constraints.NotNull;
 import javax.xml.xpath.XPathExpressionException;
+import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -47,6 +49,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import sun.security.action.GetPropertyAction;
 
 /**
  * A converter to produce PDF files using Apache PDFBox package.
@@ -72,7 +75,17 @@ public class PdfboxFileConverter extends AbstractConverter {
 
         if (!fileAlreadyExists) {
             try {
-                IDocument document = new PdfboxDocument();
+
+                // Set up memory usage settings for PDF conversion
+                File tmpDir = new File(AccessController.doPrivileged(new GetPropertyAction("java.io.tmpdir")));
+                MemoryUsageSetting memoryUsageSetting = MemoryUsageSetting
+                    .setupMixed(conversionPropertiesPdf.getMaxMemory() * 1024 * 1024)
+                    .setTempDir(tmpDir);
+
+                // Initialize PDF document
+                IDocument document = new PdfboxDocument(memoryUsageSetting);
+
+                // Set up all pages
                 for (Map<String, FileEntry> metsPage : pages.values()) {
                     PdfboxPage page = pageFactory.getObject();
                     page.setImagePath(metsPage.get("master").getFile().getAbsolutePath());
@@ -80,7 +93,10 @@ public class PdfboxFileConverter extends AbstractConverter {
                     page.setFulltextPath(metsPage.get("fulltext").getFile().getAbsolutePath());
                     document.getPages().add(page);
                 }
+
+                // Save PDF file
                 document.save(convertedFile.getAbsolutePath());
+
             } catch (Exception e) {
                 convertedFile.delete();
                 throw e;
@@ -102,8 +118,12 @@ public class PdfboxFileConverter extends AbstractConverter {
      */
     static class PdfboxDocument implements IDocument {
 
-        private PDDocument document = new PDDocument();
+        private PDDocument document;
         private List<IPage> pages = new ArrayList<>();
+
+        public PdfboxDocument(MemoryUsageSetting memoryUsageSetting) {
+            document = new PDDocument(memoryUsageSetting);
+        }
 
         public PDDocument getDocument() {
             return document;
@@ -169,9 +189,8 @@ public class PdfboxFileConverter extends AbstractConverter {
         }
 
         @Override
-        public void setImagePath(@NotNull String path) throws IOException {
+        public void setImagePath(@NotNull String path) {
             super.setImagePath(path);
-            page = new PDPage(new PDRectangle(image.getWidth(), image.getHeight()));
         }
 
         @Override
@@ -192,7 +211,7 @@ public class PdfboxFileConverter extends AbstractConverter {
                 try {
                     addOcrText(contentStream);
                 } catch (Exception ex) {
-                    LOGGER.error("Could not write OCR text on page using fulltext file '" + fulltextPath + "'", ex);
+                    LOGGER.warn("Could not write OCR text on page using fulltext file '" + fulltextPath + "'", ex);
                 }
             }
 
@@ -224,22 +243,29 @@ public class PdfboxFileConverter extends AbstractConverter {
             // Write words on canvas
             stream.beginText();
             // PDF layout is upside down, so start on correct top
-            stream.newLineAtOffset(imageRect.x, image.getHeight() * imageScaling + (pageSize.height - imageRect.height - imageRect.y));
+            stream.newLineAtOffset(imageRect.x, imageSize.height * imageScaling + (pageSize.height - imageRect.height - imageRect.y));
             for (OcrParagraph paragraph : ocrPage.paragraphs) {
                 for (OcrLine line : paragraph.lines) {
                     for (OcrWord word : line.words) {
-
-                        // Calculate relative word position
-                        tx = (word.x - lastWord.x) * imageScaling;
-                        ty = ((lastWord.y + lastWord.height) - (word.y + word.height)) * imageScaling;
 
                         // Use word height to guess font size
                         if (word.height > 0) {
                             size = word.height * imageScaling * 1.1f;
                         }
 
+                        // Check word width, if not possible (maybe illegal characters) drop this word and continue
+                        try {
+                            wordWidth = font.getStringWidth(word.word) / 1000 * size;
+                        } catch (Exception ex) {
+                            LOGGER.debug("Could not render word '" + word.word + "'. Dropping it.", ex);
+                            continue;
+                        }
+
+                        // Calculate relative word position
+                        tx = (word.x - lastWord.x) * imageScaling;
+                        ty = ((lastWord.y + lastWord.height) - (word.y + word.height)) * imageScaling;
+
                         // Stretch word to match word box
-                        wordWidth = font.getStringWidth(word.word) / 1000 * size;
                         wordWidthScaling = 100 * word.width * imageScaling / wordWidth;
                         stream.setHorizontalScaling(wordWidthScaling);
 

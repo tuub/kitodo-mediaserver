@@ -64,6 +64,7 @@ conversion:
   pdf:
     defaultSize: 2500
     addOcrText: true
+    maxMemory: 1024
   jpeg:
     defaultSize: 1000
   useGraphicsMagick: false

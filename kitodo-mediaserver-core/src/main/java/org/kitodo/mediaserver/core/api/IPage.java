@@ -11,7 +11,6 @@
 
 package org.kitodo.mediaserver.core.api;
 
-import java.io.IOException;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -31,7 +30,7 @@ public interface IPage {
      *
      * @param path path to the image file
      */
-    void setImagePath(@NotNull String path) throws IOException;
+    void setImagePath(@NotNull String path);
 
     /**
      * Set maximum page size to resize images.

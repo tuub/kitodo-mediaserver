@@ -38,6 +38,7 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
   * `pdf`:
     * `defaultSize` (int): The default maximum size in pixels the images are resized to when converting to PDF format including extension for watermarks.
     * `addOcrText` (bool): `true` or `false` - Whether to add OCR text layer to PDF or not. See also: `mets.fulltextFileGrp`
+    * `maxMemory` (int): Use this amount of RAM in Megabyte for PDF generation. If the conversion process needs more memory it will use a disk cache in the system temp folder.
   * `jpeg`:
     * `defaultSize` (int): The default maximum size in pixels the images are resized to when converting to image format including extension for watermarks.
   * `useGraphicsMagick` (bool): `true` or `false` - Whether to use [GraphicsMagick](http://www.graphicsmagick.org/) for image conversion.

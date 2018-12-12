@@ -47,6 +47,7 @@ public class ConversionProperties {
         private int defaultSize;
         private boolean addOcrText;
         private List<String> ocrDirs;
+        private int maxMemory;
 
         public int getDefaultSize() {
             return defaultSize;
@@ -70,6 +71,14 @@ public class ConversionProperties {
 
         public void setOcrDirs(List<String> ocrDirs) {
             this.ocrDirs = ocrDirs;
+        }
+
+        public int getMaxMemory() {
+            return maxMemory;
+        }
+
+        public void setMaxMemory(int maxMemory) {
+            this.maxMemory = maxMemory;
         }
     }
 

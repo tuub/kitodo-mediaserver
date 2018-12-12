@@ -45,7 +45,7 @@ public abstract class AbstractPage implements IPage {
     /**
      * Master image object.
      */
-    protected BufferedImage image;
+    protected Dimension imageSize;
 
     /**
      * Graphics context of the resized page.
@@ -94,9 +94,8 @@ public abstract class AbstractPage implements IPage {
     }
 
     @Override
-    public void setImagePath(@NotNull String path) throws IOException {
+    public void setImagePath(@NotNull String path) {
         this.imagePath = path;
-        image = ImageIO.read(new File(imagePath));
     }
 
     public int getSize() {
@@ -115,6 +114,9 @@ public abstract class AbstractPage implements IPage {
      * @throws IOException on image file errors
      */
     public BufferedImage renderImage() throws IOException {
+
+        BufferedImage image = ImageIO.read(new File(imagePath));
+        imageSize = new Dimension(image.getWidth(), image.getHeight());
 
         calcDimensions();
 
@@ -162,8 +164,8 @@ public abstract class AbstractPage implements IPage {
      * Calculate image and page dimensions.
      */
     protected void calcDimensions() {
-        int width = image.getWidth();
-        int height = image.getHeight();
+        int width = imageSize.width;
+        int height = imageSize.height;
         int widthOffset = 0;
         int heightOffset = 0;
         if (isWatermarkEnabled() && canvasExtensionProp.isEnabled()) {
