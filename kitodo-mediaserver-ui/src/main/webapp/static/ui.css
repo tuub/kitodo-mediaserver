@@ -103,6 +103,10 @@ label {
     margin-bottom: 4px;
 }
 
+.allowedNetwork {
+    white-space: nowrap;
+}
+
 /* pagination: page numbers */
 span.pagination {
     margin-right: 1em;
@@ -165,6 +169,7 @@ span.pagination {
 @media only screen and (min-width: 769px) {
     nav.nav {
         width: 18em;
+        min-width: 18em;
     }
     nav.nav button.toggle {
         display: none;
