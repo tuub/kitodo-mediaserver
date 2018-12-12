@@ -14,6 +14,7 @@ package org.kitodo.mediaserver.core.actions;
 import java.io.File;
 import java.util.AbstractMap;
 import java.util.Map;
+import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IMetsTransformer;
 import org.kitodo.mediaserver.core.db.entities.Work;
@@ -56,6 +57,16 @@ public class CleanMetsTitleEntriesAction implements IAction {
         File metsFile = mediaServerUtils.getMetsFileForWork(work);
 
         metsTransformer.transform(metsFile, metsFile, new AbstractMap.SimpleEntry<>("pattern", parameter.get("pattern")));
+
+        if (StringUtils.equals(parameter.get("performOnAnchor"), "true")) {
+            File metsAnchorFile = mediaServerUtils.getAnchorMetsFileForWork(work);
+            if (metsAnchorFile.exists()) {
+                metsTransformer.transform(
+                        metsAnchorFile,
+                        metsAnchorFile,
+                        new AbstractMap.SimpleEntry<>("pattern", parameter.get("pattern")));
+            }
+        }
 
         return null;
     }

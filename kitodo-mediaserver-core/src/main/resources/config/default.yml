@@ -97,6 +97,7 @@ mets:
   fulltextFileGrp: FULLTEXT
   downloadFileGrp: DOWNLOAD
   workLockReduceMetsXsl: xslt/reduceMets.xsl
+  anchorSuffix: _anchor
 
 indexing:
   indexScriptUrl: https://example.com/indexWork.php
@@ -119,7 +120,6 @@ importer:
   fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"
   cron: 0 5 2 * * *
-  anchorSuffix: _anchor
   indexWorkAfterImport: true
   validationFileGrps:
     - ORIGINAL
