@@ -79,7 +79,9 @@ public class StandaloneFullPdfFileConvertAction implements IAction {
      */
     public InputStream perform(Work work, Map<String, String> parameter) throws Exception {
 
-        mediaServerUtils.checkForRequiredParameter(parameter);
+        if (parameter == null) {
+            parameter = new HashMap<>();
+        }
 
         File metsFile = mediaServerUtils.getMetsFileForWork(work);
         String workIdRegex = ".*?(" + Pattern.quote(work.getId()) + "/.*)";
