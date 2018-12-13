@@ -90,7 +90,13 @@ public class PdfboxFileConverter extends AbstractConverter {
                     PdfboxPage page = pageFactory.getObject();
                     page.setImagePath(metsPage.get("master").getFile().getAbsolutePath());
                     page.setSize(size);
-                    page.setFulltextPath(metsPage.get("fulltext").getFile().getAbsolutePath());
+
+                    // Add optional Fulltext file
+                    FileEntry fulltextEntry = metsPage.get("fulltext");
+                    if (fulltextEntry != null) {
+                        page.setFulltextPath(fulltextEntry.getFile().getAbsolutePath());
+                    }
+
                     document.getPages().add(page);
                 }
 
