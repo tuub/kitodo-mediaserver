@@ -21,13 +21,15 @@
                     <xsl:for-each select="alto:TextLine">
                         <ocrLine>
                             <xsl:for-each select="alto:String">
-                                <ocrWord>
-                                    <xsl:attribute name="x"><xsl:value-of select="@HPOS"/></xsl:attribute>
-                                    <xsl:attribute name="y"><xsl:value-of select="@VPOS"/></xsl:attribute>
-                                    <xsl:attribute name="width"><xsl:value-of select="@WIDTH"/></xsl:attribute>
-                                    <xsl:attribute name="height"><xsl:value-of select="@HEIGHT"/></xsl:attribute>
-                                    <xsl:value-of select="@CONTENT"/>
-                                </ocrWord>
+                                <xsl:if test="@HPOS!='' and @VPOS!='' and @WIDTH!='' and @HEIGHT!='' and @CONTENT!=''">
+                                    <ocrWord>
+                                        <xsl:attribute name="x"><xsl:value-of select="@HPOS"/></xsl:attribute>
+                                        <xsl:attribute name="y"><xsl:value-of select="@VPOS"/></xsl:attribute>
+                                        <xsl:attribute name="width"><xsl:value-of select="@WIDTH"/></xsl:attribute>
+                                        <xsl:attribute name="height"><xsl:value-of select="@HEIGHT"/></xsl:attribute>
+                                        <xsl:value-of select="@CONTENT"/>
+                                    </ocrWord>
+                                </xsl:if>
                             </xsl:for-each>
                         </ocrLine>
                     </xsl:for-each>
