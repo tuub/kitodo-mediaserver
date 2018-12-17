@@ -30,5 +30,5 @@ ui:
     actions:
 
 # This is just to make sure that the build doesn't break
-doi:
+identifier:
   doiDataReaderXsl: xslt/getDoiFromMets.xsl

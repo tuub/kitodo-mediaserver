@@ -25,7 +25,8 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IMetsReader;
-import org.kitodo.mediaserver.core.config.DoiProperties;
+import org.kitodo.mediaserver.core.api.IWorkDescriptor;
+import org.kitodo.mediaserver.core.config.IdentifierProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.slf4j.Logger;
@@ -40,18 +41,23 @@ public class DoiRegisterAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DoiRegisterAction.class);
 
-    private DoiProperties doiProperties;
+    private IdentifierProperties identifierProperties;
     private MediaServerUtils mediaServerUtils;
     private IMetsReader metsReader;
+    private IWorkDescriptor workDescriptor;
 
     @Autowired
-    public void setDoiProperties(DoiProperties doiProperties) {
-        this.doiProperties = doiProperties;
+    public void setIdentifierProperties(IdentifierProperties identifierProperties) {
+        this.identifierProperties = identifierProperties;
     }
 
     @Autowired
     public void setMediaServerUtils(MediaServerUtils mediaServerUtils) {
         this.mediaServerUtils = mediaServerUtils;
+    }
+
+    public void setWorkDescriptor(IWorkDescriptor workDescriptor) {
+        this.workDescriptor = workDescriptor;
     }
 
     public void setMetsReader(IMetsReader metsReader) {
@@ -78,15 +84,15 @@ public class DoiRegisterAction implements IAction {
         }
 
         final String doi = metsResult.get(0);
-        final String doiUrl = doiProperties.getDataCiteURL() + doi;
-        final String landingPage = doiProperties.getDoiLandingPagePattern().replaceFirst("\\{workId\\}", work.getId());
+        final String doiUrl = identifierProperties.getDataCiteURL() + doi;
+        final String landingPage = workDescriptor.describe(work);
         final String putRequestContent = "doi=" + doi + "\nurl=" + landingPage;
 
         // Register doi using Http Put
         CredentialsProvider provider = new BasicCredentialsProvider();
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-                doiProperties.getDataCiteUser(),
-                doiProperties.getDataCitePassword());
+                identifierProperties.getDataCiteUser(),
+                identifierProperties.getDataCitePassword());
         provider.setCredentials(AuthScope.ANY, credentials);
 
         HttpClient client = HttpClientBuilder.create()
