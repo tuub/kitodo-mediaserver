@@ -104,12 +104,14 @@ indexing:
   indexScriptUrl: https://example.com/indexWork.php
   indexScriptMetsUrlArgName: doc
 
-doi:
+identifier:
   dataCiteURL: https://mds.test.datacite.org/doi/
   dataCiteUser: nobody
   dataCitePassword: secret
-  doiLandingPagePattern: https://digital.example.com/works/{workId}
   doiDataReaderXsl: xslt/getDoiFromMets.xsl
+  landingPagePattern: https://digital.example.com/works/{workId}
+  replacementRegex: "[-\s]"
+  replacement: "_"
 
 importer:
   hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/

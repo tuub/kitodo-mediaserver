@@ -15,17 +15,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Configuration class for the doi properties.
+ * Configuration class for identifier properties.
  */
 @Configuration
-@ConfigurationProperties(prefix = "doi")
-public class DoiProperties {
+@ConfigurationProperties(prefix = "identifier")
+public class IdentifierProperties {
 
     private String dataCiteURL;
     private String dataCiteUser;
     private String dataCitePassword;
-    private String doiLandingPagePattern;
+    private String landingPagePattern;
     private String doiDataReaderXsl;
+    private String replacementRegex;
+    private String replacement;
 
     public String getDataCiteURL() {
         return dataCiteURL;
@@ -51,12 +53,12 @@ public class DoiProperties {
         this.dataCitePassword = dataCitePassword;
     }
 
-    public String getDoiLandingPagePattern() {
-        return doiLandingPagePattern;
+    public String getLandingPagePattern() {
+        return landingPagePattern;
     }
 
-    public void setDoiLandingPagePattern(String doiLandingPagePattern) {
-        this.doiLandingPagePattern = doiLandingPagePattern;
+    public void setLandingPagePattern(String landingPagePattern) {
+        this.landingPagePattern = landingPagePattern;
     }
 
     public String getDoiDataReaderXsl() {
@@ -65,5 +67,21 @@ public class DoiProperties {
 
     public void setDoiDataReaderXsl(String doiDataReaderXsl) {
         this.doiDataReaderXsl = doiDataReaderXsl;
+    }
+
+    public String getReplacementRegex() {
+        return replacementRegex;
+    }
+
+    public void setReplacementRegex(String replacementRegex) {
+        this.replacementRegex = replacementRegex;
+    }
+
+    public String getReplacement() {
+        return replacement;
+    }
+
+    public void setReplacement(String replacement) {
+        this.replacement = replacement;
     }
 }
