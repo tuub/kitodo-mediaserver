@@ -16,12 +16,10 @@ import org.kitodo.mediaserver.core.api.IWorkDescriptor;
 import org.kitodo.mediaserver.core.config.IdentifierProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * An implementation of a work descriptor creating a persistent url of a work.
  */
-@Component
 public class WorkPurlCreator implements IWorkDescriptor {
 
     IdentifierProperties identifierProperties;

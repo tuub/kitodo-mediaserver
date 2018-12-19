@@ -17,6 +17,7 @@ import org.kitodo.mediaserver.core.actions.DoiRegisterAction;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IMetsTransformer;
+import org.kitodo.mediaserver.core.api.IWorkDescriptor;
 import org.kitodo.mediaserver.core.processors.WorkPurlCreator;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
 import org.kitodo.mediaserver.core.processors.XsltMetsTransformer;
@@ -41,10 +42,15 @@ public class CommonConfiguration {
         return xsltMetsReader;
     }
 
+    @Bean
+    public IWorkDescriptor workPurlCreator() {
+        return new WorkPurlCreator();
+    }
+
     @Bean(name = "registerDoi")
     public IAction doiRegisterAction() throws IOException {
         DoiRegisterAction doiRegisterAction = new DoiRegisterAction();
-        doiRegisterAction.setWorkDescriptor(new WorkPurlCreator());
+        doiRegisterAction.setWorkDescriptor(workPurlCreator());
         doiRegisterAction.setMetsReader(doiMetsReader());
         return doiRegisterAction;
     }
