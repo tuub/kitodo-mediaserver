@@ -11,6 +11,8 @@
 
 package org.kitodo.mediaserver.core.api;
 
+import java.awt.color.ICC_Profile;
+import java.util.Calendar;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 
@@ -30,6 +32,46 @@ public interface IDocument {
      * Get a list of all pages.
      */
     List<IPage> getPages();
+
+    /**
+     * Get document title.
+     */
+    String getTitle();
+
+    /**
+     * Get list of document authors.
+     */
+    List<String> getAuthors();
+
+    /**
+     * Get date of document production.
+     */
+    Calendar getProductionDate();
+
+    /**
+     * Get ICC color profile of document.
+     */
+    ICC_Profile getIccProfile();
+
+    /**
+     * Set the document title.
+     */
+    void setTitle(String title);
+
+    /**
+     * Add an document author.
+     */
+    void addAuthor(String author);
+
+    /**
+     * Set date of document production.
+     */
+    void setProductionDate(Calendar cal);
+
+    /**
+     * Set ICC color profile.
+     */
+    void setIccProfile(ICC_Profile profile);
 
     /**
      * Saves the whole document and its pages to a file.
