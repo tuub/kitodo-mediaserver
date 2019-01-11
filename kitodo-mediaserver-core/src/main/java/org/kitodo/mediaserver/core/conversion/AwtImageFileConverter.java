@@ -78,7 +78,7 @@ public class AwtImageFileConverter extends AbstractConverter {
     /**
      * A document representation using an image.
      */
-    static class AwtImageDocument implements IDocument {
+    static class AwtImageDocument extends AbstractDocument {
 
         private List<IPage> pages = new ArrayList<>();
 

@@ -39,6 +39,7 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
     * `defaultSize` (int): The default maximum size in pixels the images are resized to when converting to PDF format including extension for watermarks.
     * `addOcrText` (bool): `true` or `false` - Whether to add OCR text layer to PDF or not. See also: `mets.fulltextFileGrp`
     * `maxMemory` (int): Use this amount of RAM in Megabyte for PDF generation. If the conversion process needs more memory it will use a disk cache in the system temp folder.
+    * `iccProfile` (string: filesystem path): Path to an ICC profile file. This color profile gets embedded to files if the converter supports it. Mainly this is for PDF/A support by PdfboxFileConverter. On Ubuntu with installed *icc-profiles-free* package this uses the provided *sRGB.icc* file.
   * `jpeg`:
     * `defaultSize` (int): The default maximum size in pixels the images are resized to when converting to image format including extension for watermarks.
   * `useGraphicsMagick` (bool): `true` or `false` - Whether to use [GraphicsMagick](http://www.graphicsmagick.org/) for image conversion.

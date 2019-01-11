@@ -48,6 +48,7 @@ public class ConversionProperties {
         private boolean addOcrText;
         private List<String> ocrDirs;
         private int maxMemory;
+        private String iccProfile;
 
         public int getDefaultSize() {
             return defaultSize;
@@ -79,6 +80,14 @@ public class ConversionProperties {
 
         public void setMaxMemory(int maxMemory) {
             this.maxMemory = maxMemory;
+        }
+
+        public String getIccProfile() {
+            return iccProfile;
+        }
+
+        public void setIccProfile(String iccProfile) {
+            this.iccProfile = iccProfile;
         }
     }
 

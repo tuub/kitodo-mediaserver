@@ -7,6 +7,7 @@ This document describes how to install Kitodo Mediaserver.
 * Apache Tomcat 8.5 - the application server
 * GraphicsMagick (default) or ImageMagick - for file conversion
 * Ghostscript - for PDF support
+* A default ICC profile. On Ubuntu you may install *icc-profiles-free* package
 
 Mediaserver may run on other application servers supporting Java Servlet 3 too but this is untested and not supported. Same applies for Tomcat 7.0 and Tomcat 8.0.
 

@@ -65,12 +65,12 @@ public abstract class AbstractConverter implements IConverter {
     /**
      * Checks that all required parameter are present.
      *
-     * @param pages a map (key=sorting order of files) of maps (key={master,fulltext,...}) with work files
-     * @param parameter the parameter map
+     * @param pages          a map (key=sorting order of files) of maps (key={master,fulltext,...}) with work files
+     * @param parameter      the parameter map
      * @param requiredParams required parameter
      * @throws Exception by fatal errors
      */
-    protected void checkParams(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter, String ... requiredParams) {
+    protected void checkParams(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter, String... requiredParams) {
 
         if (pages == null) {
             throw new IllegalArgumentException("'pages' must not be null.");

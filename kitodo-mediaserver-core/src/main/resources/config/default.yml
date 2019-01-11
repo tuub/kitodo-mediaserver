@@ -65,6 +65,7 @@ conversion:
     defaultSize: 2500
     addOcrText: true
     maxMemory: 1024
+    iccProfile: /usr/share/color/icc/sRGB.icc
   jpeg:
     defaultSize: 1000
   useGraphicsMagick: false
