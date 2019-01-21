@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -135,15 +136,17 @@ public class ImporterFlowControl {
     public void importWorks() throws Exception {
 
         File workDir;
-        File mets = null;
+        File mets;
         Notifier errorNotifier = notifierFactory.getObject();
         Notifier reportNotifier = notifierFactory.getObject();
+
+        List<String> incompleteDirectories = new ArrayList<>();
 
         LOGGER.info("Looking for works to import in folder " + importerProperties.getHotfolderPath());
 
         // Get a work from the hotfolder and move it to the import-in-progress-folder. Make sure that this set
         // of files is in a subdirectory named as the XML file with the mets-mods-data.
-        while ((workDir = importerUtils.getWorkPackage()) != null) {
+        while ((workDir = importerUtils.getWorkPackage(incompleteDirectories)) != null) {
 
             LOGGER.info("Starting import of work " + workDir.getName());
 
@@ -366,6 +369,12 @@ public class ImporterFlowControl {
             errorNotifier.send("Error: Import Action", importerProperties.getErrorNotificationEmail());
         }
 
+        if (!incompleteDirectories.isEmpty()) {
+            String message = "The following directories were incomplete (no mets file found) and thus not imported: "
+                    + incompleteDirectories;
+            LOGGER.info(message);
+            reportNotifier.add(message);
+        }
         reportNotifier.send("Report: Import Action", importerProperties.getReportNotificationEmail());
     }
 

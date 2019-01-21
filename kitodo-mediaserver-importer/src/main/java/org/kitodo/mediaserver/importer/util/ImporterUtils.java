@@ -13,13 +13,14 @@ package org.kitodo.mediaserver.importer.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.FalseFileFilter;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.kitodo.mediaserver.core.config.ImporterProperties;
 import org.kitodo.mediaserver.importer.exceptions.ImporterException;
@@ -50,12 +51,12 @@ public class ImporterUtils {
      *
      * <p>
      * If no xml file is found, the first directory found is copied to the importing directory, assuming this is a
-     * process folder for the complete work.
+     * process folder for the complete work. However, directories with no METS xml are ignored.
      *
      * @return the directory with the work to import, null if no work is found.
      * @throws Exception if a severe error occurs.
      */
-    public File getWorkPackage() throws Exception {
+    public File getWorkPackage(List<String> incompleteDirectories) throws Exception {
         File hotfolder = new File(importerProperties.getHotfolderPath());
         File importingFolder  = new File(importerProperties.getImportingFolderPath());
 
@@ -101,20 +102,25 @@ public class ImporterUtils {
         }
 
         // If there is no xml file directly under the hotfolder, check for a directory
-        Optional<File> optionalDir = FileUtils
-                .listFilesAndDirs(
-                        hotfolder,
-                        FalseFileFilter.FALSE,
-                        TrueFileFilter.TRUE)
-                .stream()
-                .filter(dir -> !dir.equals(hotfolder))
-                .filter(File::isDirectory)
-                .findFirst();
+        boolean thereIsStillHopeForCompleteDirectories = true;
+        while (thereIsStillHopeForCompleteDirectories) {
+            Optional<File> optionalDir = Arrays.stream(hotfolder.listFiles(File::isDirectory))
+                    .filter(dir -> !incompleteDirectories.contains(dir.getName()))
+                    .findFirst();
 
-        if (optionalDir.isPresent()) {
-            moveDir(optionalDir.get(), importingFolder);
-
-            return new File(importingFolder, optionalDir.get().getName());
+            if (optionalDir.isPresent()) {
+                File dir = optionalDir.get();
+                // Check that the directory contains a mets file, otherwise the export might not yet be complete.
+                File mets = new File(dir, dir.getName() + ".xml");
+                if (mets.exists()) {
+                    moveDir(optionalDir.get(), importingFolder);
+                    return new File(importingFolder, optionalDir.get().getName());
+                } else {
+                    incompleteDirectories.add(dir.getName());
+                }
+            } else {
+                thereIsStillHopeForCompleteDirectories = false;
+            }
         }
 
         return null;
