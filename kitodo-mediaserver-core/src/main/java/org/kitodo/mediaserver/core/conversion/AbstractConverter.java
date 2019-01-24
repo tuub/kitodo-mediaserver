@@ -13,9 +13,9 @@ package org.kitodo.mediaserver.core.conversion;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
@@ -93,24 +93,6 @@ public abstract class AbstractConverter implements IConverter {
     }
 
     /**
-     * Checks if a file exist and creates it, if it doesn't.
-     *
-     * @param file the file
-     * @return true if the file already existed, otherwise false.
-     * @throws IOException if the file could not be created
-     */
-    protected synchronized boolean createCacheFile(File file) throws IOException {
-        if (file == null) {
-            throw new IllegalArgumentException("The file must not be null");
-        }
-        if (file.exists()) {
-            return true;
-        }
-        FileUtils.touch(file);
-        return false;
-    }
-
-    /**
      * Gets the conversion size from the parameter map. If no parameter is found, it delivers the default size.
      *
      * @param parameter the parameter map
@@ -125,6 +107,41 @@ public abstract class AbstractConverter implements IConverter {
                 return conversionPropertiesPdf.getDefaultSize();
             }
             return conversionPropertiesJpeg.getDefaultSize();
+        }
+    }
+
+    /**
+     * Checks if derivative file not exists and creates it.
+     *
+     * @param derivativePath relative path to the file
+     * @return Map with key=file and value=alreadyExists
+     * @throws IOException if the file could not be created
+     */
+    protected synchronized Map.Entry<File, Boolean> createDerivativeFile(String derivativePath) throws IOException {
+        File file;
+        boolean exists = false;
+        if (saveConvertedFile) {
+            file = new File(conversionTargetPath, derivativePath);
+            file.getParentFile().mkdirs();
+            exists = !file.createNewFile();
+        } else {
+            file = File.createTempFile("derivative_", null);
+        }
+        return new AbstractMap.SimpleEntry<>(file, exists);
+    }
+
+    /**
+     * Delete the derivative if needed.
+     *
+     * @param file derivative file
+     */
+    protected synchronized void cleanDerivativeFile(File file) {
+        if (!saveConvertedFile) {
+            if (file == null) {
+                throw new IllegalArgumentException("Argument file must not be null.");
+            }
+            LOGGER.info("Deleting file " + file.getAbsolutePath());
+            file.delete();
         }
     }
 }
