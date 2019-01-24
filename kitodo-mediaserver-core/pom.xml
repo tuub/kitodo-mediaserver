@@ -87,4 +87,24 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources/config</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>default.yml</include>
+                    <include>local.yml</include>
+                    <include>secrets.yml</include>
+                    <include>application.yml</include>
+                    <include>dev.yml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
+
 </project>
