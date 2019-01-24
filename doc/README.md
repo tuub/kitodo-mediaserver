@@ -22,4 +22,5 @@ All operations on a work are executed technically as actions implementing a simp
 * Usage Guide
   * [Web UI usage guide](Web-UI-usage-guide.md)
   * [CLI usage guide](CLI-usage-guide.md)
+  * [Provided actions](Actions.md) - What they do and how to use them
 * [Developer Guide](Developer-Guide.md)
