@@ -46,31 +46,26 @@ public class AwtImageFileConverter extends AbstractConverter {
 
         int size = getConversionSize(parameter);
 
-        File convertedFile = new File(conversionTargetPath, parameter.get("derivativePath"));
-
         // if the cache file already exists, there is another thread already performing the conversion.
-        boolean fileAlreadyExists = createCacheFile(convertedFile);
+        Map.Entry<File, Boolean> convertedFile = createDerivativeFile(parameter.get("derivativePath"));
 
-        if (!fileAlreadyExists) {
+        if (!convertedFile.getValue()) {
             try {
                 IDocument document = new AwtImageDocument();
                 IPage page = pageFactory.getObject();
                 page.setImagePath(pages.firstEntry().getValue().get("master").getFile().getAbsolutePath());
                 page.setSize(size);
                 document.getPages().add(page);
-                document.save(convertedFile.getAbsolutePath());
+                document.save(convertedFile.getKey().getAbsolutePath());
             } catch (Exception e) {
-                convertedFile.delete();
+                convertedFile.getKey().delete();
                 throw e;
             }
         }
 
-        InputStream convertedInputStream = new FileInputStream(convertedFile);
+        InputStream convertedInputStream = new FileInputStream(convertedFile.getKey());
 
-        if (!saveConvertedFile) {
-            LOGGER.info("Deleting file " + convertedFile.getAbsolutePath());
-            convertedFile.delete();
-        }
+        cleanDerivativeFile(convertedFile.getKey());
 
         return convertedInputStream;
     }

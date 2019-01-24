@@ -77,12 +77,10 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
         boolean addWatermark = conversionPropertiesWatermark.isEnabled()
                                 && size >= conversionPropertiesWatermark.getMinSize();
 
-        File convertedFile = new File(conversionTargetPath, parameter.get("derivativePath"));
-
         // if the cache file already exists, there is another thread already performing the conversion.
-        boolean fileAlreadyExists = createCacheFile(convertedFile);
+        Map.Entry<File, Boolean> convertedFile = createDerivativeFile(parameter.get("derivativePath"));
 
-        if (!fileAlreadyExists) {
+        if (!convertedFile.getValue()) {
             try {
                 IMOperation operation = new IMOperation();
                 operation.addImage(pages.get(0).get("master").getFile().getAbsolutePath());
@@ -98,7 +96,7 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
                     }
                 }
                 operation.colorspace("RGB"); // Needed for firefox
-                operation.addImage(convertedFile.getAbsolutePath());
+                operation.addImage(convertedFile.getKey().getAbsolutePath());
 
                 ImageCommand convertCmd = new ConvertCmd(conversionProperties.isUseGraphicsMagick());
 
@@ -107,17 +105,14 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
                 LOGGER.info("Executed IM Operation: " + operation.toString());
 
             } catch (Exception e) {
-                convertedFile.delete();
+                convertedFile.getKey().delete();
                 throw e;
             }
         }
 
-        InputStream convertedInputStream = new FileInputStream(convertedFile);
+        InputStream convertedInputStream = new FileInputStream(convertedFile.getKey());
 
-        if (!saveConvertedFile) {
-            LOGGER.info("Deleting file " + convertedFile.getAbsolutePath());
-            convertedFile.delete();
-        }
+        cleanDerivativeFile(convertedFile.getKey());
 
         return convertedInputStream;
     }
