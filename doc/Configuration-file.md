@@ -28,7 +28,7 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
   * `filePathPattern` (string: URL path): The URL path to use for the file server. `/files/{workId}/**` will work for an URL like *http://<span>d</span>omain.de/files/ABC123/...*.
   * `caching` (bool): `true` or `false` - Enable or disable caching of produced derivatives. 
   * `cachePath` (string: filesystem path): Path to the cache files. The folder needs write permissions from the fileserver process.
-  * `convertAction` (string: Spring bean): A Spring Action Bean defining the convert action. By default there are three convert actions available.. `scalingWatermarkingConvertAction` and `appendingWatermarkingConvertAction` are using ImageMagick or GraphicsMagic shell command. `awtPdfboxSingleFileConvertAction` uses our own conversion implementation. Therefor the widely tested ImageMagick variant might be more stable. But with the `awtPdfboxSingleFileConvertAction` you can create searchable PDF files using your OCR texts.
+  * `convertAction` (string: Spring bean): A Spring Action Bean defining the convert action. By default there are three convert actions available.. `scalingWatermarkingConvertAction` and `appendingWatermarkingConvertAction` are using ImageMagick or GraphicsMagic shell command. `awtPdfboxSingleFileConvertAction` uses our own conversion implementation. Therefor the widely tested ImageMagick variant might be more stable. But with the `awtPdfboxSingleFileConvertAction` you can create searchable PDF/A-1b files using your OCR texts.
   * `cacheClearCron` (string: UNIX Cron format): If scheduling is used this is the schedule in [UNIX cron](https://en.wikipedia.org/wiki/Cron) format like `0 5 2 * * *`.
   * `cacheClearSince` (int: seconds): File that are touched since this value should be deleted by a cache clear run.
   * `allowedNetworks` (map: IP subnets): Contains multiple IP subnet definitions defining the access level for a work. Every work can have one network. There are two default networks: `global: 0.0.0.0/0,::/0` allows access from everywhere. `disabled: 0.0.0.0/32,::/128` disables access for everyone. `disabled` also allows to set a comment and to create a reduced METS/MODS file with less informations about the work.
@@ -91,7 +91,13 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
   * `cron` (string): For job scheduling this defines when the jobs will run. It uses [UNIX cron](https://en.wikipedia.org/wiki/Cron) format like `0 5 2 * * *`.
   * `indexWorkAfterImport` (bool): `true` or `false` - Whether to call reindexing after import.
   * `validationFileGrps` (list of strings): Valid entries: `ORIGINAL`, `PRESENTATION` and `FULLTEXT` (TODO)
-  * `actionsBeforeIndexing` (list): A list of action beans to be run before indexing.
+  * `actionsBeforeIndexing` (list): A list of action beans to be run before indexing, e.g. 
+    ```yaml
+    actionsBeforeIndexing:
+      - abbyyToAltoOcrConvertAction
+      - addFullPdfToMetsAction
+      - preproduceFullPdfFileConvertAction
+    ```
   * `actionsAfterSuccessfulIndexing` (list): A list of action beans to be run after indexing.
   * `actionsToRequestAsynchronously` (list): A list of action beans to be run after indexing. These actions will be requested only and will run asynchronously later.
 
@@ -113,3 +119,13 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
         * `action` (string): The bean name of the action
         * `enabled` (bool): `true` or `false` - Whether to enabled or disable this action definition. Use this key to disable predefined actions.
         * `parameters` (map): A map of parameters for this action
+      Example:
+      ```yaml
+      actions:
+        thumbs:
+          label: Generate Thumbnails
+          action: preproduceDerivativesAction
+          enabled: true
+          parameters:
+            fileGrp: MIN
+      ```
