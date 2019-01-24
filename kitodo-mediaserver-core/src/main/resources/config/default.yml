@@ -46,6 +46,10 @@ notifier:
   timestampFormat: "yyyy-MM-dd HH:mm:ss"
   # Recipients are set in the modules via <notificationEmail>
 
+application:
+  version: @project.version@
+  timestamp: @maven.build.timestamp@
+
 fileserver:
   rootUrl: https://example.com/files/
   filePathPattern: /files/{workId}/**

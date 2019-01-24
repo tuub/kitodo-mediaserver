@@ -36,7 +36,7 @@
                 <span th:text="#{users.title}"></span>
             </a>
 
-            <a class="item" href="https://github.com/tuub/kitodo-mediaserver/wiki" target="_blank">
+            <a class="item" th:href="'https://github.com/tuub/kitodo-mediaserver/tree/' + ${applicationVersion} + '/doc'" target="_blank">
                 <i class="left help icon"></i>
                 <span th:text="#{help.title}"></span>
                 <i class="external alternate icon"></i>
