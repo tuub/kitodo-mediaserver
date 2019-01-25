@@ -36,5 +36,13 @@ public interface WorkRepository extends PagingAndSortingRepository<Work, String>
      * @return a list of works
      */
     List<Work> findByCollectionsName(String collectionName);
+
+    /**
+     * Search for IDs using a pattern.
+     *
+     * @param idPattern the pattern to search for
+     * @return a list of works.
+     */
+    List<Work> findByIdLike(String idPattern);
 }
 
