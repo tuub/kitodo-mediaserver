@@ -91,10 +91,11 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
             <resource>
-                <filtering>true</filtering>
                 <directory>src/main/resources/config</directory>
+                <filtering>true</filtering>
                 <includes>
                     <include>default.yml</include>
                     <include>local.yml</include>
