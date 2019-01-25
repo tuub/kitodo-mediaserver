@@ -97,6 +97,11 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
       - abbyyToAltoOcrConvertAction
       - addFullPdfToMetsAction
       - preproduceFullPdfFileConvertAction
+      - cleanMetsTitleEntriesAction:
+          pattern: "<<(.*?)>>"
+      - preproduceDerivativesAction:
+          fileGrp: THUMBS
+          fileId: FILE_0001_THUMBS
     ```
   * `actionsAfterSuccessfulIndexing` (list): A list of action beans to be run after indexing.
   * `actionsToRequestAsynchronously` (list): A list of action beans to be run after indexing. These actions will be requested only and will run asynchronously later.
@@ -128,4 +133,8 @@ The `url` parameter uses the format `jdbc:mysql://DB-HOSTNAME/DB-NAME?autoReconn
           enabled: true
           parameters:
             fileGrp: MIN
+        makeFullPDF:
+          label: Generate Full PDF
+          action: preproduceFullPdfFileConvertAction
+          enabled: true
       ```

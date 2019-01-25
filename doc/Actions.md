@@ -1,5 +1,7 @@
 # Provided actions
 
+Actions in Kitodo.Mediaserver can be anything that can be performed on works or work files: conversions, creation of derivatives, manipulations of the mets file, setting of access rights etc. Actions may be executed by import, from the admin ui or using the cli tool. For examples of action configurations, see the [configuration file documentation](Configuration-file.md)
+
 If you want to know how to create your own action, have a look at [Developer-Guide](Developer-Guide.md#Actions).
 
 This guide tells you about provided actions - or better: their action beans - which could be easily used in your [configuration file](Configuration-file.md).
@@ -10,11 +12,11 @@ Converts ABBYY Finereader v10 OCR files to ALTO 2.0 format.
 
 ## addFullPdfToMetsAction
 
-Add an file entry to the METS file that points to the full PDF file containing all images in one file. This entry works in Kitodo.Presentation and DFG-Viewer to provide "Download whole work".
+Add a file entry to the METS file that points to the full PDF file containing all images in one file. This entry works in Kitodo.Presentation and DFG-Viewer to provide "Download whole work".
 
 ##### Call parameters
 
-- `destFile` (optional): The file path to save the file to. If unset the source file gets overwritten.
+- `destFile` (optional): The file path to save the file to. If unset the METS file gets overwritten.
 
 ## cacheDeleteAction
 
@@ -22,7 +24,7 @@ Deletes cached derivatives. This deletes files and folders from cache directory.
 
 ##### Call parameters
 
-- `age` (optional): Timespan in seconds. Delete files older than <age> only.
+- `age` (optional): Timespan in seconds. Only deletes files older than `age`.
 
 ## cleanMetsTitleEntriesAction
 
@@ -34,16 +36,16 @@ Remove characters in metadata title fields.
 
 ## preproduceDerivativesAction
 
-Generate derivatives for all master files in a METS file using Java converter.
+Generate derivatives for master files in a METS file using Java converter.
 
 ##### Call parameters
 
-- `fileGrp` (required): The file group to generate derivatives for every file, e.g. `THUMBS`
-- `fileId` (optional): The file ID to generate a single derivative file for.
+- `fileGrp` (required): The file group to generate derivatives for, e.g. `THUMBS`
+- `fileId` (optional): If omitted, derivatives of all files in the file group will be created.
 
 ## preproduceFullPdfFileConvertAction
 
-Generate a full PDF containing all images in one PDF file using Java converter.
+Generate a full PDF containing containing all images and possibly embedded OCR in one PDF file using Java converter.
 
 ## registerDoi
 
