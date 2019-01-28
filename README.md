@@ -7,4 +7,4 @@
 * Files may be put in quarantine in case of copyright issues
 * An open software architecture making it possible for developers to add new conversion features or other actions to be performed on works
 
-For further Information, please see the [Documentation](https://github.com/tuub/kitodo-mediaserver/tree/master/doc).
+For further Information, please see the [documentation](doc).
