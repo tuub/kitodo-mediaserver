@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.stream.Stream;
 import org.kitodo.mediaserver.core.config.CliProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
@@ -100,7 +99,6 @@ public class PerformCommand implements Callable {
         if (!StringUtils.hasText(actionName)) {
             throw new IllegalArgumentException("actionName must be set.");
         }
-        Stream<String> workIdStream = Arrays.stream(workIds);
         if (workIds == null || Arrays.stream(workIds).noneMatch(StringUtils::hasText)) {
             throw new IllegalArgumentException("workIds must be set.");
         }
@@ -108,7 +106,7 @@ public class PerformCommand implements Callable {
         final Set<Work> allWorks = new HashSet<>();
 
         // Get all Works by workId patterns
-        workIdStream
+        Arrays.stream(workIds)
             .filter(StringUtils::hasText)
             .distinct()
             .map(id -> id
@@ -117,7 +115,7 @@ public class PerformCommand implements Callable {
                 .replace("%", "\\%")
                 // replace shell wildcard chars with SQL ones
                 .replaceAll("[*]+", "%")
-                .replaceAll("[?]+", "_"))
+                .replaceAll("\\?", "_"))
             .forEach(workIdPattern -> {
                 List<Work> works = workRepository.findByIdLike(workIdPattern);
                 allWorks.addAll(works);
