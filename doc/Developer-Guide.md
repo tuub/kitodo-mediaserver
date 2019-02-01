@@ -18,7 +18,7 @@ The local module is the place where to put local configurations and extensions a
 
 ## Configuration files
 
-*Basic configurations* are declared using YAML, hereto: [Configuration file](Configuration-file.md). The main configuration file is [default.yml](../kitodo-mediaserver-core/src/main/resources/config/default.yml). Any configuration parameter in this file can be overridden in [local.yml](../kitodo-mediaserver-local/src/main/resources/config/local.yml). The latter must in the repository be left empty, only to be used for local installations. Occasionally there are additional configurations in the application.yml of each module.
+*Basic configurations* are declared using YAML, hereto: [Configuration file](Configuration-file.md). The main configuration file is [default.yml](../kitodo-mediaserver-core/src/main/resources/config/default.yml). Any configuration parameter in this file can be overridden in [local.yml](../kitodo-mediaserver-local/src/main/resources/config/local.yml). The latter must be left empty in the repository, only to be used for local installations. Occasionally there are additional configurations in the application.yml of each module.
 
 The system also allows a dev.yml to be used for developing puposes and a secrets.yml containing passwords and suchs to be deployed only on production servers. An example of a dev.yml using console logging and hibernate printouts looks like this:
 ```yml
@@ -43,7 +43,7 @@ logging:
 
 The read order of the configuration files is set in the `@SpringBootApplication` class of each executable module, see e.g. [FileserverApplication.java](../kitodo-mediaserver-fileserver/src/main/java/org/kitodo/mediaserver/fileserver/FileserverApplication.java). The embedding of the configuration parameter in the java code takes place in `@ConfigurationProperties` classes in the config directories of the modules. If you add a configuration parameter, you also have to extend the appropriate `@ConfigurationProperties` class.
 
-*Spring configurations* (i.e. declarations of Spring Beans) are made in Java classes annotated with `@Configuration` placed in the config directory of the module. Of course you may also use directly annotate Implementations as `@Component` or `@Service` making them directly accessible as Spring beans since component-scans are always made in the `@SpringBootApplication` classes.
+*Spring configurations* (i.e. declarations of Spring Beans) are made in Java classes annotated with `@Configuration` placed in the config directory of the module. Of course you may also directly annotate Implementations as `@Component` or `@Service` making them directly accessible as Spring beans since component-scans are always made in the `@SpringBootApplication` classes.
 
 ## Actions
 
@@ -59,7 +59,7 @@ Actions can be executed anywhere in the Kitodo.Mediaserver components: in the fi
 
 Since actions are named beans, they can easily be added to the YAML configuration file to be executable in the different modules. This is implemented in the [ActionService](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/services/ActionService.java). Requested actions to be performed at a later time are stored in a simple database (see the database model below) and performed using the CLI.
 
-Requested actions are stored in a simple database where the action always is connected to a work and can have any number of parameters (see the database model below).
+Requested actions are stored in a simple database where the action is always connected to a work and can have any number of parameters (see the database model below).
 
 ### Implementing actions
 
@@ -77,16 +77,16 @@ public class MyAction implements IAction {
 }
 ```
 
-The action will then automatically be instantiated as a Spring bean and can be added in thconfiguration yaml using the name `myUniqueAction`.
+The action will then automatically be instantiated as a Spring bean and can be added in the configuration yaml using the name `myUniqueAction`.
 
-It is encouraged, to implement actions in the core module and make a pull request, so that they can be used by others as well. However, if you know, your action can only be used locally, you may just as well put it in the local module.
+It is encouraged to implement actions in the core module and make a pull request, so that they can be used by others as well. However, if you know your action can only be used locally, you may just as well put it in the local module.
 
 
 ### Implementing conversion classes
 
 To implement a class for file conversion, you have to implement the [IConverter](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/api/IConverter.java) interface. You will find implementation examples [here](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/conversion).
 
-You won't necessarily have to implement a new action for the conversion. If it for instance is to be used for a single file, you can use the [SingleFileConvertAction](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/actions/SingleFileConvertAction.java) and simply define a new Spring Bean with your conversion class in [FileserverConfiguration](../kitodo-mediaserver-fileserver/src/main/java/org/kitodo/mediaserver/fileserver/config/FileserverConfiguration.java) or wherever you wish to use the conversion.
+You won't necessarily have to implement a new action for the conversion. For instance, if it is to be used for a single file, you can use the [SingleFileConvertAction](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/actions/SingleFileConvertAction.java) and simply define a new Spring Bean with your conversion class in [FileserverConfiguration](../kitodo-mediaserver-fileserver/src/main/java/org/kitodo/mediaserver/fileserver/config/FileserverConfiguration.java) or wherever you wish to use the conversion.
 
 ## Database
 
