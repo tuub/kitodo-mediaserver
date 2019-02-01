@@ -94,10 +94,10 @@ ER-Model:
 
 ![Mediaserver database ER model](images/mediaserver_er-model.png)
 
-The database consists of just a few entities. The work table contains basic information on imported works and an enabled attribute for controlling access to the files of a work. The tables action_data and action_parameter is for controlling asynchronous actions to be performed on works. The user table contains the login data of the users of the UI. Since the mediaserver UI is strictly for administration, we don't need a user role concept.
+The database consists of just a few entities. The work table contains basic information on imported works and an enabled attribute for controlling access to the files of a work. The tables action_data and action_parameter are for controlling asynchronous actions to be performed on works. The user table contains the login data of the users of the UI. Since the mediaserver UI is strictly for administration, we don't need a user role concept.
 
 The implementation of the database and all database communication uses Spring JPA, all classes are found [here](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/db).
-The initialization and update of the database is done using Flyway, thus only MySQL is supported for the time being. The Flyway migration SQL files are found [here](../kitodo-mediaserver-core/src/main/resources/db/migration/mysql). See [InitDbCommand](../kitodo-mediaserver-cli/src/main/java/org/kitodo/mediaserver/cli/commands/UpdateDbCommand.java). To update the database, you must execute the cli with param `updatedb`.
+The initialization and update of the database is done using Flyway, thus only MySQL is supported for the time being. The Flyway migration SQL files are found [here](../kitodo-mediaserver-core/src/main/resources/db/migration/mysql). See [UpdateDbCommand](../kitodo-mediaserver-cli/src/main/java/org/kitodo/mediaserver/cli/commands/UpdateDbCommand.java). To update the database, you must execute the cli with param `updatedb`.
 
 For further information, see [#132](https://github.com/tuub/kitodo-mediaserver/issues/132).
 
