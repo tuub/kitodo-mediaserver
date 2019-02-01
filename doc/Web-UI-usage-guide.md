@@ -17,7 +17,14 @@ After login you get redirected to the works overview. There you'll find all impo
 
 ### (1) Search field
 
-Search for works in different fields. Hover the mouse cursor over the field to see which fields are searchable explicitly. Without a specific field like `id:UAB` search is performed on every field.
+Search for works in different fields. Hover the mouse cursor over the field to see which fields are searchable explicitly. Without a specific field like `id:UAB` search is performed on every field. Search for values in fields using operators:
+- `field=abc` - is exactly "abc"
+- `field:abc` - contains "abc" (like "\*abc\*")
+- `field!=abc` - is not "abc"
+- `field!:abc` - does not contain "abc"
+- `field<abc` - less than "abc" (best for numeric IDs or indexTime)
+- `field<=abc` - less than or equal to "abc"
+- `indexTime=""` - indexTime is NULL (never indexed)
 
 ### (2) Perform action
 

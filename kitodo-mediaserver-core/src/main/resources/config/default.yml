@@ -161,6 +161,7 @@ ui:
       - allowedNetwork
       - hostId
       - collection
+      - indexTime
     reduceMets: true
     actions:
       cacheclear:

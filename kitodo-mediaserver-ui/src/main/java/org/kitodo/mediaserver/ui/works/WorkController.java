@@ -25,10 +25,11 @@ import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
+import org.kitodo.mediaserver.core.processors.ConditionParser;
+import org.kitodo.mediaserver.core.processors.Operator;
 import org.kitodo.mediaserver.core.services.ActionService;
 import org.kitodo.mediaserver.core.services.WorkService;
 import org.kitodo.mediaserver.ui.config.UiProperties;
-import org.kitodo.mediaserver.ui.util.KeyValueParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,8 +123,8 @@ public class WorkController {
 
         if (StringUtils.hasText(search)) {
             // do a search...
-            KeyValueParser parser = new KeyValueParser(uiProperties.getWorks().getSearchableFields());
-            List<Map.Entry<String, String>> fields = parser.parse(search);
+            ConditionParser parser = new ConditionParser(uiProperties.getWorks().getSearchableFields());
+            List<Map.Entry<String, Map.Entry<Operator, String>>> fields = parser.parse(search);
             page = workService.searchWorks(fields, pageable);
             model.addAttribute("search", search);
             model.addAttribute("searchFields", fields);

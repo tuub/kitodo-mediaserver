@@ -288,17 +288,11 @@ public class WorkControllerTest {
         mockMvc
             .perform( get("/works").param("search", "hostId:" + workHostId1) )
             .andExpect( status().isOk() )
-            .andExpect( model().attribute("page", hasProperty("content", hasSize(2))) )
+            .andExpect( model().attribute("page", hasProperty("content", hasSize(1))) )
             .andExpect( model().attribute("page", hasProperty("content", hasItem(
                 allOf(
                     hasProperty("id", is(workId1)),
                     hasProperty("title", is(workTitle1))
-                )
-            ))) )
-            .andExpect( model().attribute("page", hasProperty("content", hasItem(
-                allOf(
-                    hasProperty("id", is(workHostId1)),
-                    hasProperty("title", is(workTitle3))
                 )
             ))) )
             .andExpect( view().name("works/works") );
