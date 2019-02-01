@@ -32,11 +32,19 @@
 
 
     <repositories>
+
+        <!-- Default Repo -->
         <repository>
-            <!-- This repo adds GitHub support -->
-            <id>jitpack.io</id>
+            <id>111_maven.apache.org</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+
+        <!-- This repo adds GitHub support -->
+        <repository>
+            <id>zzz_jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+
     </repositories>
 
 
@@ -100,7 +108,7 @@
             <dependency>
                 <groupId>com.github.seancfoley</groupId>
                 <artifactId>ipaddress</artifactId>
-                <version>4.2.0</version>
+                <version>5.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.pdfbox</groupId>
