@@ -20,6 +20,7 @@ import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.db.specifications.WorkJpaSpecification;
 import org.kitodo.mediaserver.core.exceptions.WorkNotFoundException;
+import org.kitodo.mediaserver.core.processors.Operator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,7 +65,7 @@ public class WorkService {
      * @param pageable paging and sorting
      * @return Page with Works
      */
-    public Page<Work> searchWorks(final List<Map.Entry<String, String>> criterias, Pageable pageable) {
+    public Page<Work> searchWorks(final List<Map.Entry<String, Map.Entry<Operator, String>>> criterias, Pageable pageable) {
         WorkJpaSpecification workJpaSpecification = new WorkJpaSpecification(criterias);
         return workRepository.findAll(workJpaSpecification, pageable);
     }

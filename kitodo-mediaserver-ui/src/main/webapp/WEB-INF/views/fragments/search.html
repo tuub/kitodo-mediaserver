@@ -34,6 +34,7 @@ availableFields string[]:   field names that may be used for search
                     <li th:text="#{search.for_a_word}"></li>
                     <li th:text="#{search.for_a_string}"></li>
                     <li th:text="#{search.for_a_field}"></li>
+                    <li th:text="#{search.with_operators}"></li>
                 </ul>
                 <h3 class="ui header" th:text="#{search.available_fields}"></h3>
                 <div>
@@ -55,12 +56,15 @@ availableFields string[]:   field names that may be used for search
         <div class="item" th:each="field : ${searchFields}">
             <div class="content">
                 <h4 class="header"
-                    th:text="${field.getKey()}"
-                    th:if="${field.getKey()}"></h4>
+                    th:text="${field.key}"
+                    th:if="${field.key}"></h4>
                 <h4 class="header"
                     th:text="#{search.wildcard_field}"
-                    th:if="not ${field.getKey()}"></h4>
-                <div class="description" th:text="${field.getValue()}"></div>
+                    th:if="not ${field.key}"></h4>
+                <div class="description">
+                    <span th:text="${field.value.key}" th:if="${field.value.key}" class="ui circular basic label"></span>
+                    <span th:text="${field.value.value}" class="ui basic label"></span>
+                </div>
             </div>
         </div>
     </div>
