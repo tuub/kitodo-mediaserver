@@ -44,6 +44,7 @@ logging:
 notifier:
   emailFrom: "kitodo@example.org"
   timestampFormat: "yyyy-MM-dd HH:mm:ss"
+  subjectPrefix: "Kitodo Mediaserver "
   # Recipients are set in the modules via <notificationEmail>
 
 application:
