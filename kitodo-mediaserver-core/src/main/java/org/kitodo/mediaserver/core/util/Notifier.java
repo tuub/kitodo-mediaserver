@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
+import org.apache.commons.lang.StringUtils;
 import org.kitodo.mediaserver.core.api.INotifier;
 import org.kitodo.mediaserver.core.config.NotifierProperties;
 import org.slf4j.Logger;
@@ -84,7 +86,10 @@ public class Notifier implements INotifier {
     public void send(String subject, List<String> recipients) {
 
         try {
-            if (recipients.size() > 0) {
+            if (recipients.size() > 0 && StringUtils.isNotBlank(notification.toString())) {
+                if (StringUtils.isNotBlank(notifierProperties.getSubjectPrefix())) {
+                    subject = notifierProperties.getSubjectPrefix() + subject;
+                }
                 String [] emailTo = recipients.toArray(new String[0]);
                 MimeMessage message = mailSender.createMimeMessage();
                 MimeMessageHelper mailHelper = new MimeMessageHelper(message, false, "utf-8");

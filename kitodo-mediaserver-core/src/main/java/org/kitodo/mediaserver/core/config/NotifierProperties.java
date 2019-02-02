@@ -23,6 +23,7 @@ public class NotifierProperties {
 
     private String emailFrom;
     private String timestampFormat;
+    private String subjectPrefix;
 
     public String getEmailFrom() {
         return emailFrom;
@@ -38,5 +39,13 @@ public class NotifierProperties {
 
     public void setTimestampFormat(String timestampFormat) {
         this.timestampFormat = timestampFormat;
+    }
+
+    public String getSubjectPrefix() {
+        return subjectPrefix;
+    }
+
+    public void setSubjectPrefix(String subjectPrefix) {
+        this.subjectPrefix = subjectPrefix;
     }
 }
