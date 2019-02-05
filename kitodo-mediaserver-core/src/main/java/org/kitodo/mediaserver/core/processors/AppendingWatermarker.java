@@ -13,7 +13,7 @@ package org.kitodo.mediaserver.core.processors;
 
 import java.awt.Color;
 import java.io.File;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.im4java.core.IMOperation;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.slf4j.Logger;

@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -24,7 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
 @DataJpaTest
-@SpringBootTest(classes = WorkRepository.class)
+@ContextConfiguration(classes = WorkRepository.class)
 public class JpaWorkCheckerTest {
 
     @Autowired

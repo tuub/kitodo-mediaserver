@@ -12,14 +12,11 @@
 package org.kitodo.mediaserver.importer.processors;
 
 import java.io.File;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.api.IDataReader;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;

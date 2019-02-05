@@ -14,7 +14,7 @@ package org.kitodo.mediaserver.importer.validators;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.config.ImporterProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ValidationException;

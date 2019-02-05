@@ -23,12 +23,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
+        <version>2.1.8.RELEASE</version>
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <!-- release overrides source and target in Java 9+ but doesn't work in Java 8- -->
+        <!--<maven.compiler.release>8</maven.compiler.release>-->
     </properties>
 
 
@@ -82,14 +87,14 @@
                 <version>2.6</version>
             </dependency>
             <dependency>
-                <groupId>commons-lang</groupId>
-                <artifactId>commons-lang</artifactId>
-                <version>2.6</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.9</version>
             </dependency>
             <dependency>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-core</artifactId>
-                <version>5.1.4</version>
+                <version>6.0.4</version>
             </dependency>
             <dependency>
                 <groupId>org.im4java</groupId>
@@ -104,7 +109,7 @@
             <dependency>
                 <groupId>com.twelvemonkeys.imageio</groupId>
                 <artifactId>imageio-tiff</artifactId>
-                <version>3.4.1</version>
+                <version>3.4.2</version>
             </dependency>
             <dependency>
                 <groupId>com.mortennobel</groupId>
@@ -114,33 +119,39 @@
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.5.6</version>
+                <version>4.5.10</version>
+                <!-- TODO: Upgrade to v5 to add Java 11 support (added in 5.0-beta2) -->
             </dependency>
             <dependency>
                 <groupId>com.github.seancfoley</groupId>
                 <artifactId>ipaddress</artifactId>
-                <version>5.0.1</version>
+                <version>5.0.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>pdfbox</artifactId>
-                <version>2.0.16</version>
+                <version>2.0.17</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.pdfbox</groupId>
                 <artifactId>xmpbox</artifactId>
-                <version>2.0.16</version>
+                <version>2.0.17</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
                 <artifactId>Saxon-HE</artifactId>
-                <version>9.9.0-2</version>
+                <version>9.9.1-5</version>
             </dependency>
             <dependency>
                 <!-- Use GitHub project as package -->
                 <groupId>com.github.tuub</groupId>
                 <artifactId>abbyy-to-alto</artifactId>
-                <version>0945bea945881ea928bb2585696a4a9b7b4d4832</version>
+                <version>99e1f9f249f48054e6a7841e4261aaa8d72c7da0</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.3.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -151,7 +162,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
                 </configuration>
@@ -159,12 +170,17 @@
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>5.1.4</version>
+                <version>6.0.4</version>
                 <dependencies>
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.45</version>
+                        <version>5.1.48</version>
+                        <!--
+                        TODO: MySQL connector till v8 only supports Java 8.
+                        JDBC 4.3 supports Java 9 but the connector supports JDBC 4.2 only.
+                        CAUTION: https://stackoverflow.com/q/54018163/3898725#comment95190638_54018163
+                        -->
                     </dependency>
                 </dependencies>
             </plugin>
