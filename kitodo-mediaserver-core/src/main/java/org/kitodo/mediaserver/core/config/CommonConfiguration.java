@@ -11,7 +11,6 @@
 
 package org.kitodo.mediaserver.core.config;
 
-import java.io.IOException;
 import org.kitodo.mediaserver.core.actions.CleanMetsTitleEntriesAction;
 import org.kitodo.mediaserver.core.actions.DoiRegisterAction;
 import org.kitodo.mediaserver.core.api.IAction;
@@ -36,7 +35,7 @@ public class CommonConfiguration {
     private IdentifierProperties identifierProperties;
 
     @Bean
-    public IMetsReader doiMetsReader() throws IOException {
+    public IMetsReader doiMetsReader() {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
         xsltMetsReader.setXslt(new ClassPathResource(identifierProperties.getDoiDataReaderXsl()));
         return xsltMetsReader;
@@ -48,7 +47,7 @@ public class CommonConfiguration {
     }
 
     @Bean(name = "registerDoi")
-    public IAction doiRegisterAction() throws IOException {
+    public IAction doiRegisterAction() {
         DoiRegisterAction doiRegisterAction = new DoiRegisterAction();
         doiRegisterAction.setWorkDescriptor(workPurlCreator());
         doiRegisterAction.setMetsReader(doiMetsReader());
