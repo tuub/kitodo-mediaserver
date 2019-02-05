@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -166,11 +167,17 @@ public class WorkController {
     public String action(@RequestParam(required = false) List<String> workIds,
                          @RequestParam String action,
                          @RequestParam Map<String, String> params,
+                         @RequestHeader(required = false) final String referer,
                          RedirectAttributes redirectAttributes) {
+
+        String redirectUrl = "/works";
+        if (StringUtils.hasText(referer)) {
+            redirectUrl = referer;
+        }
 
         if (workIds == null || workIds.size() == 0) {
             redirectAttributes.addFlashAttribute("error", "works.error.no_work_selected");
-            return "redirect:/works";
+            return "redirect:" + redirectUrl;
         }
 
         // Parse dynamic action parameters. Keep only keys with specific pattern
@@ -244,7 +251,7 @@ public class WorkController {
         redirectAttributes.addFlashAttribute("succeededWorks", succeededWorks);
         redirectAttributes.addFlashAttribute("failedWorks", failedWorks);
 
-        return "redirect:/works";
+        return "redirect:" + redirectUrl;
     }
 
     /**
