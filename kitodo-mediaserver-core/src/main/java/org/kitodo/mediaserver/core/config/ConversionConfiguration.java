@@ -11,7 +11,6 @@
 
 package org.kitodo.mediaserver.core.config;
 
-import java.io.IOException;
 import org.kitodo.mediaserver.core.actions.AbbyyToAltoOcrConvertAction;
 import org.kitodo.mediaserver.core.actions.AddFullPdfToMetsAction;
 import org.kitodo.mediaserver.core.actions.PreproduceDerivativesAction;
@@ -60,14 +59,14 @@ public class ConversionConfiguration {
     private FileserverProperties fileserverProperties;
 
     @Bean
-    public IMetsReader masterFilesMetsReader() throws IOException {
+    public IMetsReader masterFilesMetsReader() {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
         xsltMetsReader.setXslt(new ClassPathResource("xslt/filesFromMets.xsl"));
         return xsltMetsReader;
     }
 
     @Bean
-    public IMetsReader requestUrlsMetsReader() throws IOException {
+    public IMetsReader requestUrlsMetsReader() {
         XsltMetsReader xsltMetsReader = new XsltMetsReader();
         xsltMetsReader.setXslt(new ClassPathResource("xslt/fileGrpRequestUrlsFromMets.xsl"));
         return xsltMetsReader;
@@ -103,8 +102,53 @@ public class ConversionConfiguration {
         return new AppendingWatermarker();
     }
 
+    /**
+     * A reader using XSLT to read the fulltext OCR file.
+     *
+     * @return the reader
+     */
+    @Bean(name = "ocrReader")
+    public IOcrReader xsltOcrReader() {
+        XsltOcrReader ocrReader = new XsltOcrReader();
+        ocrReader.getFormats().put("<alto ", new ClassPathResource("xslt/ocr/alto.xsl"));
+        return ocrReader;
+    }
+
+    /**
+     * A reader using XSLT to get the fulltext URL from METS file.
+     *
+     * @return the reader
+     */
     @Bean
-    public IConverter preproduceFileConverter() {
+    public IMetsReader fullPdfUrlMetsreader() {
+        XsltMetsReader xsltMetsReader = new XsltMetsReader();
+        xsltMetsReader.setXslt(new ClassPathResource("xslt/fullPdfUrlFromMets.xsl"));
+        return xsltMetsReader;
+    }
+
+    /**
+     * An ocr converter to convert an OCR file from ABBYY Finereader format to ALTO format.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IOcrConverter abbyyToAltoOcrConverter() {
+        return new AbbyyToAltoOcrConverter();
+    }
+
+
+    /*
+     * FILE CONVERTERS
+     */
+
+    /**
+     * A single file converter for preproduction of images or pdf using imagemagick
+     * and the scaling watermarker, since it produces better results than the appending watermarker.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IConverter preproduceIMConverterScalingWatermarker() {
         SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
         simpleIMSingleFileConverter.setConversionTargetPath(importerProperties.getWorkFilesPath());
         simpleIMSingleFileConverter.setSaveConvertedFile(true);
@@ -112,26 +156,154 @@ public class ConversionConfiguration {
         return simpleIMSingleFileConverter;
     }
 
+    /**
+     * A single file converter for on-demand-conversions using imagemagick. Saves the file on the caching path.
+     * This bean uses the appending watermarker since it is faster than the scaling watermarker.
+     *
+     * @return the converter
+     */
     @Bean
-    public IAction preproduceSingleFileAction() throws IOException {
+    public IConverter onDemandIMConverterAppendingWatermarker() {
+        SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
+        simpleIMSingleFileConverter.setConversionTargetPath(fileserverProperties.getCachePath());
+        simpleIMSingleFileConverter.setSaveConvertedFile(fileserverProperties.isCaching());
+        simpleIMSingleFileConverter.setWatermarker(appendingWatermarker());
+        return simpleIMSingleFileConverter;
+    }
+
+    /**
+     * A single file image converter for preproduction using Java AWT.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IConverter preproduceAwtFileConverter() {
+        AwtImageFileConverter converter = new AwtImageFileConverter();
+        converter.setConversionTargetPath(importerProperties.getWorkFilesPath());
+        converter.setSaveConvertedFile(true);
+        return converter;
+    }
+
+    /**
+     * A single file image converter for on-demand-conversion using Java AWT. Saves the file on the caching path.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IConverter onDemandAwtFileConverter() {
+        AwtImageFileConverter converter = new AwtImageFileConverter();
+        converter.setConversionTargetPath(fileserverProperties.getCachePath());
+        converter.setSaveConvertedFile(fileserverProperties.isCaching());
+        return converter;
+    }
+
+    /**
+     * A single file PDF converter for preproduction using Apache Pdfbox.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IConverter preproducePdfboxFileConverter() {
+        PdfboxFileConverter converter = new PdfboxFileConverter();
+        converter.setConversionTargetPath(importerProperties.getWorkFilesPath());
+        converter.setSaveConvertedFile(true);
+        return converter;
+    }
+
+    /**
+     * A single file PDF converter for on-demand-conversion using Apache Pdfbox. Saves the file on the caching path.
+     *
+     * @return the converter
+     */
+    @Bean
+    public IConverter onDemandPdfboxFileConverter() {
+        PdfboxFileConverter converter = new PdfboxFileConverter();
+        converter.setConversionTargetPath(fileserverProperties.getCachePath());
+        converter.setSaveConvertedFile(fileserverProperties.isCaching());
+        return converter;
+    }
+
+
+    /*
+     * ACTIONS
+     */
+
+    /**
+     * An on-demand convert action to convert a single file using Pdfbox for PDF and AWT for images.
+     *
+     * @return the action
+     */
+    @Bean(name = "onDemandAwtPdfboxSingleFileConvertAction")
+    public IAction onDemandAwtPdfboxSingleFileConvertAction() {
+        SingleFileConvertAction convertAction = new SingleFileConvertAction();
+        convertAction.setMetsReader(masterFilesMetsReader());
+        convertAction.setReadResultParser(listToMapParser());
+        convertAction.getConverters().put("image/jpeg", onDemandAwtFileConverter());
+        convertAction.getConverters().put("application/pdf", onDemandPdfboxFileConverter());
+        convertAction.setPatternExtractor(patternExtractor());
+        return convertAction;
+    }
+
+    /**
+     * A conversion action using imagemagick and appending watermarker for on-demand single file conversion.
+     *
+     * @return a SingleFileConvertAction
+     */
+    @Bean(name = "onDemandIMSingleFileConvertAction")
+    public IAction appendingConversionAction() {
         SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
         singleFileConvertAction.setMetsReader(masterFilesMetsReader());
         singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.getConverters().put("application/pdf", preproduceFileConverter());
+        singleFileConvertAction.getConverters().put("application/pdf", onDemandIMConverterAppendingWatermarker());
+        singleFileConvertAction.getConverters().put("image/jpeg", onDemandIMConverterAppendingWatermarker());
+        singleFileConvertAction.setPatternExtractor(patternExtractor());
+        return singleFileConvertAction;
+    }
+
+
+    /**
+     * An action for preproducing a single file using imagemagick. Used by the preproduceIMDerivativesAction.
+     *
+     * @return the action
+     */
+    @Bean
+    public IAction preproduceIMSingleFileConvertAction() {
+        SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
+        singleFileConvertAction.setMetsReader(masterFilesMetsReader());
+        singleFileConvertAction.setReadResultParser(listToMapParser());
+        singleFileConvertAction.getConverters().put("application/pdf", preproduceIMConverterScalingWatermarker());
+        singleFileConvertAction.getConverters().put("image/jpeg", preproduceIMConverterScalingWatermarker());
         singleFileConvertAction.setPatternExtractor(patternExtractor());
         return singleFileConvertAction;
     }
 
     /**
-     * An action bean for preproducing derivatives. My be configured to be used in the importer or the ui.
+     * An on-demand convert action to convert a single file using Pdfbox for PDF and AWT for images.
+     * Used by the preproduceDerivativesAction.
+     *
+     * @return the action
+     */
+    @Bean
+    public IAction preproduceAwtPdfboxSingleFileConvertAction() {
+        SingleFileConvertAction convertAction = new SingleFileConvertAction();
+        convertAction.setMetsReader(masterFilesMetsReader());
+        convertAction.setReadResultParser(listToMapParser());
+        convertAction.getConverters().put("image/jpeg", preproduceAwtFileConverter());
+        convertAction.getConverters().put("application/pdf", preproducePdfboxFileConverter());
+        convertAction.setPatternExtractor(patternExtractor());
+        return convertAction;
+    }
+
+    /**
+     * An action for preproducing derivatives using a java implementation.
+     * May be configured to be used in the importer or the ui.
      *
      * @return the bean
-     * @throws IOException by severe errors
      */
     @Bean(name = "preproduceDerivativesAction")
-    public IAction preproduceDerivativesAction() throws Exception {
+    public IAction preproduceDerivativesAction() {
         PreproduceDerivativesAction preproduceDerivativesAction = new PreproduceDerivativesAction();
-        preproduceDerivativesAction.setConvertAction(awtPdfboxSingleFileConvertAction());
+        preproduceDerivativesAction.setConvertAction(preproduceAwtPdfboxSingleFileConvertAction());
         preproduceDerivativesAction.setReadResultParser(listToMapParser());
         preproduceDerivativesAction.setValueConcatSeparator(METS_READER_CONCAT_SEPARATOR);
         preproduceDerivativesAction.setMetsReader(requestUrlsMetsReader());
@@ -139,37 +311,46 @@ public class ConversionConfiguration {
     }
 
     /**
-     * A conversion action bean to be used by the fileserver if a file is not present.
-     * Uses the scaling watermarker.
+     * An action for preproducing derivatives using imagemagick.
+     * May be configured to be used in the importer or the ui.
      *
-     * @return a ConversionAction
+     * @return the bean
      */
-    @Bean(name = "scalingWatermarkingConvertAction")
-    public IAction scalingConversionAction() throws Exception {
-        SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
-        singleFileConvertAction.setMetsReader(masterFilesMetsReader());
-        singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.getConverters().put("application/pdf", singleFileOnDemandConverterScalingWatermarker());
-        singleFileConvertAction.getConverters().put("image/jpeg", singleFileOnDemandConverterScalingWatermarker());
-        singleFileConvertAction.setPatternExtractor(patternExtractor());
-        return singleFileConvertAction;
+    @Bean(name = "preproduceIMDerivativesAction")
+    public IAction preproduceIMDerivativesAction() {
+        PreproduceDerivativesAction preproduceDerivativesAction = new PreproduceDerivativesAction();
+        preproduceDerivativesAction.setConvertAction(preproduceIMSingleFileConvertAction());
+        preproduceDerivativesAction.setReadResultParser(listToMapParser());
+        preproduceDerivativesAction.setValueConcatSeparator(METS_READER_CONCAT_SEPARATOR);
+        preproduceDerivativesAction.setMetsReader(requestUrlsMetsReader());
+        return preproduceDerivativesAction;
     }
 
     /**
-     * A conversion action bean to be used by the fileserver if a file is not present.
-     * Uses the appendingwatermarker.
+     * An action for preproduction of pdf files containing a complete work.
      *
-     * @return a ConversionAction
+     * @return the action
      */
-    @Bean(name = "appendingWatermarkingConvertAction")
-    public IAction appendingConversionAction() throws Exception {
-        SingleFileConvertAction singleFileConvertAction = new SingleFileConvertAction();
-        singleFileConvertAction.setMetsReader(masterFilesMetsReader());
-        singleFileConvertAction.setReadResultParser(listToMapParser());
-        singleFileConvertAction.getConverters().put("application/pdf", singleFileOnDemandConverterAppendingWatermarker());
-        singleFileConvertAction.getConverters().put("image/jpeg", singleFileOnDemandConverterAppendingWatermarker());
-        singleFileConvertAction.setPatternExtractor(patternExtractor());
-        return singleFileConvertAction;
+    @Bean(name = "preproduceFullPdfFileConvertAction")
+    public IAction preproduceFullPdfFileConvertAction() {
+        StandaloneFullPdfFileConvertAction convertAction = new StandaloneFullPdfFileConvertAction();
+        convertAction.setMetsReader(masterFilesMetsReader());
+        convertAction.setFullPdfReader(fullPdfUrlMetsreader());
+        convertAction.setReadResultParser(listToMapParser());
+        convertAction.getConverters().put("application/pdf", preproducePdfboxFileConverter());
+        return convertAction;
+    }
+
+    /**
+     * A convert action to transform every OCR file of a work from ABBYY Finereader format to ALTO format.
+     */
+    @Bean
+    public IAction abbyyToAltoOcrConvertAction() {
+        AbbyyToAltoOcrConvertAction action = new AbbyyToAltoOcrConvertAction();
+        action.setMetsReader(masterFilesMetsReader());
+        action.setReadResultParser(listToMapParser());
+        action.setOcrConverter(abbyyToAltoOcrConverter());
+        return action;
     }
 
     /**
@@ -182,134 +363,5 @@ public class ConversionConfiguration {
         return new AddFullPdfToMetsAction(fullPdfMetsTransformer());
     }
 
-    /**
-     * A single file converter for on-demand-conversions. Uses caching according to the configurations.
-     * This bean uses the scaling watermarker.
-     *
-     * @return the converter
-     */
-    @Bean
-    public IConverter singleFileOnDemandConverterScalingWatermarker() {
-        SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
-        simpleIMSingleFileConverter.setConversionTargetPath(fileserverProperties.getCachePath());
-        simpleIMSingleFileConverter.setSaveConvertedFile(fileserverProperties.isCaching());
-        simpleIMSingleFileConverter.setWatermarker(scalingWatermarker());
-        return simpleIMSingleFileConverter;
-    }
-
-    /**
-     * A single file converter for on-demand-conversions. Uses caching according to the configurations.
-     * This bean uses the appending watermarker.
-     *
-     * @return the converter
-     */
-    @Bean
-    public IConverter singleFileOnDemandConverterAppendingWatermarker() {
-        SimpleIMSingleFileConverter simpleIMSingleFileConverter = new SimpleIMSingleFileConverter();
-        simpleIMSingleFileConverter.setConversionTargetPath(fileserverProperties.getCachePath());
-        simpleIMSingleFileConverter.setSaveConvertedFile(fileserverProperties.isCaching());
-        simpleIMSingleFileConverter.setWatermarker(appendingWatermarker());
-        return simpleIMSingleFileConverter;
-    }
-
-    /**
-     * A converter to convert master images to target image files.
-     */
-    @Bean
-    public IConverter awtFileConverter() {
-        AwtImageFileConverter converter = new AwtImageFileConverter();
-        converter.setConversionTargetPath(fileserverProperties.getCachePath());
-        converter.setSaveConvertedFile(fileserverProperties.isCaching());
-        return converter;
-    }
-
-    /**
-     * A converter to convert master images to PDF files.
-     */
-    @Bean
-    public IConverter pdfboxFileConverter() {
-        PdfboxFileConverter converter = new PdfboxFileConverter();
-        converter.setConversionTargetPath(fileserverProperties.getCachePath());
-        converter.setSaveConvertedFile(fileserverProperties.isCaching());
-        return converter;
-    }
-
-    /**
-     * A converter to preproduce PDF files.
-     */
-    @Bean
-    public IConverter preproducePdfboxFileConverter() {
-        PdfboxFileConverter converter = new PdfboxFileConverter();
-        converter.setConversionTargetPath(importerProperties.getWorkFilesPath());
-        converter.setSaveConvertedFile(true);
-        return converter;
-    }
-
-    /**
-     * A convert action to convert a single master file to a target file type using PDFBox for PDF and AWT for images.
-     */
-    @Bean(name = "awtPdfboxSingleFileConvertAction")
-    public IAction awtPdfboxSingleFileConvertAction() throws Exception {
-        SingleFileConvertAction convertAction = new SingleFileConvertAction();
-        convertAction.setMetsReader(masterFilesMetsReader());
-        convertAction.setReadResultParser(listToMapParser());
-        convertAction.getConverters().put("image/jpeg", awtFileConverter());
-        convertAction.getConverters().put("application/pdf", pdfboxFileConverter());
-        convertAction.setPatternExtractor(patternExtractor());
-        return convertAction;
-    }
-
-    /**
-     * Preproduce a PDF file with all pages.
-     */
-    @Bean(name = "preproduceFullPdfFileConvertAction")
-    public IAction preproduceFullPdfFileConvertAction() throws Exception {
-        StandaloneFullPdfFileConvertAction convertAction = new StandaloneFullPdfFileConvertAction();
-        convertAction.setMetsReader(masterFilesMetsReader());
-        convertAction.setFullPdfReader(fullPdfUrlMetsreader());
-        convertAction.setReadResultParser(listToMapParser());
-        convertAction.getConverters().put("application/pdf", preproducePdfboxFileConverter());
-        return convertAction;
-    }
-
-    /**
-     * A reader using XSLT to read the fulltext OCR file.
-     */
-    @Bean(name = "ocrReader")
-    public IOcrReader xsltOcrReader() {
-        XsltOcrReader ocrReader = new XsltOcrReader();
-        ocrReader.getFormats().put("<alto ", new ClassPathResource("xslt/ocr/alto.xsl"));
-        return ocrReader;
-    }
-
-    /**
-     * A reader using XSLT to get the fulltext URL from METS file.
-     */
-    @Bean
-    public IMetsReader fullPdfUrlMetsreader() throws IOException {
-        XsltMetsReader xsltMetsReader = new XsltMetsReader();
-        xsltMetsReader.setXslt(new ClassPathResource("xslt/fullPdfUrlFromMets.xsl"));
-        return xsltMetsReader;
-    }
-
-    /**
-     * A convert action to transform every OCR file of a work from ABBYY Finereader format to ALTO format.
-     */
-    @Bean
-    public IAction abbyyToAltoOcrConvertAction() throws IOException {
-        AbbyyToAltoOcrConvertAction action = new AbbyyToAltoOcrConvertAction();
-        action.setMetsReader(masterFilesMetsReader());
-        action.setReadResultParser(listToMapParser());
-        action.setOcrConverter(abbyyToAltoOcrConverter());
-        return action;
-    }
-
-    /**
-     * A converter to convert an OCR file from ABBYY Finereader format to ALTO format.
-     */
-    @Bean
-    public IOcrConverter abbyyToAltoOcrConverter() {
-        return new AbbyyToAltoOcrConverter();
-    }
 
 }

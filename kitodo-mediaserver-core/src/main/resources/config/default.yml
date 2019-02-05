@@ -56,7 +56,7 @@ fileserver:
   filePathPattern: /files/{workId}/**
   caching: false
   cachePath: /tmp
-  convertAction: awtPdfboxSingleFileConvertAction
+  convertAction: onDemandAwtPdfboxSingleFileConvertAction
   cacheClearCron: "0 3 * * * *"
   cacheClearSince: 2592000 # 30 days
   allowedNetworks:

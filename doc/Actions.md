@@ -41,6 +41,15 @@ Generate derivatives for master files in a METS file using Java converter.
 ##### Call parameters
 
 - `fileGrp` (required): The file group to generate derivatives for, e.g. `THUMBS`
+- `fileId` (optional): e.g. `FILE_0001_THUMBS`. If omitted, derivatives of all files in the file group will be created.
+
+## preproduceIMDerivativesAction
+
+Generate derivatives for master files in a METS file using imagemagick.
+
+##### Call parameters
+
+- `fileGrp` (required): The file group to generate derivatives for, e.g. `THUMBS`
 - `fileId` (optional): If omitted, derivatives of all files in the file group will be created.
 
 ## preproduceFullPdfFileConvertAction
