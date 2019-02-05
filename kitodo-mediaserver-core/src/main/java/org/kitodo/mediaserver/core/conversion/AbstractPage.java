@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
 import javax.validation.constraints.NotNull;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.api.IPage;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.springframework.beans.factory.annotation.Autowired;

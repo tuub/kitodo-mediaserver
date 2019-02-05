@@ -15,6 +15,7 @@ import org.kitodo.mediaserver.core.api.IAction;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Mockito;
 import static org.mockito.Mockito.when;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @ComponentScan(basePackages = {"org.kitodo.mediaserver.core.services"})
+@EntityScan("org.kitodo.mediaserver.core.db.entities")
 @EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
 public class TestConfiguration {
 

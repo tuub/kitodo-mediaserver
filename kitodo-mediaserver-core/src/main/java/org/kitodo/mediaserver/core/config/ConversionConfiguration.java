@@ -29,7 +29,6 @@ import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.conversion.AwtImageFileConverter;
 import org.kitodo.mediaserver.core.conversion.PdfboxFileConverter;
 import org.kitodo.mediaserver.core.conversion.SimpleIMSingleFileConverter;
-import org.kitodo.mediaserver.core.conversion.ocr.AbbyyToAltoOcrConverter;
 import org.kitodo.mediaserver.core.processors.AppendingWatermarker;
 import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
@@ -40,6 +39,7 @@ import org.kitodo.mediaserver.core.processors.XsltMetsTransformer;
 import org.kitodo.mediaserver.core.processors.ocr.XsltOcrReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
@@ -47,6 +47,7 @@ import org.springframework.core.io.ClassPathResource;
  * Bean configurations for conversions, used by fileserver, importer and ui.
  */
 @Configuration
+@ComponentScan("org.kitodo.mediaserver.core")
 public class ConversionConfiguration {
 
     private static final String METS_READER_CONCAT_SEPARATOR = " ; ";
@@ -59,6 +60,9 @@ public class ConversionConfiguration {
 
     @Autowired
     private FileserverProperties fileserverProperties;
+
+    @Autowired
+    private IOcrConverter abbyyToAltoOcrConverter;
 
     @Bean
     public IMetsReader masterFilesMetsReader() {
@@ -139,17 +143,6 @@ public class ConversionConfiguration {
         xsltMetsReader.setXslt(new ClassPathResource("xslt/fullPdfUrlFromMets.xsl"));
         return xsltMetsReader;
     }
-
-    /**
-     * An ocr converter to convert an OCR file from ABBYY Finereader format to ALTO format.
-     *
-     * @return the converter
-     */
-    @Bean
-    public IOcrConverter abbyyToAltoOcrConverter() {
-        return new AbbyyToAltoOcrConverter();
-    }
-
 
     /*
      * FILE CONVERTERS
@@ -364,7 +357,7 @@ public class ConversionConfiguration {
         AbbyyToAltoOcrConvertAction action = new AbbyyToAltoOcrConvertAction();
         action.setMetsReader(masterFilesMetsReader());
         action.setReadResultParser(listToMapParser());
-        action.setOcrConverter(abbyyToAltoOcrConverter());
+        action.setOcrConverter(abbyyToAltoOcrConverter);
         return action;
     }
 

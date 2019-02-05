@@ -11,6 +11,7 @@
 
 package org.kitodo.mediaserver.core.db.repositories;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,15 +21,13 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test for the User repository.
  */
-@SpringBootTest(classes = UserRepository.class)
+@ContextConfiguration(classes = UserRepository.class)
 @EnableAutoConfiguration
 @EntityScan("org.kitodo.mediaserver.core.db.entities")
 @RunWith(SpringRunner.class)

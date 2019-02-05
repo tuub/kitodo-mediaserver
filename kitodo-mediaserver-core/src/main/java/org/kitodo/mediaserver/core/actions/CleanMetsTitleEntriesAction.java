@@ -14,7 +14,7 @@ package org.kitodo.mediaserver.core.actions;
 import java.io.File;
 import java.util.AbstractMap;
 import java.util.Map;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IMetsTransformer;
 import org.kitodo.mediaserver.core.db.entities.Work;

@@ -53,3 +53,4 @@ All operations on a work are executed technically as actions implementing a simp
   * [CLI usage guide](CLI-usage-guide.md)
   * [Provided actions](Actions.md) - What they do and how to use them
 * [Developer Guide](Developer-Guide.md)
+* [Changelog](Changelog.md)

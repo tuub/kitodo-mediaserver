@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.api.INotifier;
 import org.kitodo.mediaserver.core.config.NotifierProperties;
 import org.slf4j.Logger;

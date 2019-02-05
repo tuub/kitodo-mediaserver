@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.TreeMap;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.config.ConversionProperties;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;

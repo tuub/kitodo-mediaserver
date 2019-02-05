@@ -30,7 +30,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,11 +40,9 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Test for the User repository.
  */
-@SpringBootTest(classes = TestConfiguration.class)
-@EnableJpaRepositories("org.kitodo.mediaserver.core.db.repositories")
-@EntityScan("org.kitodo.mediaserver.core.db.entities")
+@ContextConfiguration(classes = ActionService.class)
+@Import(TestConfiguration.class)
 @RunWith(SpringRunner.class)
-@ComponentScan(value = "org.kitodo.mediaserver.core.services")
 @DataJpaTest
 public class ActionServiceTest {
 

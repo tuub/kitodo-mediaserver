@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 /**
  * Login service.
  */
-@Service
+@Service("userDetailsService")
 public class AuthenticatedUserService implements UserDetailsService {
 
     @Autowired

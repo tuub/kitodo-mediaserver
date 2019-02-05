@@ -11,7 +11,7 @@
 
 package org.kitodo.mediaserver.core.processors;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.kitodo.mediaserver.core.api.IWorkDescriptor;
 import org.kitodo.mediaserver.core.config.IdentifierProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;

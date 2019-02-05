@@ -53,7 +53,7 @@ public class UpdateDbCommand implements Callable {
     public void updateDb() {
 
         LOGGER.info("Initializing or updating database...");
-        LOGGER.debug("Database options: dataSource='" + flyway.getDataSource() + "'");
+        LOGGER.debug("Database options: dataSource='" + flyway.getConfiguration().getDataSource() + "'");
 
         // drop tables
         if (drop) {

@@ -13,6 +13,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,9 +24,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests for the collection repository.
  */
-@SpringBootTest(classes = TestConfiguration.class)
-@EnableAutoConfiguration
-@EntityScan("org.kitodo.mediaserver.core.db.entities")
+@ContextConfiguration(classes = WorkService.class)
+@Import(TestConfiguration.class)
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class WorkServiceCollectionTest {
