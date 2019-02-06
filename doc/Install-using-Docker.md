@@ -1,3 +1,7 @@
+# Install Kitodo.Mediaserver using Docker
+
+**WARNING**: The Docker way of using the Mediaserver has some issues. If you are familiar in using Docker and Mediaserver, you'll get it running. But it is not the recommended was for new users.  
+
 ## Prerequisites
 
 * Linux operating system (tested on Ubuntu 16.04 and 18.04)

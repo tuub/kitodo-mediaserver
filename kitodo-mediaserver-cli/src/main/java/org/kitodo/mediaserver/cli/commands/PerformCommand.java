@@ -33,7 +33,7 @@ import picocli.CommandLine;
  * Run an action bean on one or more works.
  */
 @CommandLine.Command(
-    description = "Perform requested actions."
+    description = "Perform action on works."
     )
 @Component
 public class PerformCommand implements Callable {
