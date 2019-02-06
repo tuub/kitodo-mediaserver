@@ -251,7 +251,13 @@ public class ImporterFlowControl {
                 }
 
                 LOGGER.info("Finished import of work " + workDir.getName());
-                reportNotifier.add("Imported: " + mets.getAbsolutePath());
+                reportNotifier.add("Imported work: " + newWork.getId());
+                reportNotifier.add("  Title info: " + newWork.getTitle());
+                reportNotifier.add("  Collections: " + newWork.getCollections());
+                if (StringUtils.isNotBlank(newWork.getHostId())) {
+                    reportNotifier.add("  Host id: " + newWork.getHostId());
+                }
+                reportNotifier.add("");
 
             } catch (Exception e) {
 
