@@ -3,9 +3,9 @@
 ## Prerequisites
 
 * Linux operating system (tested on Ubuntu 16.04 and 18.04)
-* OpenJDK 8
-* Maven 3.3
-* (optionally for UI) NPM >=8 + NPM >=5.7.1
+* OpenJDK 8 (OpenJDK 9 and newer will not work)
+* Maven >=3.3
+* (optionally for UI) NodeJS >=8 and NPM >=5.7.1
 
 ## Build from source
 

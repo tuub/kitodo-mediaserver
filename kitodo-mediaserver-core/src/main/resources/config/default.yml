@@ -39,7 +39,7 @@ logging:
   pattern:
     console:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger - %msg%n"
-  path: /usr/local/kitodo/mediaserver/
+  path: /var/local/kitodo-mediaserver/logs
 
 notifier:
   emailFrom: "kitodo@example.org"
@@ -91,7 +91,7 @@ conversion:
       colorRGB: "34,65,255"
       size: 16
     imageMode:
-      path: /srv/kitodo/assets/watermark.png
+      path: /var/local/kitodo-mediaserver/watermark.png
       opacity: 75
     extendCanvas:
       enabled: false
@@ -120,11 +120,11 @@ identifier:
   replacement: "_"
 
 importer:
-  hotfolderPath: /usr/local/kitodo/mediaserver/hotfolder/
-  importingFolderPath: /usr/local/kitodo/mediaserver/importing/
-  tempWorkFolderPath: /usr/local/kitodo/mediaserver/import_temp/
-  errorFolderPath: /usr/local/kitodo/mediaserver/import_error/
-  workFilesPath: /usr/local/kitodo/mediaserver/files/
+  hotfolderPath: /var/local/kitodo-mediaserver/hotfolder/
+  importingFolderPath: /var/local/kitodo-mediaserver/importing/
+  tempWorkFolderPath: /var/local/kitodo-mediaserver/import_temp/
+  errorFolderPath: /var/local/kitodo-mediaserver/import_error/
+  workFilesPath: /var/local/kitodo-mediaserver/files/
   workDataReaderXsl: xslt/getWorkData.xsl
   fileUrlReaderXsl: xslt/getPathsFromGivenFileGrp.xsl
   workIdRegex: "[\\w-]+"

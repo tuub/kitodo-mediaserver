@@ -1,5 +1,7 @@
 The Mediaserver uses multiple configuration files. Only [default.yml](https://github.com/tuub/kitodo-mediaserver/blob/master/kitodo-mediaserver-core/src/main/resources/config/default.yml) is provided by the Mediaserver itself. It contains default values and should not be modified. In the optional *local.yml* you can set your configuration. And in the optional *secrets.yml* you can save usernames, passwords and other secret tokens that should not be stored in Git.
 
+It is recommended to save the configuration files (*local.yml*, *secrets.yml*) next to your CLI JAR file. Thus the CLI application will find this file without any further parameters.
+
 The configuration files are in [YAML](https://en.wikipedia.org/wiki/YAML) format.
 
 ## Database configuration

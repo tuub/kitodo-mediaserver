@@ -43,7 +43,7 @@ All operations on a work are executed technically as actions implementing a simp
 
 ## Help
 
-* [Installation](Installation.md)
+* Installation
   * [Install manually](Install-manually.md)
   * [Install using Docker](Install-using-Docker.md)
   * [Install from source](Install-from-source.md)
