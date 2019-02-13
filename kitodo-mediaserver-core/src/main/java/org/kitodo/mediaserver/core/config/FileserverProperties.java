@@ -33,6 +33,7 @@ public class FileserverProperties {
     private Map<String, List<String>> allowedNetworks;
     private List<String> errorNotificationEmail;
     private String disabledWorkImagePath;
+    private String ignoredExceptionByNotificationRegex;
 
     public boolean isCaching() {
         return caching;
@@ -112,5 +113,13 @@ public class FileserverProperties {
 
     public void setDisabledWorkImagePath(String disabledWorkImagePath) {
         this.disabledWorkImagePath = disabledWorkImagePath;
+    }
+
+    public String getIgnoredExceptionByNotificationRegex() {
+        return ignoredExceptionByNotificationRegex;
+    }
+
+    public void setIgnoredExceptionByNotificationRegex(String ignoredExceptionByNotificationRegex) {
+        this.ignoredExceptionByNotificationRegex = ignoredExceptionByNotificationRegex;
     }
 }
