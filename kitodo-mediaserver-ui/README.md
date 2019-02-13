@@ -11,8 +11,6 @@ Kitodo Mediaserver UI is the optional web interface to administrate Kitodo Media
 
 ### Build
 
-```
-npm install
-npm run gulp build
+```bash
 mvn package
 ```
