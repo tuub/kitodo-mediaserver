@@ -69,7 +69,7 @@
                 <executions>
 
                     <!-- Run `npm install` before 'Default Lifecycle'
-                         Otherwise gulp may not be available -->
+                         to ensure needed packages are installed in later phases -->
                     <execution>
                         <id>npm install (initialize)</id>
                         <goals>
@@ -84,24 +84,8 @@
                         </configuration>
                     </execution>
 
-                    <!-- Run `npm install` before anything else from 'Clean Lifecycle'.
-                         Otherwise gulp may not be available -->
                     <execution>
-                        <id>npm install (clean)</id>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <phase>pre-clean</phase>
-                        <configuration>
-                            <executable>npm</executable>
-                            <arguments>
-                                <argument>ci</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>npm run gulp build (compile)</id>
+                        <id>npm run build (compile)</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -110,14 +94,13 @@
                             <executable>npm</executable>
                             <arguments>
                                 <argument>run</argument>
-                                <argument>gulp</argument>
                                 <argument>build</argument>
                             </arguments>
                         </configuration>
                     </execution>
 
                     <execution>
-                        <id>npm run gulp clean (clean)</id>
+                        <id>npm run clean (clean)</id>
                         <goals>
                             <goal>exec</goal>
                         </goals>
@@ -126,7 +109,6 @@
                             <executable>npm</executable>
                             <arguments>
                                 <argument>run</argument>
-                                <argument>gulp</argument>
                                 <argument>clean</argument>
                             </arguments>
                         </configuration>

@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gulp": "gulp"
+    "build:jquery": "mkdir -p src/main/webapp/static/jquery && cp node_modules/jquery/dist/jquery.min.js src/main/webapp/static/jquery/",
+    "build:semantic-ui": "mkdir -p src/main/webapp/static/semantic && cp -R node_modules/semantic-ui-css/semantic.min.js node_modules/semantic-ui-css/semantic.min.css node_modules/semantic-ui-css/themes src/main/webapp/static/semantic/",
+    "build": "npm run build:jquery && npm run build:semantic-ui",
+    "clean": "rm -rf src/main/webapp/static/jquery src/main/webapp/static/semantic"
   },
   "author": "Michael Richter",
   "license": "ISC",
   "dependencies": {
-    "del": "^3.0.0",
-    "gulp": "^4.0.0",
-    "gulp-add-src": "^1.0.0",
     "jquery": "^3.3.1",
     "semantic-ui-css": "^2.3.1"
   }
