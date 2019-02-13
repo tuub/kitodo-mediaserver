@@ -176,7 +176,7 @@ public class FileController {
                     try {
                         FileUtils.touch(derivative);
                     } catch (IOException e) {
-                        message = "Error executing touch on cached file: " + e;
+                        message = "Error executing touch on cached file " + workId + derivativePath + ": " + e;
                         LOGGER.error(message, e);
                         notifier.addAndSend(message, "Touch error", fileserverProperties.getErrorNotificationEmail());
                     }
@@ -221,9 +221,14 @@ public class FileController {
             inputStream.close();
             response.getOutputStream().close();
         } catch (IOException e) {
-            message = "Fileserver IO error: " + e;
+            message = "Fileserver IO error for " + workId + derivativePath + ": " + e;
             LOGGER.error(message, e);
-            notifier.addAndSend(message, "Fileserver Error", fileserverProperties.getErrorNotificationEmail());
+
+            String ignoreRegex = fileserverProperties.getIgnoredExceptionByNotificationRegex();
+            if (ignoreRegex == null || !e.toString().matches(ignoreRegex)) {
+                notifier.addAndSend(message, "Fileserver Error", fileserverProperties.getErrorNotificationEmail());
+            }
+
             throw new HttpNotFoundException(e.toString());
         }
     }

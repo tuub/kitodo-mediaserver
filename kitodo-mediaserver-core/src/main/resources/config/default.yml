@@ -64,6 +64,7 @@ fileserver:
     disabled: 0.0.0.0/32,::/128
   errorNotificationEmail:
   disabledWorkImagePath:
+  ignoredExceptionByNotificationRegex: ".*?ClientAbortException.*"
 
 conversion:
   pdf:
