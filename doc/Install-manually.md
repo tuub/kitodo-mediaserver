@@ -50,9 +50,17 @@ wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/${MS_VERSIO
 
 # Download web UI
 wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/${MS_VERSION}/kitodo-mediaserver-ui-${MS_VERSION}.war -O kitodo-mediaserver-ui.war
+```
 
+If you build the code from source, you would want to keep your local settings in the `local.yml` file stored in `kitodo-mediaserver-local/src/main/resources/config/`. If you're installing from the released jar and war files, you may create a `local.yml` file using the `default.yml`in the following manner:
+
+```bash
 # Download default local configuration file
-wget -q https://raw.githubusercontent.com/tuub/kitodo-mediaserver/${MS_VERSION}/kitodo-mediaserver-core/src/main/resources/config/local.yml -O local.yml;
+wget -q https://raw.githubusercontent.com/tuub/kitodo-mediaserver/${MS_VERSION}/kitodo-mediaserver-core/src/main/resources/config/default.yml -O local.yml
+
+# Optionally comment out every parameter in config file.
+# You may activate and change the parameters you need after that.
+sed -i 's/^\([^#]\)/#\1/g' local.yml
 ```
 
 ### Link the Fileserver and UI to Tomcat
