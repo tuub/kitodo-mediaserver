@@ -54,4 +54,12 @@ public class Collection {
         this.works = works;
     }
 
+    /**
+     * Returns the name of the collection.
+     *
+     * @return the collection name
+     */
+    public String toString() {
+        return this.getName();
+    }
 }
