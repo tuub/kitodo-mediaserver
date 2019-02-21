@@ -24,7 +24,7 @@ Mediaserver may run on other application servers supporting Java Servlet 3 too b
 ## Install Mediaserver
 
 * We install the Mediaserver to **/usr/local/kitodo-mediaserver**.
-* We install version **1.0**.
+* We install version **1.0.0**.
 * The working data is stored in **/var/local/kitodo-mediaserver**.
 * You need to be super user (root).
 
@@ -38,25 +38,25 @@ mkdir -p /usr/local/kitodo-mediaserver
 
 ```bash
 # The version to be downloaded
-MS_VERSION=1.0
+MS_VERSION=1.0.0
 
 cd /usr/local/kitodo-mediaserver
 
 # Download Fileserver
-wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/${MS_VERSION}/kitodo-mediaserver-fileserver-${MS_VERSION}.war -O kitodo-mediaserver-fileserver.war
+wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/v${MS_VERSION}/kitodo-mediaserver-fileserver-${MS_VERSION}.war -O kitodo-mediaserver-fileserver.war
 
 # Download CLI
-wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/${MS_VERSION}/kitodo-mediaserver-cli-${MS_VERSION}.jar -O kitodo-mediaserver-cli.jar
+wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/v${MS_VERSION}/kitodo-mediaserver-cli-${MS_VERSION}.jar -O kitodo-mediaserver-cli.jar
 
 # Download web UI
-wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/${MS_VERSION}/kitodo-mediaserver-ui-${MS_VERSION}.war -O kitodo-mediaserver-ui.war
+wget -q https://github.com/tuub/kitodo-mediaserver/releases/download/v${MS_VERSION}/kitodo-mediaserver-ui-${MS_VERSION}.war -O kitodo-mediaserver-ui.war
 ```
 
 If you build the code from source, you would want to keep your local settings in the `local.yml` file stored in `kitodo-mediaserver-local/src/main/resources/config/`. If you're installing from the released jar and war files, you may create a `local.yml` file using the `default.yml`in the following manner:
 
 ```bash
 # Download default local configuration file
-wget -q https://raw.githubusercontent.com/tuub/kitodo-mediaserver/${MS_VERSION}/kitodo-mediaserver-core/src/main/resources/config/default.yml -O local.yml
+wget -q https://raw.githubusercontent.com/tuub/kitodo-mediaserver/v${MS_VERSION}/kitodo-mediaserver-core/src/main/resources/config/default.yml -O local.yml
 
 # Optionally comment out every parameter in config file.
 # You may activate and change the parameters you need after that.
