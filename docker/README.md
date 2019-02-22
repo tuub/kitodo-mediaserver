@@ -7,13 +7,18 @@ It's based on the official [Tomcat 8.5 using JRE 8 (tomcat:8.5-jre8)](https://hu
 ## Build image
 
 Run the build command to build a Kitodo.Mediaserver docker image. This builds an image from the official GitHub repository:
-```
+```bash
 ./build.sh --version=<version>
 ```
 
 You can also build a docker image from your current source. First build Kitodo.Mediaserver then run:
-```
+```bash
 ./build.sh --source --version=<version>
+```
+
+To get all available options run:
+```bash
+./build.sh -h
 ```
 
 ## Use image
