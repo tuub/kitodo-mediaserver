@@ -1,36 +1,17 @@
 #!/bin/sh
 
-# default values
-MS_CREATE_TABLES="${MS_CREATE_TABLES:-0}"
-MS_SCHEDULER_IMPORT="${MS_SCHEDULER_IMPORT:-0}"
-MS_SCHEDULER_CACHECLEAR="${MS_SCHEDULER_CACHECLEAR:-0}"
-
-# If config dir is empty, copy the default config file over
-if [ ! -f "${MS_PATH}/config/local.yml" ]; then
-    echo "Creating default config file..."
-    cp "${MS_PATH}/config/local.yml.dist" "${MS_PATH}/config/local.yml"
-fi
-
 # Create and init database - this should only be called once on a new installation
-if [ "$MS_CREATE_TABLES" -eq 1 ]; then
-    echo "Creating Mediaserver DB tables..."
-    java $JAVA_OPTS -jar "${MS_PATH}/kitodo-mediaserver-cli.jar" initdb
-    echo "Creating DB tables finished."
+if [ "$MS_UPDATE_DB" -eq 1 ]; then
+    echo "Creating or updating Mediaserver DB tables..."
+    kitodo-mediaserver updatedb
 fi
 
-# run import scheduler
-if [ "$MS_SCHEDULER_IMPORT" -eq 1 ]; then
-    echo "Start import scheduler..."
-    java $JAVA_OPTS -jar "${MS_PATH}/kitodo-mediaserver-cli.jar" import -s &
-    echo "Import scheduler started."
-fi
+# Install WARs in Tomcat webapps dir
+ln -s "${MS_PATH}/kitodo-mediaserver-fileserver.war" "${CATALINA_HOME}/webapps/${MS_FILESERVER_PATH}.war"
+ln -s "${MS_PATH}/kitodo-mediaserver-ui.war" "${CATALINA_HOME}/webapps/${MS_UI_PATH}.war"
 
-# run cache-clear scheduler
-if [ "$MS_SCHEDULER_CACHECLEAR" -eq 1 ]; then
-    echo "Start cache-clear scheduler..."
-    java $JAVA_OPTS -jar "${MS_PATH}/kitodo-mediaserver-cli.jar" cacheclear -s &
-    echo "Cache-clear scheduler started."
-fi
+# Update proxy settings for Tomcat
+sed -i "s/proxyName=\"\"\\s+proxyPort=\"\"/proxyName=\"${MS_PROXY_NAME}\" proxyPort=\"${MS_PROXY_PORT}\"/g" "${CATALINA_HOME}/conf/server.xml"
 
 # Run Tomcat
 catalina.sh run

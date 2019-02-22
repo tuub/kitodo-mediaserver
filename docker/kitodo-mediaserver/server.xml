@@ -31,30 +31,32 @@
   <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
   <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
 
-  <Service name="fileserver">
-    <Connector port="8980" protocol="org.apache.coyote.http11.Http11NioProtocol"
-               connectionTimeout="20000" />
+  <Service name="Catalina">
+
+    <Connector executor="tomcatThreadPool"
+               port="8080" protocol="HTTP/1.1"
+               connectionTimeout="600000"
+               redirectPort="8443" URIEncoding="UTF-8"
+               proxyName="" proxyPort="" />
+
     <Engine name="Catalina" defaultHost="localhost">
-      <Host name="localhost"  appBase="fileserver"
+
+      <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
+
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
-               prefix="fileserver_access_log" suffix=".txt"
+               prefix="localhost_access_log" suffix=".txt"
                pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+        <!-- Forward protocol and client IP address given by a proxy server (e.g. Kitodo.Presentation) -->
+        <Valve className="org.apache.catalina.valves.RemoteIpValve"
+               remoteIpHeader="x-forwarded-for"
+               protocolHeader="x-forwarded-proto"
+               protocolHeaderHttpsValue="https" />
+
       </Host>
     </Engine>
-  </Service>
-  
-  <Service name="ui">
-    <Connector port="8981" protocol="org.apache.coyote.http11.Http11NioProtocol"
-               connectionTimeout="20000" />
-    <Engine name="Catalina" defaultHost="localhost">
-      <Host name="localhost"  appBase="ui"
-            unpackWARs="true" autoDeploy="true">
-        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
-               prefix="ui_access_log" suffix=".txt"
-               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
-      </Host>
-    </Engine>
+
   </Service>
 
 </Server>
