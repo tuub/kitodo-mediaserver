@@ -79,10 +79,7 @@ public class PdfboxFileConverter extends AbstractConverter {
                     document.setProductionDate(cal);
                 }
                 if (parameter.get("authors") != null) {
-                    String[] authors = parameter.get("authors").split(";");
-                    for (String author : authors) {
-                        document.addAuthor(author);
-                    }
+                    document.setAuthor(parameter.get("authors"));
                 }
                 document.setTitle(parameter.get("title"));
 

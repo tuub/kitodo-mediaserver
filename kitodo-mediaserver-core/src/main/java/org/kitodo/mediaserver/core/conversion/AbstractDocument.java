@@ -12,9 +12,7 @@
 package org.kitodo.mediaserver.core.conversion;
 
 import java.awt.color.ICC_Profile;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import org.kitodo.mediaserver.core.api.IDocument;
 
 /**
@@ -23,7 +21,7 @@ import org.kitodo.mediaserver.core.api.IDocument;
 public abstract class AbstractDocument implements IDocument {
 
     private String title;
-    private List<String> authors = new ArrayList<>();
+    private String author;
     private Calendar productionDate;
     private ICC_Profile iccProfile;
 
@@ -33,8 +31,8 @@ public abstract class AbstractDocument implements IDocument {
     }
 
     @Override
-    public List<String> getAuthors() {
-        return authors;
+    public String getAuthor() {
+        return author;
     }
 
     @Override
@@ -53,8 +51,8 @@ public abstract class AbstractDocument implements IDocument {
     }
 
     @Override
-    public void addAuthor(String author) {
-        this.authors.add(author);
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Override

@@ -61,7 +61,7 @@ public class PdfboxDocument extends AbstractDocument {
 
         // Metadata
         String title = getTitle();
-        List<String> authors = getAuthors();
+        String author = getAuthor();
         Calendar creationDate = Calendar.getInstance();
 
         // Create XMP metadata (needed by PDF/A)
@@ -73,19 +73,13 @@ public class PdfboxDocument extends AbstractDocument {
 
         DublinCoreSchema dublinCore = xmp.createAndAddDublinCoreSchema();
 
-        if (title != null || !authors.isEmpty()) {
-            if (title != null) {
-                dublinCore.setTitle(title);
-                docInfo.setTitle(title);
-            }
-            authors.forEach(author -> {
-                if (author != null) {
-                    dublinCore.addCreator(author);
-                }
-            });
-            if (dublinCore.getCreators() != null && !dublinCore.getCreators().isEmpty()) {
-                docInfo.setAuthor(String.join(";", authors));
-            }
+        if (title != null) {
+            docInfo.setTitle(title);
+            dublinCore.setTitle(title);
+        }
+        if (author != null) {
+            docInfo.setAuthor(author);
+            dublinCore.addCreator(author);
         }
 
         // Add document information metadata
