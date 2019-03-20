@@ -41,7 +41,7 @@ public interface IDocument {
     /**
      * Get list of document authors.
      */
-    List<String> getAuthors();
+    String getAuthor();
 
     /**
      * Get date of document production.
@@ -61,7 +61,7 @@ public interface IDocument {
     /**
      * Add an document author.
      */
-    void addAuthor(String author);
+    void setAuthor(String author);
 
     /**
      * Set date of document production.
