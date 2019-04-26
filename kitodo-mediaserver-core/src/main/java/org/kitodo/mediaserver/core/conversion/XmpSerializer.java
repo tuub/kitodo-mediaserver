@@ -51,7 +51,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.ProcessingInstruction;
 
 // Code by Apache PDFBox
-// Changed TransformerFactory implemetation to be used. See save() method
+// Changed TransformerFactory implementation to be used. See save() method
 @SuppressWarnings("all")
 public class XmpSerializer {
 

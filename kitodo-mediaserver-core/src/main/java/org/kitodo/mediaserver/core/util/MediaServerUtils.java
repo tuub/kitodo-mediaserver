@@ -227,7 +227,7 @@ public class MediaServerUtils {
     }
 
     /**
-     * Check if all requiered parameter are present in a parameter map.
+     * Check if all required parameter are present in a parameter map.
      *
      * @param parameter the parameter map
      * @param requiredParams all required parameter
@@ -276,7 +276,7 @@ public class MediaServerUtils {
     /**
      * Checks if the local.yml was loaded.
      *
-     * @return true if the local.yml was laoded
+     * @return true if the local.yml was loaded
      */
     public boolean isLocalAppConfigLoaded() {
         MutablePropertySources propertySources = ((AbstractEnvironment)environment).getPropertySources();

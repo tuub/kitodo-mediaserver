@@ -22,8 +22,8 @@ public interface IOcrConverter {
      * Convert one file to another format.
      *
      * @param sourceFile file to be converted
-     * @param destFile file to save the new formated to
-     * @throws Exception on convertion errors or file system errors
+     * @param destFile file to save the new formatted to
+     * @throws Exception on conversion errors or file system errors
      */
     void convert(Path sourceFile, Path destFile) throws Exception;
 }

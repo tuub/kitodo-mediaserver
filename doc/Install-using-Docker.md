@@ -24,7 +24,7 @@ Docker-compose bundles the steps needed to run multiple docker containers with t
 
 - Tomcat port: *8080/tcp*.
 
-The data pathes are the configuration directory containing the *local.yml*:
+The data paths are the configuration directory containing the *local.yml*:
 - */usr/local/kitodo-mediaserver/config* 
 
 And work files directories:
