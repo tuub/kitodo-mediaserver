@@ -55,7 +55,7 @@ public interface IAction {
 }
 ```
 
-Actions can be executed anywhere in the Kitodo.Mediaserver components: in the file server, using the admin ui, or at import before or after indexing (in fact, the indexing is an action itself) and they can also be ordered to be performed at a later time. Thus, e.g. at import, any number of actions can be perfomed before indexing of work (METS cleaning or extending actions, preproduction of thumbnails...), after succesful indexing (doi registration...), or requested to be performed later (creation of full work odf files ...).
+Actions can be executed anywhere in the Kitodo.Mediaserver components: in the file server, using the admin ui, or at import before or after indexing (in fact, the indexing is an action itself) and they can also be ordered to be performed at a later time. Thus, e.g. at import, any number of actions can be performed before indexing of work (METS cleaning or extending actions, preproduction of thumbnails...), after successful indexing (doi registration...), or requested to be performed later (creation of full work odf files ...).
 
 Since actions are named beans, they can easily be added to the YAML configuration file to be executable in the different modules. This is implemented in the [ActionService](../kitodo-mediaserver-core/src/main/java/org/kitodo/mediaserver/core/services/ActionService.java). Requested actions to be performed at a later time are stored in a simple database (see the database model below) and performed using the CLI.
 

@@ -270,7 +270,7 @@ public class ImporterFlowControl {
                 errorNotifier.add(message);
 
                 // Delete work from DB if it is already saved
-                // Attention: em.contains() will not find detached entites
+                // Attention: em.contains() will not find detached entities
                 if (newWork != null && newWork.getId() != null && entityManager.contains(newWork)) {
                     try {
                         LOGGER.info("Rollback: deleting database entry for work " + workDir.getName());
@@ -361,7 +361,7 @@ public class ImporterFlowControl {
                     performActions(importerProperties.getActionsToRequestAsynchronously(), newWork, true);
 
                 } catch (Exception e) {
-                    String message = "An error occured after import of work " + workDir.getName()
+                    String message = "An error occurred after import of work " + workDir.getName()
                             + ". The import itself was successfully performed not all the subsequent actions."
                             + " The work has probably not been indexed. Error: " + e;
                     LOGGER.error(message, e);

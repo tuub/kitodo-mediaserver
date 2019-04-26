@@ -9,7 +9,7 @@ services:
     volumes:
       # config directory
       - /usr/local/kitodo-mediaserver/config:/usr/local/kitodo-mediaserver/config
-      # data directorys
+      # data directories
       - /var/local/kitodo-mediaserver/cache:/var/local/kitodo-mediaserver/cache
       - /var/local/kitodo-mediaserver/files:/var/local/kitodo-mediaserver/files
       - /var/local/kitodo-mediaserver/hotfolder:/var/local/kitodo-mediaserver/hotfolder

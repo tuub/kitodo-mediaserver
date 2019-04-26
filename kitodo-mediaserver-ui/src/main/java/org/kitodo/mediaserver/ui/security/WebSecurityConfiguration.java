@@ -42,7 +42,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                // dont't require login for /static resources
+                // don't require login for /static resources
                 .antMatchers("/static/**").permitAll()
                 .anyRequest().authenticated()
             .and()

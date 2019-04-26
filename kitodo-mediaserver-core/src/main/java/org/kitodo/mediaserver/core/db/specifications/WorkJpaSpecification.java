@@ -34,7 +34,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 /**
- * JPA Specification to build search querys for Work items.
+ * JPA Specification to build search queries for work items.
  */
 public class WorkJpaSpecification implements Specification<Work> {
 

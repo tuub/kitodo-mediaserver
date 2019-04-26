@@ -236,7 +236,7 @@ public class FileController {
     /**
      * Check if an IP address is allowed to access a work.
      *
-     * @param senderIp The IP addres to check
+     * @param senderIp The IP address to check
      * @param subnets The allowed IP subnet
      */
     private boolean isAllowedIpAddress(String senderIp, List<String> subnets) {

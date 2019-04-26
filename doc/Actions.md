@@ -66,12 +66,12 @@ Register [DOI](https://de.wikipedia.org/wiki/Digital_Object_Identifier).
 
 ## setAllowedNetworkAction
 
-Set the network access policy. The default networks are `global` (access for everyone) and `disabled` (acccess for nobody). You can add further networks in your [configuration file](Configuration-file.md) parameter `fileserver.allowedNetworks`.
+Set the network access policy. The default networks are `global` (access for everyone) and `disabled` (access for nobody). You can add further networks in your [configuration file](Configuration-file.md) parameter `fileserver.allowedNetworks`.
 
 ##### Call parameters
 
 - `network` (required): The network to set.
-- `reduceMets` (optional): If `network` is set to "disabled", you may set this to "true". The METS file will be backed up and a reduced METS file takes it place. It will contain some metadata but no file informations.
+- `reduceMets` (optional): If `network` is set to "disabled", you may set this to "true". The METS file will be backed up and a reduced METS file takes it place. It will contain some metadata but no file information.
 
 ## testAction
 

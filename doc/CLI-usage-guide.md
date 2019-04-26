@@ -50,7 +50,7 @@ kitodo-mediaserver cacheclear -s
 Runs an action on specific work(s).
 
 ```bash
-kitodo-mediaserver peform <action> <workIDpattern...> [-p=<String=String>]...
+kitodo-mediaserver perform <action> <workIDpattern...> [-p=<String=String>]...
 ```
 
 ```bash
