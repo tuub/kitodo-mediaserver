@@ -10,17 +10,19 @@
   ~ LICENSE file that was distributed with this source code.
   -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:alto="http://www.loc.gov/standards/alto/ns-v2#">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:alto2="http://www.loc.gov/standards/alto/ns-v2#"
+                xmlns:alto3="http://www.loc.gov/standards/alto/ns-v3#">
 
     <xsl:output indent="yes"/>
 
     <xsl:template match="/">
         <ocrPage>
-            <xsl:for-each select="//alto:TextBlock">
+            <xsl:for-each select="//alto2:TextBlock|//alto3:TextBlock">
                 <ocrParagraph>
-                    <xsl:for-each select="alto:TextLine">
+                    <xsl:for-each select="alto2:TextLine|alto3:TextLine">
                         <ocrLine>
-                            <xsl:for-each select="alto:String">
+                            <xsl:for-each select="alto2:String|alto3:String">
                                 <xsl:if test="@HPOS!='' and @VPOS!='' and @WIDTH!='' and @HEIGHT!='' and @CONTENT!=''">
                                     <ocrWord>
                                         <xsl:attribute name="x"><xsl:value-of select="@HPOS"/></xsl:attribute>

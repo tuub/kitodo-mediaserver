@@ -24,21 +24,23 @@ import org.springframework.util.ResourceUtils;
 public class XsltOcrReaderTest {
 
     private XsltOcrReader xsltOcrReader = new XsltOcrReader();
-    private Path testOcrFile;
+    private Path testOcrFile_v2;
+    private Path testOcrFile_v3;
 
     @Before
     public void init() throws Exception {
         xsltOcrReader = new XsltOcrReader();
-        testOcrFile = ResourceUtils.getFile("classpath:fulltext/flugblattTestAlto.xml").toPath();
+        testOcrFile_v2 = ResourceUtils.getFile("classpath:fulltext/flugblattTestAlto.xml").toPath();
+        testOcrFile_v3 = ResourceUtils.getFile("classpath:fulltext/alto_v3.xml").toPath();
     }
 
     @Test
-    public void parseFirstWord() throws Exception {
+    public void parseFirstWord_v2() throws Exception {
         //given
         xsltOcrReader.getFormats().put("<alto ", new ClassPathResource("xslt/ocr/alto.xsl"));
 
         //when
-        OcrPage result = xsltOcrReader.read(testOcrFile);
+        OcrPage result = xsltOcrReader.read(testOcrFile_v2);
 
         //then
         assertThat(result).isNotNull();
@@ -58,13 +60,39 @@ public class XsltOcrReaderTest {
         assertThat(result.paragraphs.get(0).lines.get(0).words.get(0).y).isEqualTo(194);
     }
 
+    @Test
+    public void parseFirstWord_v3() throws Exception {
+        //given
+        xsltOcrReader.getFormats().put("<alto ", new ClassPathResource("xslt/ocr/alto.xsl"));
+
+        //when
+        OcrPage result = xsltOcrReader.read(testOcrFile_v3);
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.paragraphs).isNotNull();
+        assertThat(result.paragraphs).hasSize(22);
+        assertThat(result.paragraphs.get(10)).isNotNull();
+        assertThat(result.paragraphs.get(10).lines).isNotNull();
+        assertThat(result.paragraphs.get(10).lines).hasSize(8);
+        assertThat(result.paragraphs.get(10).lines.get(0)).isNotNull();
+        assertThat(result.paragraphs.get(10).lines.get(0).words).isNotNull();
+        assertThat(result.paragraphs.get(10).lines.get(0).words).hasSize(11);
+        assertThat(result.paragraphs.get(10).lines.get(0).words.get(0)).isNotNull();
+        assertThat(result.paragraphs.get(10).lines.get(0).words.get(0).word).isEqualTo("form");
+        assertThat(result.paragraphs.get(10).lines.get(0).words.get(0).height).isEqualTo(31);
+        assertThat(result.paragraphs.get(10).lines.get(0).words.get(0).width).isEqualTo(89);
+        assertThat(result.paragraphs.get(10).lines.get(0).words.get(0).x).isEqualTo(906);
+        assertThat(result.paragraphs.get(10).lines.get(0).words.get(0).y).isEqualTo(2056);
+    }
+
     @Test(expected = Exception.class)
     public void parseWithWrongIdentifier() throws Exception {
         //given
         xsltOcrReader.getFormats().put("<document ", new ClassPathResource("xslt/ocr/alto.xsl"));
 
         //when
-        OcrPage result = xsltOcrReader.read(testOcrFile);
+        OcrPage result = xsltOcrReader.read(testOcrFile_v2);
 
         //then
     }
