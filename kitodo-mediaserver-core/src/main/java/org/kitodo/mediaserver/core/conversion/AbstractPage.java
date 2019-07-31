@@ -223,7 +223,12 @@ public abstract class AbstractPage implements IPage {
 
         } else if ("image".equalsIgnoreCase(watermarkProp.getRenderMode())) {
             // Image watermark
-            watermarkImage = ImageIO.read(new File(imageModeProp.getPath()));
+            File watermarkFile = new File(imageModeProp.getPath());
+            try {
+                watermarkImage = ImageIO.read(watermarkFile);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not load watermark file '" + watermarkFile + "'", e);
+            }
             watermarkRect.width = watermarkImage.getWidth();
             watermarkRect.height = watermarkImage.getHeight();
         }
