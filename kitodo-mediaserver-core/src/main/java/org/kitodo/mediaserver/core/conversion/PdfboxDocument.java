@@ -55,6 +55,9 @@ public class PdfboxDocument extends AbstractDocument {
     @Override
     public void save(String path) throws Exception {
 
+        // Version 1.7 needed for PDF/A-2
+        document.setVersion(1.7f);
+
         // TTF font needed for Unicode support in OCR texts
         PDFont font = PDType0Font.load(document,
             PDDocument.class.getResourceAsStream("/org/apache/pdfbox/resources/ttf/LiberationSans-Regular.ttf"), true);
@@ -91,7 +94,7 @@ public class PdfboxDocument extends AbstractDocument {
 
         // Set PDF/A metadata
         PDFAIdentificationSchema pdfaId = xmp.createAndAddPFAIdentificationSchema();
-        pdfaId.setPart(1);
+        pdfaId.setPart(2);
         pdfaId.setConformance("B");
 
         // Create xpacket text from XMP
