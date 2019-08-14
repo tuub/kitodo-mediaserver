@@ -65,7 +65,7 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
      * @throws Exception by fatal errors
      */
     @Override
-    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter) throws Exception {
+    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, Object> parameter) throws Exception {
 
         Notifier notifier = notifierFactory.getObject();
         String message;
@@ -78,7 +78,7 @@ public class SimpleIMSingleFileConverter extends AbstractConverter {
                                 && size >= conversionPropertiesWatermark.getMinSize();
 
         // if the cache file already exists, there is another thread already performing the conversion.
-        Map.Entry<File, Boolean> convertedFile = createDerivativeFile(parameter.get("derivativePath"));
+        Map.Entry<File, Boolean> convertedFile = createDerivativeFile((String)parameter.get("derivativePath"));
 
         if (!convertedFile.getValue()) {
             try {

@@ -29,5 +29,5 @@ public interface IConverter {
      * @return an output stream of the converted file
      * @throws Exception by fatal errors
      */
-    InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter) throws Exception;
+    InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, Object> parameter) throws Exception;
 }

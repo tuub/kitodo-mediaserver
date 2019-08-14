@@ -70,7 +70,7 @@ public abstract class AbstractConverter implements IConverter {
      * @param requiredParams required parameter
      * @throws Exception by fatal errors
      */
-    protected void checkParams(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter, String... requiredParams) {
+    protected void checkParams(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, Object> parameter, String... requiredParams) {
 
         if (pages == null) {
             throw new IllegalArgumentException("'pages' must not be null.");
@@ -98,12 +98,12 @@ public abstract class AbstractConverter implements IConverter {
      * @param parameter the parameter map
      * @return a size
      */
-    protected int getConversionSize(Map<String, String> parameter) {
+    protected int getConversionSize(Map<String, Object> parameter) {
         try {
-            return Integer.parseInt(parameter.get("size"));
+            return (Integer)parameter.get("size");
         } catch (NumberFormatException | NullPointerException e) {
             LOGGER.warn("The requested size " + parameter.get("size") + " is not a number. Using default size.");
-            if (StringUtils.equals(parameter.get("target_mime"), "application/pdf")) {
+            if (StringUtils.equals((String)parameter.get("target_mime"), "application/pdf")) {
                 return conversionPropertiesPdf.getDefaultSize();
             }
             return conversionPropertiesJpeg.getDefaultSize();

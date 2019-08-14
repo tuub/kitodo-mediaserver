@@ -25,11 +25,17 @@ import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageFitWidthDestination;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineNode;
 import org.apache.xmpbox.XMPMetadata;
 import org.apache.xmpbox.schema.DublinCoreSchema;
 import org.apache.xmpbox.schema.PDFAIdentificationSchema;
 import org.apache.xmpbox.schema.XMPBasicSchema;
 import org.kitodo.mediaserver.core.api.IPage;
+import org.kitodo.mediaserver.core.processors.Toc;
+import org.kitodo.mediaserver.core.processors.TocItem;
 
 /**
 * A PDF document.
@@ -38,10 +44,7 @@ public class PdfboxDocument extends AbstractDocument {
 
     private PDDocument document;
     private List<IPage> pages = new ArrayList<>();
-
-    public PdfboxDocument(MemoryUsageSetting memoryUsageSetting) {
-        document = new PDDocument(memoryUsageSetting);
-    }
+    private Toc toc;
 
     public PDDocument getDocument() {
         return document;
@@ -50,6 +53,18 @@ public class PdfboxDocument extends AbstractDocument {
     @Override
     public List<IPage> getPages() {
         return pages;
+    }
+
+    public Toc getToc() {
+        return toc;
+    }
+
+    public void setToc(Toc toc) {
+        this.toc = toc;
+    }
+
+    public PdfboxDocument(MemoryUsageSetting memoryUsageSetting) {
+        document = new PDDocument(memoryUsageSetting);
     }
 
     @Override
@@ -124,7 +139,51 @@ public class PdfboxDocument extends AbstractDocument {
             document.addPage((PDPage) page.getPage());
         }
 
+        // Add table of content (PDF bookmarks)
+        addToc();
+
+        // Save file and close
         document.save(path);
         document.close();
+    }
+
+    /**
+     * Add table of content (PDF bookmarks).
+     */
+    private void addToc() {
+        PDDocumentOutline documentOutline =  new PDDocumentOutline();
+        documentOutline.openNode();
+        document.getDocumentCatalog().setDocumentOutline(documentOutline);
+        for (TocItem tocItem : toc.getTocItems()) {
+            documentOutline.addLast(newOutlineFromToc(tocItem, documentOutline));
+        }
+    }
+
+    /**
+     * Create new bookmark item.
+     *
+     * @param toc tocItem with optional children
+     * @param root the root node to add the tocItem to
+     * @return the new item
+     */
+    private PDOutlineItem newOutlineFromToc(TocItem toc, PDOutlineNode root) {
+
+        // Add the given tocItem to the root node
+        PDPageFitWidthDestination destination = new PDPageFitWidthDestination();
+        PDPage page = document.getPage(toc.getPageNumber() - 1);
+        destination.setPage(page);
+        PDOutlineItem bookmark = new PDOutlineItem();
+        bookmark.setDestination(destination);
+        bookmark.setTitle(toc.getName());
+        bookmark.openNode();
+
+        // Add further children recursively to this bookmark item
+        if (toc.getChildren() != null) {
+            for (TocItem subToc : toc.getChildren()) {
+                bookmark.addLast(newOutlineFromToc(subToc, bookmark));
+            }
+        }
+
+        return bookmark;
     }
 }

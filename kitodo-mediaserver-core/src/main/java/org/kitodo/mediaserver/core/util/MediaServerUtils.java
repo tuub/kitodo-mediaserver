@@ -232,13 +232,14 @@ public class MediaServerUtils {
      * @param parameter the parameter map
      * @param requiredParams all required parameter
      */
-    public void checkForRequiredParameter(Map<String, String> parameter, String... requiredParams) {
+    public void checkForRequiredParameter(Map<String, ?> parameter, String... requiredParams) {
         if (requiredParams.length > 0 && parameter == null) {
             throw new IllegalArgumentException("The parameter map is null.");
         }
-        for (String param : requiredParams) {
-            if (StringUtils.isEmpty(parameter.get(param))) {
-                throw new IllegalArgumentException("Required parameter " + param + " is not in the parameter map.");
+        for (String requiredParam : requiredParams) {
+            Object param = parameter.get(requiredParam);
+            if (param == null || (param instanceof String && StringUtils.isEmpty((String)param))) {
+                throw new IllegalArgumentException("Required parameter " + requiredParam + " is not in the parameter map.");
             }
         }
     }

@@ -23,7 +23,6 @@ import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IExtractor;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
-import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.conversion.FileEntry;
 import org.kitodo.mediaserver.core.db.entities.Work;
@@ -40,18 +39,12 @@ public class SingleFileConvertAction implements IAction {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleFileConvertAction.class);
 
-    private FileserverProperties fileserverProperties;
     private MetsProperties metsProperties;
     private IMetsReader metsReader;
     private IReadResultParser readResultParser;
     private Map<String, IConverter> converters = new HashMap<>();
     private IExtractor patternExtractor;
     private MediaServerUtils mediaServerUtils;
-
-    @Autowired
-    public void setFileserverProperties(FileserverProperties fileserverProperties) {
-        this.fileserverProperties = fileserverProperties;
-    }
 
     @Autowired
     public void setMetsProperties(MetsProperties metsProperties) {
@@ -114,8 +107,15 @@ public class SingleFileConvertAction implements IAction {
                 + " found in mets file " + metsFile.getAbsolutePath());
         }
 
-        parameter.put("size", patternExtractor.extract(requestUrl));
         parameter.put("target_mime", pages.firstEntry().getValue().get("target").getMimeType());
+
+        Map<String, Object> convertParams = new HashMap<>(parameter);
+        try {
+            convertParams.put("size", Integer.parseInt(patternExtractor.extract(requestUrl)));
+        } catch (Exception ex) {
+            // size is optional here
+            LOGGER.debug("Could not extract size from requestURL.", ex);
+        }
 
         LOGGER.info("Converting file from master " + sourceFile);
 
@@ -124,6 +124,6 @@ public class SingleFileConvertAction implements IAction {
             throw new ConversionException("No converter set for MIME type '" + parameter.getOrDefault("target_mime", "") + "'");
         }
 
-        return converter.convert(pages, parameter);
+        return converter.convert(pages, convertParams);
     }
 }

@@ -15,7 +15,6 @@ import java.awt.color.ICC_Profile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.security.AccessController;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,12 +22,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import org.apache.pdfbox.io.MemoryUsageSetting;
-import org.kitodo.mediaserver.core.api.IDocument;
+import org.kitodo.mediaserver.core.processors.Toc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import sun.security.action.GetPropertyAction;
 
 /**
  * A converter to produce PDF files using Apache PDFBox package.
@@ -41,26 +39,26 @@ public class PdfboxFileConverter extends AbstractConverter {
     private ObjectFactory<PdfboxPage> pageFactory;
 
     @Override
-    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter) throws Exception {
+    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, Object> parameter) throws Exception {
 
         checkParams(pages, parameter, "derivativePath", "target_mime");
 
         int size = getConversionSize(parameter);
 
         // if the cache file already exists, there is another thread already performing the conversion.
-        Map.Entry<File, Boolean> convertedFile = createDerivativeFile(parameter.get("derivativePath"));
+        Map.Entry<File, Boolean> convertedFile = createDerivativeFile((String)parameter.get("derivativePath"));
 
         if (!convertedFile.getValue()) {
             try {
 
                 // Set up memory usage settings for PDF conversion
-                File tmpDir = new File(AccessController.doPrivileged(new GetPropertyAction("java.io.tmpdir")));
+                File tmpDir = new File(System.getProperty("java.io.tmpdir"));
                 MemoryUsageSetting memoryUsageSetting = MemoryUsageSetting
                     .setupMixed(conversionPropertiesPdf.getMaxMemory() * 1024 * 1024)
                     .setTempDir(tmpDir);
 
                 // Initialize PDF document
-                IDocument document = new PdfboxDocument(memoryUsageSetting);
+                PdfboxDocument document = new PdfboxDocument(memoryUsageSetting);
 
                 // Set ICC color profile (needed for PDF/A)
                 try {
@@ -73,15 +71,16 @@ public class PdfboxFileConverter extends AbstractConverter {
                 // Set metadata
                 if (parameter.get("creationDate") != null) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd", Locale.ENGLISH);
-                    Date date = sdf.parse(parameter.get("creationDate"));
+                    Date date = sdf.parse((String)parameter.get("creationDate"));
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(date);
                     document.setProductionDate(cal);
                 }
                 if (parameter.get("authors") != null) {
-                    document.setAuthor(parameter.get("authors"));
+                    document.setAuthor((String)parameter.get("authors"));
                 }
-                document.setTitle(parameter.get("title"));
+                document.setTitle((String)parameter.get("title"));
+                document.setToc((Toc)parameter.get("toc"));
 
                 // Set up all pages
                 for (Map<String, FileEntry> metsPage : pages.values()) {
