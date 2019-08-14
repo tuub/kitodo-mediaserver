@@ -24,6 +24,7 @@ import org.kitodo.mediaserver.core.api.IMetsTransformer;
 import org.kitodo.mediaserver.core.api.IOcrConverter;
 import org.kitodo.mediaserver.core.api.IOcrReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
+import org.kitodo.mediaserver.core.api.ITocReader;
 import org.kitodo.mediaserver.core.api.IWatermarker;
 import org.kitodo.mediaserver.core.conversion.AwtImageFileConverter;
 import org.kitodo.mediaserver.core.conversion.PdfboxFileConverter;
@@ -34,6 +35,7 @@ import org.kitodo.mediaserver.core.processors.PatternExtractor;
 import org.kitodo.mediaserver.core.processors.ScalingWatermarker;
 import org.kitodo.mediaserver.core.processors.SimpleList2MapParser;
 import org.kitodo.mediaserver.core.processors.XsltMetsReader;
+import org.kitodo.mediaserver.core.processors.XsltMetsTocReader;
 import org.kitodo.mediaserver.core.processors.XsltMetsTransformer;
 import org.kitodo.mediaserver.core.processors.ocr.XsltOcrReader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,6 +114,18 @@ public class ConversionConfiguration {
         XsltOcrReader ocrReader = new XsltOcrReader();
         ocrReader.getFormats().put("<alto ", new ClassPathResource("xslt/ocr/alto.xsl"));
         return ocrReader;
+    }
+
+    /**
+     * A reader using XSLT to read the table of content from a METS file.
+     *
+     * @return the reader
+     */
+    @Bean(name = "tocReader")
+    public ITocReader xsltMetsTocReader() {
+        XsltMetsTocReader tocReader = new XsltMetsTocReader();
+        tocReader.setXslt(new ClassPathResource("xslt/tocFromMets.xsl"));
+        return tocReader;
     }
 
     /**
@@ -336,6 +350,7 @@ public class ConversionConfiguration {
         StandaloneFullPdfFileConvertAction convertAction = new StandaloneFullPdfFileConvertAction();
         convertAction.setMetsReader(masterFilesMetsReader());
         convertAction.setFullPdfReader(fullPdfUrlMetsreader());
+        convertAction.setTocReader(xsltMetsTocReader());
         convertAction.setReadResultParser(listToMapParser());
         convertAction.getConverters().put("application/pdf", preproducePdfboxFileConverter());
         return convertAction;

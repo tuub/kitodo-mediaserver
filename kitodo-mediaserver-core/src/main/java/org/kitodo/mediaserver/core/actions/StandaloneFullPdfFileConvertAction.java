@@ -23,10 +23,12 @@ import org.kitodo.mediaserver.core.api.IAction;
 import org.kitodo.mediaserver.core.api.IConverter;
 import org.kitodo.mediaserver.core.api.IMetsReader;
 import org.kitodo.mediaserver.core.api.IReadResultParser;
+import org.kitodo.mediaserver.core.api.ITocReader;
 import org.kitodo.mediaserver.core.config.MetsProperties;
 import org.kitodo.mediaserver.core.conversion.FileEntry;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.exceptions.ConversionException;
+import org.kitodo.mediaserver.core.processors.Toc;
 import org.kitodo.mediaserver.core.util.MediaServerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -39,6 +41,7 @@ public class StandaloneFullPdfFileConvertAction implements IAction {
     private MetsProperties metsProperties;
     private IMetsReader metsReader;
     private IMetsReader fullPdfMetsReader;
+    private ITocReader tocReader;
     private IReadResultParser readResultParser;
     private Map<String, IConverter> converters = new HashMap<>();
     private MediaServerUtils mediaServerUtils;
@@ -50,6 +53,10 @@ public class StandaloneFullPdfFileConvertAction implements IAction {
 
     public void setMetsReader(IMetsReader metsReader) {
         this.metsReader = metsReader;
+    }
+
+    public void setTocReader(ITocReader tocReader) {
+        this.tocReader = tocReader;
     }
 
     public void setReadResultParser(IReadResultParser readResultParser) {
@@ -103,17 +110,21 @@ public class StandaloneFullPdfFileConvertAction implements IAction {
             new AbstractMap.SimpleEntry<>("sourceGrpId", metsProperties.getOriginalFileGrp()),
             new AbstractMap.SimpleEntry<>("fulltextGrpId", metsProperties.getFulltextFileGrp())
         );
-        Map<String, String> metsResult = (Map<String, String>) readResultParser.parse(lines);
 
-        TreeMap<Integer, Map<String, FileEntry>> pages = mediaServerUtils.parseMetsFilesResult(metsResult, work);
+        final Map<String, String> metsResult = (Map<String, String>) readResultParser.parse(lines);
+        final TreeMap<Integer, Map<String, FileEntry>> pages = mediaServerUtils.parseMetsFilesResult(metsResult, work);
+        final Toc toc = tocReader.read(metsFile.toPath());
 
         parameter.put("target_mime", "application/pdf");
+
+        Map<String, Object> convertParams = new HashMap<>(parameter);
+        convertParams.put("toc", toc);
 
         IConverter converter = converters.get(parameter.get("target_mime"));
         if (converter == null) {
             throw new ConversionException("No converter set for MIME type '" + parameter.getOrDefault("target_mime", "") + "'");
         }
 
-        return converter.convert(pages, parameter);
+        return converter.convert(pages, convertParams);
     }
 }

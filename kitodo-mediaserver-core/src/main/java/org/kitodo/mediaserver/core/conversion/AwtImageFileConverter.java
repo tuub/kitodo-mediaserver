@@ -41,13 +41,13 @@ public class AwtImageFileConverter extends AbstractConverter {
     private ObjectFactory<AwtImagePage> pageFactory;
 
     @Override
-    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, String> parameter) throws Exception {
+    public InputStream convert(TreeMap<Integer, Map<String, FileEntry>> pages, Map<String, Object> parameter) throws Exception {
         checkParams(pages, parameter, "derivativePath", "target_mime");
 
         int size = getConversionSize(parameter);
 
         // if the cache file already exists, there is another thread already performing the conversion.
-        Map.Entry<File, Boolean> convertedFile = createDerivativeFile(parameter.get("derivativePath"));
+        Map.Entry<File, Boolean> convertedFile = createDerivativeFile((String)parameter.get("derivativePath"));
 
         if (!convertedFile.getValue()) {
             try {
