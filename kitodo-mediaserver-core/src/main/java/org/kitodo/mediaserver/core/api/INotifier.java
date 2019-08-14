@@ -12,7 +12,6 @@
 package org.kitodo.mediaserver.core.api;
 
 import java.util.List;
-import javax.mail.MessagingException;
 
 /**
  * Interface for a notification service.
@@ -40,7 +39,7 @@ public interface INotifier {
      * @param subject the subject
      * @param recipients The list of recipients
      */
-    void addAndSend(String message, String subject, List<String> recipients) throws MessagingException;
+    void addAndSend(String message, String subject, List<String> recipients);
 
 
     /**
@@ -49,5 +48,5 @@ public interface INotifier {
      * @param subject the subject
      * @param recipients The list of recipients
      */
-    void send(String subject, List<String> recipients) throws MessagingException;
+    void send(String subject, List<String> recipients);
 }

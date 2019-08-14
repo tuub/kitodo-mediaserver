@@ -27,13 +27,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.kitodo.mediaserver.core.api.INotifier;
 import org.kitodo.mediaserver.core.config.FileserverProperties;
 import org.kitodo.mediaserver.core.db.entities.Work;
 import org.kitodo.mediaserver.core.db.repositories.WorkRepository;
 import org.kitodo.mediaserver.core.exceptions.HttpForbiddenException;
 import org.kitodo.mediaserver.core.exceptions.HttpNotFoundException;
 import org.kitodo.mediaserver.core.services.ActionService;
-import org.kitodo.mediaserver.core.util.Notifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectFactory;
@@ -77,7 +77,7 @@ public class FileController {
     }
 
     @Autowired
-    private ObjectFactory<Notifier> notifierFactory;
+    private ObjectFactory<INotifier> notifierFactory;
 
     /**
      * Controller method mapped to a path with a workId.
@@ -99,7 +99,7 @@ public class FileController {
             HttpServletResponse response)
             throws HttpForbiddenException, HttpNotFoundException {
 
-        Notifier notifier = notifierFactory.getObject();
+        INotifier notifier = notifierFactory.getObject();
         String message;
 
         Work work;
@@ -136,7 +136,8 @@ public class FileController {
                     message = "Work with id '" + workId
                         + "' has an invalid allowedNetwork: '" + work.getAllowedNetwork() + "'";
                     LOGGER.error(message);
-                    notifier.addAndSend(message, "Fileserver Error", fileserverProperties.getErrorNotificationEmail());
+                    notifier.addAndSend(message, "Fileserver Error, workId " + workId + ", invalid network " + work.getAllowedNetwork(),
+                        fileserverProperties.getErrorNotificationEmail());
                     throw new HttpForbiddenException(message);
                 }
 
@@ -178,7 +179,8 @@ public class FileController {
                     } catch (IOException e) {
                         message = "Error executing touch on cached file " + workId + derivativePath + ": " + e;
                         LOGGER.error(message, e);
-                        notifier.addAndSend(message, "Touch error", fileserverProperties.getErrorNotificationEmail());
+                        notifier.addAndSend(message, "Touch error, workId " + workId + ", path " + derivativePath,
+                            fileserverProperties.getErrorNotificationEmail());
                     }
                 }
 
@@ -209,7 +211,8 @@ public class FileController {
                 } catch (Exception e) {
                     message = "Error trying to convert the file " + workId + derivativePath + ": " + e;
                     LOGGER.error(message, e);
-                    notifier.addAndSend(message, "Conversion Error", fileserverProperties.getErrorNotificationEmail());
+                    notifier.addAndSend(message, "Conversion Error, workId " + workId,
+                        fileserverProperties.getErrorNotificationEmail());
                 }
             }
 
@@ -226,7 +229,8 @@ public class FileController {
 
             String ignoreRegex = fileserverProperties.getIgnoredExceptionByNotificationRegex();
             if (ignoreRegex == null || !e.toString().matches(ignoreRegex)) {
-                notifier.addAndSend(message, "Fileserver Error", fileserverProperties.getErrorNotificationEmail());
+                notifier.addAndSend(message, "Fileserver IO Error, workId " + workId + ", path " + derivativePath,
+                    fileserverProperties.getErrorNotificationEmail());
             }
 
             throw new HttpNotFoundException(e.toString());
