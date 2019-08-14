@@ -15,7 +15,7 @@ If you want to use the "IM" convert actions (see [actions](Actions.md) and [conf
 
 If you want to use the Java convert actions to generate PDF files, you'll need this: 
 
-* A default **ICC profile** - The Java converter always creates PDF/A-1b files. Therefor a ICC profile is required. On Ubuntu you may install *icc-profiles-free* package
+* A default **ICC profile** - The Java converter always creates PDF/A-2b files. Therefor a ICC profile is required. On Ubuntu you may install *icc-profiles-free* package
 
 Mediaserver may run on other application servers supporting Java Servlet 3 too but this is untested and not supported. Tomcat 7.0 is known not to be working.
 
