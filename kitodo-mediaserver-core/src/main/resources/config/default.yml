@@ -10,7 +10,10 @@
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
+    # with legacy support:
+    url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useUnicode=true&useSSL=false&serverTimezone=Europe/Berlin&useLegacyDatetimeCode=false&useJDBCCompliantTimezoneShift=true
+    # without legacy support:
+    # url: jdbc:mysql://localhost/mediaserver?autoReconnect=true&useSSL=false
     username: kitodo
     password: kitodo
   jpa:
