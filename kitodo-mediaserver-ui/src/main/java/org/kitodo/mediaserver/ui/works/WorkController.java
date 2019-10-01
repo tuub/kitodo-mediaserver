@@ -11,9 +11,6 @@
 
 package org.kitodo.mediaserver.ui.works;
 
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,7 +30,6 @@ import org.kitodo.mediaserver.ui.config.UiProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -139,11 +135,6 @@ public class WorkController {
         Sort.Order order = pageable.getSort().iterator().next();
         String sort = order.getProperty() + "," + (order.getDirection().isAscending() ? "asc" : "desc");
 
-        DateTimeFormatter dateFormatter = DateTimeFormatter
-            .ofLocalizedDateTime(FormatStyle.SHORT)
-            .withLocale(LocaleContextHolder.getLocale())
-            .withZone(ZoneId.systemDefault());
-
         model.addAttribute("page", page);
         model.addAttribute("sort", sort);
         model.addAttribute("sizes", uiProperties.getPagination().getElementsPerPage().getAvailableValues());
@@ -151,7 +142,6 @@ public class WorkController {
         model.addAttribute("reduceMets", uiProperties.getWorks().getReduceMets());
         model.addAttribute("allowedNetworks", fileserverProperties.getAllowedNetworks());
         model.addAttribute("actions", uiProperties.getWorks().getActions());
-        model.addAttribute("dateFormatter", dateFormatter);
         return "works/works";
     }
 

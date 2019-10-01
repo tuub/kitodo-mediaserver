@@ -169,7 +169,7 @@
                                 </div>
                                 <div class="ui basic label" th:title="#{works.index_time}" th:if="${work.indexTime}">
                                     <i class="upload icon"></i>
-                                    <span th:text="${dateFormatter.format(work.indexTime)}"></span>
+                                    <span th:text="${#temporals.format(work.indexTime, 'SHORT')}"></span>
                                 </div>
 
                             </div>
