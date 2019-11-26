@@ -208,10 +208,10 @@ public class FileController {
                             parameterMap);
 
                 } catch (Exception e) {
-                    message = "Error trying to convert the file " + workId + derivativePath + ": " + e;
+                    message = "Error trying to convert the file " + workId + derivativePath + ": " + e
+                        + "\nUser-Agent: " + request.getHeader("User-Agent");
                     LOGGER.error(message, e);
-                    notifier.addAndSend(message, "Conversion Error, workId " + workId,
-                        fileserverProperties.getErrorNotificationEmail());
+                    notifier.addAndSend(message, "Conversion Error, workId " + workId, fileserverProperties.getErrorNotificationEmail());
                 }
             }
 
