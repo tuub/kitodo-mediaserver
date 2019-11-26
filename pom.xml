@@ -92,11 +92,6 @@
                 <version>3.9</version>
             </dependency>
             <dependency>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-core</artifactId>
-                <version>6.0.4</version>
-            </dependency>
-            <dependency>
                 <groupId>org.im4java</groupId>
                 <artifactId>im4java</artifactId>
                 <version>1.4.0</version>
