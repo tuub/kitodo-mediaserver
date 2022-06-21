@@ -170,7 +170,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.48</version>
+                        <version>8.0.28</version>
                         <!--
                         TODO: MySQL connector till v8 only supports Java 8.
                         JDBC 4.3 supports Java 9 but the connector supports JDBC 4.2 only.
